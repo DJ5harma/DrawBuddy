@@ -24,19 +24,7 @@ const FreeHandDrawer = () => {
 	};
 
 	const handleMouseUp = () => setDrawing(false);
-
-	const [wentOutWhileDrawing, setWentOutWhileDrawing] = useState(false);
-	const handleMouseOut = () => {
-		handleMouseUp();
-		setWentOutWhileDrawing(true);
-	};
-	const handlemouseEnter = (e: MouseEvent) => {
-		console.log("in");
-
-		if (!wentOutWhileDrawing) return;
-		setWentOutWhileDrawing(false);
-		handleMouseDown(e);
-	};
+	const handleMouseOut = () => setDrawing(false);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -50,14 +38,12 @@ const FreeHandDrawer = () => {
 		canvas.addEventListener("mousemove", handleMouseMove);
 		canvas.addEventListener("mouseup", handleMouseUp);
 		canvas.addEventListener("mouseout", handleMouseOut);
-		canvas.addEventListener("mouseenter", handlemouseEnter);
 
 		return () => {
 			canvas.removeEventListener("mousedown", handleMouseDown);
 			canvas.removeEventListener("mousemove", handleMouseMove);
 			canvas.removeEventListener("mouseup", handleMouseUp);
 			canvas.removeEventListener("mouseout", handleMouseOut);
-			canvas.removeEventListener("mouseenter", handlemouseEnter);
 		};
 	}, [canvasRef, ctx, drawing]);
 
