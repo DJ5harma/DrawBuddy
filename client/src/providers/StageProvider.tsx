@@ -20,20 +20,21 @@ const context = createContext<{
 });
 export default function StageProvider({ children }: { children: ReactNode }) {
 	const [elementsArr, setElementsArr] = useState<ReactNode[]>([]);
-	const [dimensions, setDimensions] = useState({
-		width: window.innerWidth,
-		height: window.innerHeight,
-	});
-
 	const addElementToStage = (element: ReactNode) =>
 		setElementsArr((p) => [...p, element]);
 
 	useEffect(() => {
-		window.addEventListener("resize", () =>
-			setDimensions({ width: window.innerWidth, height: window.innerHeight })
-		);
+		window.addEventListener("resize", updateDimensions);
+		return () => {
+			window.removeEventListener("resize", updateDimensions);
+		};
 	}, []);
-
+	const [dimensions, setDimensions] = useState({
+		width: window.innerWidth,
+		height: window.innerHeight,
+	});
+	const updateDimensions = () =>
+		setDimensions({ width: window.innerWidth, height: window.innerHeight });
 	return (
 		<Stage
 			width={dimensions.width}
