@@ -7,7 +7,6 @@ import { ImTextColor } from "react-icons/im";
 import { LuDiamond, LuEraser, LuRectangleHorizontal } from "react-icons/lu";
 import { MdOutlineHorizontalRule } from "react-icons/md";
 import { RiGalleryLine } from "react-icons/ri";
-import RectangleHandler from "../handlers/RectangleHandler";
 
 type ITool = {
 	name:
@@ -23,64 +22,52 @@ type ITool = {
 		| "Gallery"
 		| "Eraser";
 	icon: ReactNode;
-	handler: ReactNode;
 };
 
 const toolArr: ITool[] = [
 	{
 		name: "Hand",
 		icon: <FaHand />,
-		handler: <></>,
 	},
 	{
 		name: "Pointer",
 		icon: <FaMousePointer />,
-		handler: <></>,
 	},
 	{
 		name: "Rectangle",
 		icon: <LuRectangleHorizontal />,
-		handler: <RectangleHandler />,
 	},
 	{
 		name: "Diamond",
 		icon: <LuDiamond />,
-		handler: <></>,
 	},
 	{
 		name: "Circle",
 		icon: <FiCircle />,
-		handler: <></>,
 	},
 	{
 		name: "Arrow",
 		icon: <FaArrowRightLong />,
-		handler: <></>,
 	},
 	{
 		name: "Line",
 		icon: <MdOutlineHorizontalRule />,
-		handler: <></>,
 	},
 	{
 		name: "Pencil",
 		icon: <BiPencil />,
-		handler: <></>,
 	},
 	{
 		name: "Text",
 		icon: <ImTextColor />,
-		handler: <></>,
 	},
 	{
 		name: "Gallery",
 		icon: <RiGalleryLine />,
-		handler: <></>,
 	},
 	{
 		name: "Eraser",
 		icon: <LuEraser />,
-		handler: <></>,
 	},
 ];
 export default function ToolsProvider({ children }: { children: ReactNode }) {
