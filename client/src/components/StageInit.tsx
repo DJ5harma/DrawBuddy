@@ -1,9 +1,8 @@
-import { Layer, Rect, Stage } from "react-konva";
-import { useTools } from "../providers/ToolsProvider";
+import { Layer, Stage } from "react-konva";
 import RectangleHandler from "../handlers/RectangleHandler";
+import CircleHandler from "../handlers/CircleHandler";
 
 export default function StageInit() {
-	const { selectedTool } = useTools();
 	return (
 		<Stage
 			width={window.innerWidth}
@@ -12,6 +11,7 @@ export default function StageInit() {
 		>
 			<Layer>
 				<RectangleHandler />
+				<CircleHandler />
 			</Layer>
 		</Stage>
 	);
