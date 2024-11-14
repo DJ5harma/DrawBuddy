@@ -5,7 +5,7 @@ const FreeHandDrawer = () => {
 	const { canvasRef, ctx } = useCanvas();
 	const [drawing, setDrawing] = useState(false);
 
-	const handleMouseDown = (e: MouseEvent) => {
+	const onMouseDown = (e: MouseEvent) => {
 		if (!ctx) return;
 
 		ctx.beginPath();
@@ -15,7 +15,7 @@ const FreeHandDrawer = () => {
 		// console.log(canvasRef.current?.toDataURL());
 	};
 
-	const handleMouseMove = (e: MouseEvent) => {
+	const onMouseMove = (e: MouseEvent) => {
 		if (!drawing || !canvasRef.current || !ctx) return;
 
 		const { offsetX: x, offsetY: y } = e;
@@ -23,8 +23,8 @@ const FreeHandDrawer = () => {
 		ctx.stroke();
 	};
 
-	const handleMouseUp = () => setDrawing(false);
-	const handleMouseOut = () => setDrawing(false);
+	const onMouseUp = () => setDrawing(false);
+	const onMouseOut = () => setDrawing(false);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -34,16 +34,16 @@ const FreeHandDrawer = () => {
 		ctx.strokeStyle = "white";
 		ctx.lineWidth = 5;
 
-		canvas.addEventListener("mousedown", handleMouseDown);
-		canvas.addEventListener("mousemove", handleMouseMove);
-		canvas.addEventListener("mouseup", handleMouseUp);
-		canvas.addEventListener("mouseout", handleMouseOut);
+		canvas.addEventListener("mousedown", onMouseDown);
+		canvas.addEventListener("mousemove", onMouseMove);
+		canvas.addEventListener("mouseup", onMouseUp);
+		canvas.addEventListener("mouseout", onMouseOut);
 
 		return () => {
-			canvas.removeEventListener("mousedown", handleMouseDown);
-			canvas.removeEventListener("mousemove", handleMouseMove);
-			canvas.removeEventListener("mouseup", handleMouseUp);
-			canvas.removeEventListener("mouseout", handleMouseOut);
+			canvas.removeEventListener("mousedown", onMouseDown);
+			canvas.removeEventListener("mousemove", onMouseMove);
+			canvas.removeEventListener("mouseup", onMouseUp);
+			canvas.removeEventListener("mouseout", onMouseOut);
 		};
 	}, [canvasRef, ctx, drawing]);
 
