@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useCanvas } from "../provider/CanvasProvider";
+import { useCanvas } from "../providers/CanvasProvider";
 
 const FreeHandDrawer = () => {
 	const { canvasRef, ctx } = useCanvas();
