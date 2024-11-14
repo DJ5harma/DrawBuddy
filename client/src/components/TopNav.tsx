@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
+import { IconType } from "react-icons";
 import { BiPencil } from "react-icons/bi";
 import { FaMousePointer } from "react-icons/fa";
 import { FaArrowRightLong, FaHand } from "react-icons/fa6";
@@ -21,122 +22,69 @@ type ISelectedTool =
 	| "Gallery"
 	| "Eraser";
 
+const toolArr: { name: ISelectedTool; icon: ReactNode }[] = [
+	{
+		name: "Hand",
+		icon: <FaHand />,
+	},
+	{
+		name: "Pointer",
+		icon: <FaMousePointer />,
+	},
+	{
+		name: "Rectangle",
+		icon: <LuRectangleHorizontal />,
+	},
+	{
+		name: "Diamond",
+		icon: <LuDiamond />,
+	},
+	{
+		name: "Circle",
+		icon: <FiCircle />,
+	},
+	{
+		name: "Arrow",
+		icon: <FaArrowRightLong />,
+	},
+	{
+		name: "Line",
+		icon: <MdOutlineHorizontalRule />,
+	},
+	{
+		name: "Pencil",
+		icon: <BiPencil />,
+	},
+	{
+		name: "Text",
+		icon: <ImTextColor />,
+	},
+	{
+		name: "Gallery",
+		icon: <RiGalleryLine />,
+	},
+	{
+		name: "Eraser",
+		icon: <LuEraser />,
+	},
+];
 export default function TopNav() {
-	const [selected, setSelected] = useState<ISelectedTool>("Pointer");
+	const [selected, setSelected] = useState<ISelectedTool>("Rectangle");
 
 	return (
 		<div className="w-screen absolute top-4 left-0 flex justify-center items-center z-10">
 			<nav className="top-2 bg-neutral-800 flex p-1 [&>button]:p-3 gap-1">
-				<button
-					onClick={() => {
-						setSelected("Hand");
-					}}
-					className={` ${
-						selected === "Hand" ? "bg-orange-900" : "hover:bg-neutral-700"
-					}`}
-				>
-					<FaHand />
-				</button>
-				<button
-					onClick={() => {
-						setSelected("Pointer");
-					}}
-					className={` ${
-						selected === "Pointer" ? "bg-orange-900" : "hover:bg-neutral-700"
-					}`}
-				>
-					<FaMousePointer />
-				</button>
-				<button
-					onClick={() => {
-						setSelected("Rectangle");
-					}}
-					className={` ${
-						selected === "Rectangle" ? "bg-orange-900" : "hover:bg-neutral-700"
-					}`}
-				>
-					<LuRectangleHorizontal />
-				</button>
-				<button
-					onClick={() => {
-						setSelected("Diamond");
-					}}
-					className={` ${
-						selected === "Diamond" ? "bg-orange-900" : "hover:bg-neutral-700"
-					}`}
-				>
-					<LuDiamond />
-				</button>
-				<button
-					onClick={() => {
-						setSelected("Circle");
-					}}
-					className={` ${
-						selected === "Circle" ? "bg-orange-900" : "hover:bg-neutral-700"
-					}`}
-				>
-					<FiCircle />
-				</button>
-				<button
-					onClick={() => {
-						setSelected("Arrow");
-					}}
-					className={` ${
-						selected === "Arrow" ? "bg-orange-900" : "hover:bg-neutral-700"
-					}`}
-				>
-					<FaArrowRightLong />
-				</button>
-				<button
-					onClick={() => {
-						setSelected("Line");
-					}}
-					className={` ${
-						selected === "Line" ? "bg-orange-900" : "hover:bg-neutral-700"
-					}`}
-				>
-					<MdOutlineHorizontalRule />
-				</button>
-				<button
-					onClick={() => {
-						setSelected("Pencil");
-					}}
-					className={` ${
-						selected === "Pencil" ? "bg-orange-900" : "hover:bg-neutral-700"
-					}`}
-				>
-					<BiPencil />
-				</button>
-				<button
-					onClick={() => {
-						setSelected("Text");
-					}}
-					className={` ${
-						selected === "Text" ? "bg-orange-900" : "hover:bg-neutral-700"
-					}`}
-				>
-					<ImTextColor />
-				</button>
-				<button
-					onClick={() => {
-						setSelected("Gallery");
-					}}
-					className={` ${
-						selected === "Gallery" ? "bg-orange-900" : "hover:bg-neutral-700"
-					}`}
-				>
-					<RiGalleryLine />
-				</button>
-				<button
-					onClick={() => {
-						setSelected("Eraser");
-					}}
-					className={` ${
-						selected === "Eraser" ? "bg-orange-900" : "hover:bg-neutral-700"
-					}`}
-				>
-					<LuEraser />
-				</button>
+				{toolArr.map(({ name, icon }) => (
+					<button
+						onClick={() => setSelected(name)}
+						className={` ${
+							selected === name ? "bg-orange-900" : "hover:bg-neutral-700"
+						}`}
+						key={name}
+					>
+						{icon}
+					</button>
+				))}
 			</nav>
 		</div>
 	);
