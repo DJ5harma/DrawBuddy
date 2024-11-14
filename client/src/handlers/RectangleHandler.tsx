@@ -1,14 +1,15 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Rect } from "react-konva";
 import { useTools } from "../providers/ToolsProvider";
+import { useStage } from "../providers/StageProvider";
 
 export default function RectangleHandler() {
-	const [rectanglesArr, setRectanglesArr] = useState<ReactNode[]>([]);
-	const [newRectangle, setNewRectangle] = useState<JSX.Element | null>(null);
+	const [NewRectangle, setNewRectangle] = useState<ReactNode | null>(null);
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
 	const [drawing, setDrawing] = useState(false);
 
 	const { selectedTool } = useTools();
+	const { addElementToStage } = useStage();
 
 	const handleMouseDown = (e: MouseEvent) => {
 		setDrawing(true);
@@ -33,9 +34,9 @@ export default function RectangleHandler() {
 		);
 	};
 	const handleMouseUp = () => {
-		const storeNewRect = newRectangle;
+		const newElem = NewRectangle;
 		setNewRectangle(null);
-		setRectanglesArr([...rectanglesArr, storeNewRect]);
+		addElementToStage(newElem);
 		setDrawing(false);
 	};
 
@@ -50,8 +51,7 @@ export default function RectangleHandler() {
 				document.removeEventListener("mouseup", handleMouseUp);
 			};
 		}
-	}, [drawing, startingPosition, newRectangle, rectanglesArr, selectedTool]);
+	}, [drawing, startingPosition, NewRectangle, selectedTool]);
 
-	if (newRectangle) return [newRectangle, ...rectanglesArr];
-	return rectanglesArr;
+	if (NewRectangle) return NewRectangle;
 }

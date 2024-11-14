@@ -1,14 +1,15 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Circle } from "react-konva";
 import { useTools } from "../providers/ToolsProvider";
+import { useStage } from "../providers/StageProvider";
 
 export default function CircleHandler() {
-	const [circlesArr, setCirclesArr] = useState<ReactNode[]>([]);
-	const [newCircle, setNewCircle] = useState<JSX.Element | null>(null);
+	const [NewCircle, setNewCircle] = useState<JSX.Element | null>(null);
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
 	const [drawing, setDrawing] = useState(false);
 
 	const { selectedTool } = useTools();
+	const { addElementToStage } = useStage();
 
 	const handleMouseDown = (e: MouseEvent) => {
 		setDrawing(true);
@@ -35,9 +36,9 @@ export default function CircleHandler() {
 		);
 	};
 	const handleMouseUp = () => {
-		const storeNewRect = newCircle;
+		const newElem = NewCircle;
 		setNewCircle(null);
-		setCirclesArr([...circlesArr, storeNewRect]);
+		addElementToStage(newElem);
 		setDrawing(false);
 	};
 
@@ -52,8 +53,7 @@ export default function CircleHandler() {
 				document.removeEventListener("mouseup", handleMouseUp);
 			};
 		}
-	}, [drawing, startingPosition, newCircle, circlesArr, selectedTool]);
+	}, [drawing, startingPosition, NewCircle, selectedTool]);
 
-	if (newCircle) return [newCircle, ...circlesArr];
-	return circlesArr;
+	return NewCircle;
 }

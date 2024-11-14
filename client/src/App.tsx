@@ -1,11 +1,16 @@
+import CircleHandler from "./handlers/CircleHandler";
+import RectangleHandler from "./handlers/RectangleHandler";
+import StageProvider from "./providers/StageProvider";
 import ToolsProvider from "./providers/ToolsProvider";
-import StageInit from "./components/StageInit";
 
 export default function App() {
 	return (
 		<>
 			<ToolsProvider>
-				<StageInit />
+				<StageProvider>
+					<RectangleHandler />
+					<CircleHandler />
+				</StageProvider>
 			</ToolsProvider>
 		</>
 	);
