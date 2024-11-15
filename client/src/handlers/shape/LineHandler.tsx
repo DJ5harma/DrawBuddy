@@ -4,7 +4,6 @@ import { useStage } from "../../providers/StageProvider";
 import { useElements } from "../../providers/ElementsProvider";
 
 export default function LineHandler() {
-	const [NewLine, setNewLine] = useState<JSX.Element | null>(null);
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
 	const [drawing, setDrawing] = useState(false);
 
@@ -17,7 +16,8 @@ export default function LineHandler() {
 	});
 
 	const { mousePos } = useStage();
-	const { elementsArr, addElementToStage } = useElements();
+	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
+		useElements();
 
 	useEffect(() => {
 		const handleMouseDown = () => {
@@ -35,7 +35,7 @@ export default function LineHandler() {
 			if (!drawing) return;
 
 			const { x, y } = mousePos;
-			setNewLine(
+			setMyNewElement(
 				<Line
 					key={"Line" + elementsArr.length}
 					points={
@@ -56,26 +56,14 @@ export default function LineHandler() {
 				setMultipleLines({ pointsArr: [x, y], exist: true });
 				return;
 			}
-			addElementToStage(NewLine);
-			setNewLine(null);
+			addElementToStage();
 			setDrawing(false);
 		};
 		const handleKeyUp = (e: KeyboardEvent) => {
 			if (multipleLines.exist && e.key === "Escape") {
-				setDrawing(false);
-				setNewLine(null);
-				const pointsArr = multipleLines.pointsArr;
 				setMultipleLines({ exist: false, pointsArr: [] });
-				addElementToStage(
-					<Line
-						key={Math.random()}
-						points={pointsArr}
-						strokeEnabled
-						strokeWidth={4}
-						stroke={"red"}
-					/>
-				);
-				return;
+				addElementToStage();
+				setDrawing(false);
 			}
 		};
 		document.addEventListener("mousedown", handleMouseDown);
@@ -88,7 +76,6 @@ export default function LineHandler() {
 			document.removeEventListener("mouseup", handleMouseUp);
 			document.removeEventListener("keyup", handleKeyUp);
 		};
-	}, [drawing, startingPosition, NewLine, multipleLines, mousePos]);
-
-	return NewLine;
+	}, [drawing, startingPosition, myNewElement, multipleLines, mousePos]);
+	return null;
 }

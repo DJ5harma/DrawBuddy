@@ -4,12 +4,12 @@ import { useStage } from "../../providers/StageProvider";
 import { useElements } from "../../providers/ElementsProvider";
 
 export default function RectangleHandler() {
-	const [NewRectangle, setNewRectangle] = useState<JSX.Element | null>(null);
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
 	const [drawing, setDrawing] = useState(false);
 
 	const { mousePos } = useStage();
-	const { elementsArr, addElementToStage } = useElements();
+	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
+		useElements();
 
 	useEffect(() => {
 		const handleMouseDown = () => {
@@ -18,7 +18,7 @@ export default function RectangleHandler() {
 		};
 		const handleMouseMove = () => {
 			if (!drawing) return;
-			setNewRectangle(
+			setMyNewElement(
 				<Rect
 					key={"Rect" + elementsArr.length}
 					x={startingPosition.x}
@@ -32,8 +32,7 @@ export default function RectangleHandler() {
 			);
 		};
 		const handleMouseUp = () => {
-			addElementToStage(NewRectangle);
-			setNewRectangle(null);
+			addElementToStage();
 			setDrawing(false);
 		};
 		document.addEventListener("mousedown", handleMouseDown);
@@ -44,7 +43,6 @@ export default function RectangleHandler() {
 			document.removeEventListener("mousemove", handleMouseMove);
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [drawing, startingPosition, NewRectangle, mousePos]);
-
-	if (NewRectangle) return NewRectangle;
+	}, [drawing, startingPosition, myNewElement, mousePos]);
+	return null;
 }

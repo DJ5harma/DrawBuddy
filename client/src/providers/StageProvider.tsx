@@ -11,7 +11,7 @@ const context = createContext<{
 });
 
 export default function StageProvider() {
-	const { elementsArr } = useElements();
+	const { elementsArr, myNewElement } = useElements();
 
 	const [dimensions, setDimensions] = useState({
 		width: window.innerWidth,
@@ -95,12 +95,13 @@ export default function StageProvider() {
 		>
 			<Layer>
 				{elementsArr}
+				{myNewElement && myNewElement}
 				<context.Provider
 					value={{
 						mousePos,
 					}}
 				>
-					{selectedTool.handler}
+					{selectedTool && selectedTool.handler}
 				</context.Provider>
 			</Layer>
 		</Stage>

@@ -4,12 +4,12 @@ import { useStage } from "../../providers/StageProvider";
 import { useElements } from "../../providers/ElementsProvider";
 
 export default function CircleHandler() {
-	const [NewCircle, setNewCircle] = useState<JSX.Element | null>(null);
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
 	const [drawing, setDrawing] = useState(false);
 
 	const { mousePos } = useStage();
-	const { elementsArr, addElementToStage } = useElements();
+	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
+		useElements();
 
 	useEffect(() => {
 		const handleMouseDown = () => {
@@ -20,7 +20,7 @@ export default function CircleHandler() {
 		const handleMouseMove = () => {
 			if (!drawing) return;
 			const { x, y } = mousePos;
-			setNewCircle(
+			setMyNewElement(
 				<Circle
 					key={"Circle" + elementsArr.length}
 					x={startingPosition.x}
@@ -36,8 +36,7 @@ export default function CircleHandler() {
 			);
 		};
 		const handleMouseUp = () => {
-			addElementToStage(NewCircle);
-			setNewCircle(null);
+			addElementToStage();
 			setDrawing(false);
 		};
 		document.addEventListener("mousedown", handleMouseDown);
@@ -48,7 +47,6 @@ export default function CircleHandler() {
 			document.removeEventListener("mousemove", handleMouseMove);
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [drawing, startingPosition, NewCircle, mousePos]);
-
-	return NewCircle;
+	}, [drawing, startingPosition, myNewElement, mousePos]);
+	return null;
 }

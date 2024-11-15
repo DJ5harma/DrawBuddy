@@ -24,7 +24,9 @@ type ITool = {
 		| "Pencil"
 		| "Text"
 		| "Gallery"
-		| "Eraser";
+		| "Eraser"
+		| "ClearAll";
+
 	icon: ReactNode;
 	handler: ReactNode;
 };
@@ -85,6 +87,11 @@ const toolArr: ITool[] = [
 		icon: <LuEraser />,
 		handler: <></>,
 	},
+	{
+		name: "ClearAll",
+		handler: <ClearAllHandler />,
+		icon: <MdOutlineDelete />,
+	},
 ];
 
 export default function ToolsProvider({ children }: { children: ReactNode }) {
@@ -117,7 +124,6 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 							{tool.icon}
 						</button>
 					))}
-					<ClearAllHandler />
 				</nav>
 			</div>
 			{children}
@@ -125,6 +131,8 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 	);
 }
 
-const context = createContext({ selectedTool: toolArr[2] });
+const context = createContext<{ selectedTool: ITool }>({
+	selectedTool: toolArr[2],
+});
 
 export const useTools = () => useContext(context);
