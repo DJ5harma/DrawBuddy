@@ -12,6 +12,7 @@ import {
 	deserializeKonvaElement,
 	serializeKonvaElement,
 } from "../utils/konva/convertKonva";
+import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
 
 const context = createContext<{
 	elementsArr: JSX.Element[];
@@ -48,45 +49,75 @@ export default function StageProvider() {
 	}, []);
 
 	// ------------------------------------
-	// mouse and zoom section ___
+	// size, mouse and zoom section ___
 
 	const [dimensions, setDimensions] = useState({
 		width: window.innerWidth,
 		height: window.innerHeight,
 	});
-	const updateDimensions = () =>
-		setDimensions({ width: window.innerWidth, height: window.innerHeight });
 
 	const { selectedTool } = useTools();
 
-	const [scale, setScale] = useState(1);
-	const [position, setPosition] = useState({ x: 0, y: 0 });
+	const [scale, setScale] = useState(() => {
+		const storedScale = localStorage.getItem("stageScale");
+		return storedScale ? JSON.parse(storedScale) : 1;
+	});
+	const [position, setPosition] = useState(() => {
+		const storedPos = localStorage.getItem("stagePosition");
+		console.log({ storedPos });
+
+		return storedPos ? JSON.parse(storedPos) : { x: 0, y: 0 };
+	});
 
 	const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-	const handleMouseMove = (e: MouseEvent) => {
-		const stage = document.querySelector("canvas")?.getBoundingClientRect();
-		const scaleX = scale;
-		const scaleY = scale;
-		const offsetX = position.x;
-		const offsetY = position.y;
-
-		const mouseX = e.clientX - (stage?.left || 0);
-		const mouseY = e.clientY - (stage?.top || 0);
-
-		const adjustedX = (mouseX - offsetX) / scaleX;
-		const adjustedY = (mouseY - offsetY) / scaleY;
-
-		setMousePos({ x: adjustedX, y: adjustedY });
-	};
 	useEffect(() => {
-		document.addEventListener("mousemove", handleMouseMove);
+		const updateDimensions = () =>
+			setDimensions({ width: window.innerWidth, height: window.innerHeight });
+		const handleMouseMove = (e: MouseEvent) => {
+			const stage = document.querySelector("canvas")?.getBoundingClientRect();
+			const scaleX = scale;
+			const scaleY = scale;
+			const offsetX = position.x;
+			const offsetY = position.y;
+
+			const mouseX = e.clientX - (stage?.left || 0);
+			const mouseY = e.clientY - (stage?.top || 0);
+
+			const adjustedX = (mouseX - offsetX) / scaleX;
+			const adjustedY = (mouseY - offsetY) / scaleY;
+
+			setMousePos({ x: adjustedX, y: adjustedY });
+		};
 		window.addEventListener("resize", updateDimensions);
+		document.addEventListener("mousemove", handleMouseMove);
 		return () => {
 			window.removeEventListener("resize", updateDimensions);
 			document.removeEventListener("mousemove", handleMouseMove);
 		};
 	}, [scale, position]);
+
+	const handleOnWheel = (e: KonvaEventObject<WheelEvent, Node<NodeConfig>>) => {
+		const newScale = e.evt.deltaY < 0 ? scale * 1.1 : scale / 1.1;
+		if (newScale < 0.2 || newScale > 3) return;
+
+		const stage = e.target.getStage();
+		if (!stage) return;
+
+		const scaleFactor = newScale / scale;
+		setScale(newScale);
+		localStorage.setItem("stageScale", newScale.toString());
+
+		const mousePos = stage.getPointerPosition();
+		if (mousePos) {
+			const mouseX = mousePos.x;
+			const mouseY = mousePos.y;
+			const newX = mouseX - (mouseX - position.x) * scaleFactor;
+			const newY = mouseY - (mouseY - position.y) * scaleFactor;
+			setPosition({ x: newX, y: newY });
+			localStorage.setItem("stagePosition", JSON.stringify(position));
+		}
+	};
 
 	return (
 		<Stage
@@ -97,25 +128,7 @@ export default function StageProvider() {
 			scaleY={scale}
 			x={position.x}
 			y={position.y}
-			onWheel={(e) => {
-				const newScale = e.evt.deltaY < 0 ? scale * 1.1 : scale / 1.1;
-				if (newScale < 0.2 || newScale > 3) return;
-
-				const stage = e.target.getStage();
-				if (!stage) return;
-
-				const scaleFactor = newScale / scale;
-				setScale(newScale);
-
-				const mousePos = stage.getPointerPosition();
-				if (mousePos) {
-					const mouseX = mousePos.x;
-					const mouseY = mousePos.y;
-					const newX = mouseX - (mouseX - position.x) * scaleFactor;
-					const newY = mouseY - (mouseY - position.y) * scaleFactor;
-					setPosition({ x: newX, y: newY });
-				}
-			}}
+			onWheel={handleOnWheel}
 		>
 			<Layer>
 				{elementsArr}
