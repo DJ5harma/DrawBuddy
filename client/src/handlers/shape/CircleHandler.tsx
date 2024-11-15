@@ -9,7 +9,7 @@ export default function CircleHandler() {
 	const [drawing, setDrawing] = useState(false);
 
 	const { mousePos } = useStage();
-	const { addElementToStage } = useElements();
+	const { elementsArr, addElementToStage } = useElements();
 
 	useEffect(() => {
 		const handleMouseDown = () => {
@@ -22,7 +22,7 @@ export default function CircleHandler() {
 			const { x, y } = mousePos;
 			setNewCircle(
 				<Circle
-					key={Math.random()}
+					key={"Circle" + elementsArr.length}
 					x={startingPosition.x}
 					y={startingPosition.y}
 					radius={Math.sqrt(
@@ -37,6 +37,7 @@ export default function CircleHandler() {
 		};
 		const handleMouseUp = () => {
 			addElementToStage(NewCircle);
+			setNewCircle(null);
 			setDrawing(false);
 		};
 		document.addEventListener("mousedown", handleMouseDown);

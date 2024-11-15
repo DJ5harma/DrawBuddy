@@ -9,7 +9,7 @@ export default function RectangleHandler() {
 	const [drawing, setDrawing] = useState(false);
 
 	const { mousePos } = useStage();
-	const { addElementToStage } = useElements();
+	const { elementsArr, addElementToStage } = useElements();
 
 	useEffect(() => {
 		const handleMouseDown = () => {
@@ -20,7 +20,7 @@ export default function RectangleHandler() {
 			if (!drawing) return;
 			setNewRectangle(
 				<Rect
-					key={Math.random()}
+					key={"Rect" + elementsArr.length}
 					x={startingPosition.x}
 					y={startingPosition.y}
 					width={mousePos.x - startingPosition.x}

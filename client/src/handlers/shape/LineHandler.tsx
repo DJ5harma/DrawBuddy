@@ -17,7 +17,7 @@ export default function LineHandler() {
 	});
 
 	const { mousePos } = useStage();
-	const { addElementToStage } = useElements();
+	const { elementsArr, addElementToStage } = useElements();
 
 	useEffect(() => {
 		const handleMouseDown = () => {
@@ -37,7 +37,7 @@ export default function LineHandler() {
 			const { x, y } = mousePos;
 			setNewLine(
 				<Line
-					key={Math.random()}
+					key={"Line" + elementsArr.length}
 					points={
 						multipleLines.exist
 							? [...multipleLines.pointsArr, x, y]
@@ -56,7 +56,6 @@ export default function LineHandler() {
 				setMultipleLines({ pointsArr: [x, y], exist: true });
 				return;
 			}
-
 			addElementToStage(NewLine);
 			setNewLine(null);
 			setDrawing(false);
