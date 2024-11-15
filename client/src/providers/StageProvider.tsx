@@ -13,6 +13,7 @@ import {
 	serializeKonvaElement,
 } from "../utils/konva/convertKonva";
 import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
+import ClearAllHandler from "../handlers/ClearAllHandler";
 
 const context = createContext<{
 	elementsArr: JSX.Element[];
@@ -108,42 +109,55 @@ export default function StageProvider() {
 		setScale(newScale);
 		localStorage.setItem("stageScale", newScale.toString());
 
-		const mousePos = stage.getPointerPosition();
-		if (mousePos) {
-			const mouseX = mousePos.x;
-			const mouseY = mousePos.y;
-			const newX = mouseX - (mouseX - position.x) * scaleFactor;
-			const newY = mouseY - (mouseY - position.y) * scaleFactor;
-			setPosition({ x: newX, y: newY });
-			localStorage.setItem("stagePosition", JSON.stringify(position));
+		const stagePointerPos = stage.getPointerPosition();
+		if (stagePointerPos) {
+			const { x, y } = stagePointerPos;
+			const newPos = {
+				x: x - (x - position.x) * scaleFactor,
+				y: y - (y - position.y) * scaleFactor,
+			};
+			setPosition(newPos);
+			localStorage.setItem("stagePosition", JSON.stringify(newPos));
 		}
 	};
 
 	return (
-		<Stage
-			width={dimensions.width}
-			height={dimensions.height}
-			className="bg-neutral-900 overflow-hidden"
-			scaleX={scale}
-			scaleY={scale}
-			x={position.x}
-			y={position.y}
-			onWheel={handleOnWheel}
-		>
-			<Layer>
-				{elementsArr}
-				<context.Provider
-					value={{
-						elementsArr,
-						setElementsArr,
-						addElementToStage,
-						mousePos,
-					}}
-				>
-					{selectedTool.handler}
-				</context.Provider>
-			</Layer>
-		</Stage>
+		<>
+			<Stage
+				width={dimensions.width}
+				height={dimensions.height}
+				className="bg-neutral-900 overflow-hidden"
+				scaleX={scale}
+				scaleY={scale}
+				x={position.x}
+				y={position.y}
+				onWheel={handleOnWheel}
+			>
+				<Layer>
+					{elementsArr}
+					<context.Provider
+						value={{
+							elementsArr,
+							setElementsArr,
+							addElementToStage,
+							mousePos,
+						}}
+					>
+						{selectedTool.handler}
+					</context.Provider>
+				</Layer>
+			</Stage>
+			<context.Provider
+				value={{
+					elementsArr,
+					setElementsArr,
+					addElementToStage,
+					mousePos,
+				}}
+			>
+				<ClearAllHandler />
+			</context.Provider>
+		</>
 	);
 }
 
