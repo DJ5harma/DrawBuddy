@@ -26,8 +26,6 @@ export default function StageProvider() {
 	});
 	const [position, setPosition] = useState(() => {
 		const storedPos = localStorage.getItem("stagePosition");
-		console.log({ storedPos });
-
 		return storedPos ? JSON.parse(storedPos) : { x: 0, y: 0 };
 	});
 
@@ -51,10 +49,15 @@ export default function StageProvider() {
 
 			setMousePos({ x: adjustedX, y: adjustedY });
 		};
+		const handleWheel = (e: WheelEvent) => {
+			e.preventDefault();
+		};
 		window.addEventListener("resize", updateDimensions);
+		window.addEventListener("wheel", handleWheel, { passive: false });
 		document.addEventListener("mousemove", handleMouseMove);
 		return () => {
 			window.removeEventListener("resize", updateDimensions);
+			window.removeEventListener("wheel", handleWheel);
 			document.removeEventListener("mousemove", handleMouseMove);
 		};
 	}, [scale, position]);
