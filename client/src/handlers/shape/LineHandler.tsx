@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Line } from "react-konva";
-import { useStage } from "../providers/StageProvider";
+import { useStage } from "../../providers/StageProvider";
+import { useElements } from "../../providers/ElementsProvider";
 
 export default function LineHandler() {
 	const [NewLine, setNewLine] = useState<JSX.Element | null>(null);
@@ -15,7 +16,8 @@ export default function LineHandler() {
 		pointsArr: [],
 	});
 
-	const { addElementToStage, mousePos } = useStage();
+	const { mousePos } = useStage();
+	const { addElementToStage } = useElements();
 
 	useEffect(() => {
 		const handleMouseDown = () => {

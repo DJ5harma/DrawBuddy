@@ -1,28 +1,34 @@
 import { useEffect, useState } from "react";
-import { Rect } from "react-konva";
-import { useStage } from "../providers/StageProvider";
+import { Circle } from "react-konva";
+import { useStage } from "../../providers/StageProvider";
+import { useElements } from "../../providers/ElementsProvider";
 
-export default function RectangleHandler() {
-	const [NewRectangle, setNewRectangle] = useState<JSX.Element | null>(null);
+export default function CircleHandler() {
+	const [NewCircle, setNewCircle] = useState<JSX.Element | null>(null);
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
 	const [drawing, setDrawing] = useState(false);
 
-	const { addElementToStage, mousePos } = useStage();
+	const { mousePos } = useStage();
+	const { addElementToStage } = useElements();
 
 	useEffect(() => {
 		const handleMouseDown = () => {
 			setDrawing(true);
-			setStartingPosition({ ...mousePos });
+			const { x, y } = mousePos;
+			setStartingPosition({ x, y });
 		};
 		const handleMouseMove = () => {
 			if (!drawing) return;
-			setNewRectangle(
-				<Rect
+			const { x, y } = mousePos;
+			setNewCircle(
+				<Circle
 					key={Math.random()}
 					x={startingPosition.x}
 					y={startingPosition.y}
-					width={mousePos.x - startingPosition.x}
-					height={mousePos.y - startingPosition.y}
+					radius={Math.sqrt(
+						Math.pow(x - startingPosition.x, 2) +
+							Math.pow(y - startingPosition.y, 2)
+					)}
 					strokeEnabled
 					strokeWidth={4}
 					stroke={"red"}
@@ -30,8 +36,7 @@ export default function RectangleHandler() {
 			);
 		};
 		const handleMouseUp = () => {
-			addElementToStage(NewRectangle);
-			setNewRectangle(null);
+			addElementToStage(NewCircle);
 			setDrawing(false);
 		};
 		document.addEventListener("mousedown", handleMouseDown);
@@ -42,7 +47,7 @@ export default function RectangleHandler() {
 			document.removeEventListener("mousemove", handleMouseMove);
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [drawing, startingPosition, NewRectangle, mousePos]);
+	}, [drawing, startingPosition, NewCircle, mousePos]);
 
-	if (NewRectangle) return NewRectangle;
+	return NewCircle;
 }

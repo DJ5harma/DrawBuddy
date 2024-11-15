@@ -7,9 +7,10 @@ import { ImTextColor } from "react-icons/im";
 import { LuDiamond, LuEraser, LuRectangleHorizontal } from "react-icons/lu";
 import { MdOutlineDelete, MdOutlineHorizontalRule } from "react-icons/md";
 import { RiGalleryLine } from "react-icons/ri";
-import RectangleHandler from "../handlers/RectangleHandler";
-import CircleHandler from "../handlers/CircleHandler";
-import LineHandler from "../handlers/LineHandler";
+import RectangleHandler from "../handlers/shape/RectangleHandler";
+import CircleHandler from "../handlers/shape/CircleHandler";
+import LineHandler from "../handlers/shape/LineHandler";
+import ClearAllHandler from "../handlers/functional/ClearAllHandler";
 
 type ITool = {
 	name:
@@ -85,6 +86,7 @@ const toolArr: ITool[] = [
 		handler: <></>,
 	},
 ];
+
 export default function ToolsProvider({ children }: { children: ReactNode }) {
 	const [selectedTool, setSelectedTool] = useState<ITool>(
 		toolArr[parseInt(localStorage.getItem("selectedToolIndex") || "2")]
@@ -115,6 +117,7 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 							{tool.icon}
 						</button>
 					))}
+					<ClearAllHandler />
 				</nav>
 			</div>
 			{children}

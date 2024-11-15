@@ -1,56 +1,17 @@
 import { Layer, Stage } from "react-konva";
-import {
-	createContext,
-	Dispatch,
-	SetStateAction,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useTools } from "./ToolsProvider";
-import {
-	deserializeKonvaElement,
-	serializeKonvaElement,
-} from "../utils/konva/convertKonva";
 import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
-import ClearAllHandler from "../handlers/ClearAllHandler";
+import { useElements } from "./ElementsProvider";
 
 const context = createContext<{
-	elementsArr: JSX.Element[];
-	setElementsArr: Dispatch<SetStateAction<JSX.Element[]>>;
-	addElementToStage: (element: JSX.Element | null) => void;
 	mousePos: { x: number; y: number };
 }>({
-	elementsArr: [],
-	setElementsArr: () => {},
-	addElementToStage: () => {},
 	mousePos: { x: 0, y: 0 },
 });
 
 export default function StageProvider() {
-	// elements' section ___
-	const [elementsArr, setElementsArr] = useState<JSX.Element[]>([]);
-	const addElementToStage = (element: JSX.Element | null) => {
-		if (!element) return;
-		const newArr = [...elementsArr, element];
-		setElementsArr(newArr);
-
-		localStorage.setItem(
-			"serializedShapes",
-			JSON.stringify(newArr.map((element) => serializeKonvaElement(element)))
-		);
-	};
-	useEffect(() => {
-		const serializedShapes = JSON.parse(
-			localStorage.getItem("serializedShapes") || "[]"
-		) as string[];
-		setElementsArr(
-			serializedShapes.map((serial) => deserializeKonvaElement(serial))
-		);
-	}, []);
-
-	// ------------------------------------
-	// size, mouse and zoom section ___
+	const { elementsArr } = useElements();
 
 	const [dimensions, setDimensions] = useState({
 		width: window.innerWidth,
@@ -122,42 +83,27 @@ export default function StageProvider() {
 	};
 
 	return (
-		<>
-			<Stage
-				width={dimensions.width}
-				height={dimensions.height}
-				className="bg-neutral-900 overflow-hidden"
-				scaleX={scale}
-				scaleY={scale}
-				x={position.x}
-				y={position.y}
-				onWheel={handleOnWheel}
-			>
-				<Layer>
-					{elementsArr}
-					<context.Provider
-						value={{
-							elementsArr,
-							setElementsArr,
-							addElementToStage,
-							mousePos,
-						}}
-					>
-						{selectedTool.handler}
-					</context.Provider>
-				</Layer>
-			</Stage>
-			<context.Provider
-				value={{
-					elementsArr,
-					setElementsArr,
-					addElementToStage,
-					mousePos,
-				}}
-			>
-				<ClearAllHandler />
-			</context.Provider>
-		</>
+		<Stage
+			width={dimensions.width}
+			height={dimensions.height}
+			className="bg-neutral-900 overflow-hidden"
+			scaleX={scale}
+			scaleY={scale}
+			x={position.x}
+			y={position.y}
+			onWheel={handleOnWheel}
+		>
+			<Layer>
+				{elementsArr}
+				<context.Provider
+					value={{
+						mousePos,
+					}}
+				>
+					{selectedTool.handler}
+				</context.Provider>
+			</Layer>
+		</Stage>
 	);
 }
 
