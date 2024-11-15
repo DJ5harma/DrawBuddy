@@ -71,15 +71,20 @@ const toolArr: ITool[] = [
 	},
 ];
 export default function ToolsProvider({ children }: { children: ReactNode }) {
-	const [selectedTool, setSelectedTool] = useState<ITool>(toolArr[2]);
+	const [selectedTool, setSelectedTool] = useState<ITool>(
+		toolArr[parseInt(localStorage.getItem("selectedToolIndex") || "2")]
+	);
 
 	return (
 		<context.Provider value={{ selectedTool }}>
 			<div className="w-screen absolute top-4 left-0 flex justify-center items-center z-10">
 				<nav className="top-2 bg-neutral-800 flex p-1 [&>button]:p-3 gap-1">
-					{toolArr.map((tool) => (
+					{toolArr.map((tool, i) => (
 						<button
-							onClick={() => setSelectedTool(tool)}
+							onClick={() => {
+								setSelectedTool(tool);
+								localStorage.setItem("selectedToolIndex", i.toString());
+							}}
 							className={
 								selectedTool.name === tool.name
 									? "bg-orange-900"
