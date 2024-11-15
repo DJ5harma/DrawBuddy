@@ -1,9 +1,9 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Rect } from "react-konva";
 import { useStage } from "../providers/StageProvider";
 
 export default function RectangleHandler() {
-	const [NewRectangle, setNewRectangle] = useState<ReactNode | null>(null);
+	const [NewRectangle, setNewRectangle] = useState<JSX.Element | null>(null);
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
 	const [drawing, setDrawing] = useState(false);
 
@@ -33,6 +33,7 @@ export default function RectangleHandler() {
 	};
 	const handleMouseUp = () => {
 		const newElem = NewRectangle;
+
 		setNewRectangle(null);
 		addElementToStage(newElem);
 		setDrawing(false);

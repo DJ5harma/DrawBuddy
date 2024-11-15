@@ -2,27 +2,35 @@ import { Layer, Stage } from "react-konva";
 import {
 	createContext,
 	Dispatch,
-	ReactNode,
 	SetStateAction,
 	useContext,
 	useEffect,
 	useState,
 } from "react";
 import { useTools } from "./ToolsProvider";
+// import { serializeKonvaElement } from "../utils/konva/convertKonva";
 
 const context = createContext<{
-	elementsArr: ReactNode[];
-	setElementsArr: Dispatch<SetStateAction<ReactNode[]>>;
-	addElementToStage: (element: ReactNode) => void;
+	elementsArr: JSX.Element[];
+	setElementsArr: Dispatch<SetStateAction<JSX.Element[]>>;
+	addElementToStage: (element: JSX.Element | null) => void;
 }>({
 	elementsArr: [],
 	setElementsArr: () => {},
 	addElementToStage: () => {},
 });
 export default function StageProvider() {
-	const [elementsArr, setElementsArr] = useState<ReactNode[]>([]);
-	const addElementToStage = (element: ReactNode) =>
-		setElementsArr((p) => [...p, element]);
+	const [elementsArr, setElementsArr] = useState<JSX.Element[]>([]);
+
+	const addElementToStage = (element: JSX.Element | null) => {
+		if (element) setElementsArr((p) => [...p, element]);
+		// const storedShapesArray = JSON.parse(localStorage.getItem("storedShapesArray") || '[]') as Array<>;
+		// if(!storedShapesArray) storedShapesArray = [serializeKonvaElement(element)]
+	};
+
+	useEffect(() => {
+		localStorage.clear();
+	}, []);
 
 	useEffect(() => {
 		window.addEventListener("resize", updateDimensions);
