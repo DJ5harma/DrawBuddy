@@ -7,39 +7,33 @@ export default function RectangleHandler() {
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
 	const [drawing, setDrawing] = useState(false);
 
-	const { addElementToStage } = useStage();
-
-	const handleMouseDown = (e: MouseEvent) => {
-		setDrawing(true);
-		const { clientX: x, clientY: y } = e;
-		setStartingPosition({ x, y });
-	};
-	const handleMouseMove = (e: MouseEvent) => {
-		if (!drawing) return;
-
-		const { clientX: x, clientY: y } = e;
-		setNewRectangle(
-			<Rect
-				key={Math.random()}
-				x={startingPosition.x}
-				y={startingPosition.y}
-				width={x - startingPosition.x}
-				height={y - startingPosition.y}
-				strokeEnabled
-				strokeWidth={4}
-				stroke={"red"}
-			/>
-		);
-	};
-	const handleMouseUp = () => {
-		const newElem = NewRectangle;
-
-		setNewRectangle(null);
-		addElementToStage(newElem);
-		setDrawing(false);
-	};
+	const { addElementToStage, mousePos } = useStage();
 
 	useEffect(() => {
+		const handleMouseDown = () => {
+			setDrawing(true);
+			setStartingPosition({ ...mousePos });
+		};
+		const handleMouseMove = () => {
+			if (!drawing) return;
+			setNewRectangle(
+				<Rect
+					key={Math.random()}
+					x={startingPosition.x}
+					y={startingPosition.y}
+					width={mousePos.x - startingPosition.x}
+					height={mousePos.y - startingPosition.y}
+					strokeEnabled
+					strokeWidth={4}
+					stroke={"red"}
+				/>
+			);
+		};
+		const handleMouseUp = () => {
+			addElementToStage(NewRectangle);
+			setNewRectangle(null);
+			setDrawing(false);
+		};
 		document.addEventListener("mousedown", handleMouseDown);
 		document.addEventListener("mousemove", handleMouseMove);
 		document.addEventListener("mouseup", handleMouseUp);
@@ -48,7 +42,7 @@ export default function RectangleHandler() {
 			document.removeEventListener("mousemove", handleMouseMove);
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [drawing, startingPosition, NewRectangle]);
+	}, [drawing, startingPosition, NewRectangle, mousePos]);
 
 	if (NewRectangle) return NewRectangle;
 }

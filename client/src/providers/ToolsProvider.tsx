@@ -92,7 +92,12 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 
 	return (
 		<context.Provider value={{ selectedTool }}>
-			<div className="w-screen absolute top-4 left-0 flex justify-center items-center z-10">
+			<div
+				className="w-screen absolute top-4 left-0 flex justify-center items-center z-10"
+				style={{
+					transform: "scale(1)",
+				}}
+			>
 				<nav className="top-2 bg-neutral-800 flex p-1 [&>button]:p-3 gap-1">
 					{toolArr.map((tool, i) => (
 						<button
