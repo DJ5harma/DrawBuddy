@@ -31,7 +31,12 @@ export default function ElementsProvider({
 }: {
 	children: ReactNode;
 }) {
-	const [elementsArr, setElementsArr] = useState<JSX.Element[]>([]);
+	const [elementsArr, setElementsArr] = useState<JSX.Element[]>(() => {
+		const serializedShapes = JSON.parse(
+			localStorage.getItem("serializedShapes") || "[]"
+		) as string[];
+		return serializedShapes.map((serial) => deserializeKonvaElement(serial));
+	});
 	const [myNewElement, setMyNewElement] = useState<JSX.Element | null>(null);
 	const addElementToStage = () => {
 		if (!myNewElement) return;
@@ -46,14 +51,6 @@ export default function ElementsProvider({
 			)
 		);
 	}, [elementsArr]);
-	useEffect(() => {
-		const serializedShapes = JSON.parse(
-			localStorage.getItem("serializedShapes") || "[]"
-		) as string[];
-		setElementsArr(
-			serializedShapes.map((serial) => deserializeKonvaElement(serial))
-		);
-	}, []);
 	return (
 		<context.Provider
 			value={{
