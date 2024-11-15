@@ -8,6 +8,10 @@ import {
 	useState,
 } from "react";
 import { useTools } from "./ToolsProvider";
+import {
+	deserializeKonvaElement,
+	serializeKonvaElement,
+} from "../utils/konva/convertKonva";
 // import { serializeKonvaElement } from "../utils/konva/convertKonva";
 
 const context = createContext<{
@@ -23,13 +27,23 @@ export default function StageProvider() {
 	const [elementsArr, setElementsArr] = useState<JSX.Element[]>([]);
 
 	const addElementToStage = (element: JSX.Element | null) => {
-		if (element) setElementsArr((p) => [...p, element]);
-		// const storedShapesArray = JSON.parse(localStorage.getItem("storedShapesArray") || '[]') as Array<>;
-		// if(!storedShapesArray) storedShapesArray = [serializeKonvaElement(element)]
+		if (!element) return;
+		const newArr = [...elementsArr, element];
+		setElementsArr(newArr);
+
+		localStorage.setItem(
+			"serializedShapes",
+			JSON.stringify(newArr.map((element) => serializeKonvaElement(element)))
+		);
 	};
 
 	useEffect(() => {
-		localStorage.clear();
+		const serializedShapes = JSON.parse(
+			localStorage.getItem("serializedShapes") || "[]"
+		) as string[];
+		setElementsArr(
+			serializedShapes.map((serial) => deserializeKonvaElement(serial))
+		);
 	}, []);
 
 	useEffect(() => {

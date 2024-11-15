@@ -2,7 +2,7 @@ import { Circle, Line, Rect } from "react-konva";
 
 export function serializeKonvaElement(element: JSX.Element) {
 	const { type, props, key } = element;
-	return JSON.stringify({ type, props, key });
+	return JSON.stringify({ type, props, key }) as string;
 }
 
 export function deserializeKonvaElement(serial: string) {
