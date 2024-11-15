@@ -22,7 +22,7 @@ export default function StageProvider() {
 
 	const [scale, setScale] = useState(() => {
 		const storedScale = localStorage.getItem("stageScale");
-		return storedScale ? JSON.parse(storedScale) : 1;
+		return (storedScale ? JSON.parse(storedScale) : 1) as number;
 	});
 	const [position, setPosition] = useState<{ x: number; y: number }>(() => {
 		const storedPos = localStorage.getItem("stagePosition");
@@ -35,6 +35,13 @@ export default function StageProvider() {
 		x: 0,
 		y: 0,
 	});
+
+	useEffect(() => {
+		localStorage.setItem("stagePosition", JSON.stringify(position));
+	}, [position]);
+	useEffect(() => {
+		localStorage.setItem("stageScale", scale.toString());
+	}, [scale]);
 
 	useEffect(() => {
 		const updateDimensions = () =>
@@ -98,7 +105,6 @@ export default function StageProvider() {
 
 		const scaleFactor = newScale / scale;
 		setScale(newScale);
-		localStorage.setItem("stageScale", newScale.toString());
 
 		const stagePointerPos = stage.getPointerPosition();
 		if (stagePointerPos) {
@@ -108,7 +114,6 @@ export default function StageProvider() {
 				y: y - (y - position.y) * scaleFactor,
 			};
 			setPosition(newPos);
-			localStorage.setItem("stagePosition", JSON.stringify(newPos));
 		}
 	};
 

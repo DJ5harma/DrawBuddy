@@ -35,15 +35,17 @@ export default function ElementsProvider({
 	const [myNewElement, setMyNewElement] = useState<JSX.Element | null>(null);
 	const addElementToStage = () => {
 		if (!myNewElement) return;
-		const newArr = [...elementsArr, myNewElement];
-
-		setElementsArr(newArr);
+		setElementsArr([...elementsArr, myNewElement]);
 		setMyNewElement(null);
+	};
+	useEffect(() => {
 		localStorage.setItem(
 			"serializedShapes",
-			JSON.stringify(newArr.map((element) => serializeKonvaElement(element)))
+			JSON.stringify(
+				elementsArr.map((element) => serializeKonvaElement(element))
+			)
 		);
-	};
+	}, [elementsArr]);
 	useEffect(() => {
 		const serializedShapes = JSON.parse(
 			localStorage.getItem("serializedShapes") || "[]"

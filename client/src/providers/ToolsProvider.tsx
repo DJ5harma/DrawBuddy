@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+	createContext,
+	ReactNode,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 import { BiPencil } from "react-icons/bi";
 import { FaMousePointer } from "react-icons/fa";
 import { FaArrowRightLong, FaHand } from "react-icons/fa6";
@@ -112,8 +118,8 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 					{toolArr.map((tool, i) => (
 						<button
 							onClick={() => {
-								setSelectedTool(tool);
 								localStorage.setItem("selectedToolIndex", i.toString());
+								setSelectedTool(tool);
 							}}
 							className={
 								selectedTool.name === tool.name
