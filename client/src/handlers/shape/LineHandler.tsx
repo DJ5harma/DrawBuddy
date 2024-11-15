@@ -20,7 +20,8 @@ export default function LineHandler() {
 		useElements();
 
 	useEffect(() => {
-		const handleMouseDown = () => {
+		const handleMouseDown = (e: MouseEvent) => {
+			if (e.button !== 0) return;
 			const { x, y } = mousePos;
 			if (multipleLines.exist)
 				return setMultipleLines((p) => ({

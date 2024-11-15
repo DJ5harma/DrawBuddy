@@ -12,7 +12,8 @@ export default function CircleHandler() {
 		useElements();
 
 	useEffect(() => {
-		const handleMouseDown = () => {
+		const handleMouseDown = (e: MouseEvent) => {
+			if (e.button !== 0) return;
 			setDrawing(true);
 			const { x, y } = mousePos;
 			setStartingPosition({ x, y });

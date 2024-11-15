@@ -24,12 +24,17 @@ export default function StageProvider() {
 		const storedScale = localStorage.getItem("stageScale");
 		return storedScale ? JSON.parse(storedScale) : 1;
 	});
-	const [position, setPosition] = useState(() => {
+	const [position, setPosition] = useState<{ x: number; y: number }>(() => {
 		const storedPos = localStorage.getItem("stagePosition");
 		return storedPos ? JSON.parse(storedPos) : { x: 0, y: 0 };
 	});
 
 	const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+	const [isPanning, setIsPanning] = useState(false);
+	const [panStartPos, setPanStartPos] = useState<{ x: number; y: number }>({
+		x: 0,
+		y: 0,
+	});
 
 	useEffect(() => {
 		const updateDimensions = () =>
@@ -48,19 +53,41 @@ export default function StageProvider() {
 			const adjustedY = (mouseY - offsetY) / scaleY;
 
 			setMousePos({ x: adjustedX, y: adjustedY });
+
+			if (isPanning) {
+				const dx = e.clientX - panStartPos.x;
+				const dy = e.clientY - panStartPos.y;
+				setPosition((prev) => ({ x: prev.x + dx, y: prev.y + dy }));
+				setPanStartPos({ x: e.clientX, y: e.clientY });
+			}
 		};
 		const handleWheel = (e: WheelEvent) => {
 			e.preventDefault();
 		};
+		const handleMouseDown = (e: MouseEvent) => {
+			if (e.button === 1) {
+				setIsPanning(true);
+				setPanStartPos({ x: e.clientX, y: e.clientY });
+			}
+		};
+		const handleMouseUp = (e: MouseEvent) => {
+			if (e.button === 1) setIsPanning(false);
+		};
+
 		window.addEventListener("resize", updateDimensions);
 		window.addEventListener("wheel", handleWheel, { passive: false });
 		document.addEventListener("mousemove", handleMouseMove);
+		document.addEventListener("mousedown", handleMouseDown);
+		document.addEventListener("mouseup", handleMouseUp);
+
 		return () => {
 			window.removeEventListener("resize", updateDimensions);
 			window.removeEventListener("wheel", handleWheel);
 			document.removeEventListener("mousemove", handleMouseMove);
+			document.removeEventListener("mousedown", handleMouseDown);
+			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [scale, position]);
+	}, [scale, position, isPanning, panStartPos]);
 
 	const handleOnWheel = (e: KonvaEventObject<WheelEvent, Node<NodeConfig>>) => {
 		const newScale = e.evt.deltaY < 0 ? scale * 1.1 : scale / 1.1;
