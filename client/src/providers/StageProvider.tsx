@@ -8,6 +8,7 @@ import {
 	useEffect,
 	useState,
 } from "react";
+import { useTools } from "./ToolsProvider";
 
 const context = createContext<{
 	elementsArr: ReactNode[];
@@ -18,7 +19,7 @@ const context = createContext<{
 	setElementsArr: () => {},
 	addElementToStage: () => {},
 });
-export default function StageProvider({ children }: { children: ReactNode }) {
+export default function StageProvider() {
 	const [elementsArr, setElementsArr] = useState<ReactNode[]>([]);
 	const addElementToStage = (element: ReactNode) =>
 		setElementsArr((p) => [...p, element]);
@@ -35,6 +36,9 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 	});
 	const updateDimensions = () =>
 		setDimensions({ width: window.innerWidth, height: window.innerHeight });
+
+	const { selectedTool } = useTools();
+
 	return (
 		<Stage
 			width={dimensions.width}
@@ -46,7 +50,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 				<context.Provider
 					value={{ elementsArr, setElementsArr, addElementToStage }}
 				>
-					{children}
+					{selectedTool.handler}
 				</context.Provider>
 			</Layer>
 		</Stage>

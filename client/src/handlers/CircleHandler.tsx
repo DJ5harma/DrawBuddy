@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Circle } from "react-konva";
-import { useTools } from "../providers/ToolsProvider";
 import { useStage } from "../providers/StageProvider";
 
 export default function CircleHandler() {
@@ -8,7 +7,6 @@ export default function CircleHandler() {
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
 	const [drawing, setDrawing] = useState(false);
 
-	const { selectedTool } = useTools();
 	const { addElementToStage } = useStage();
 
 	const handleMouseDown = (e: MouseEvent) => {
@@ -43,17 +41,15 @@ export default function CircleHandler() {
 	};
 
 	useEffect(() => {
-		if (selectedTool.name === "Circle") {
-			document.addEventListener("mousedown", handleMouseDown);
-			document.addEventListener("mousemove", handleMouseMove);
-			document.addEventListener("mouseup", handleMouseUp);
-			return () => {
-				document.removeEventListener("mousedown", handleMouseDown);
-				document.removeEventListener("mousemove", handleMouseMove);
-				document.removeEventListener("mouseup", handleMouseUp);
-			};
-		}
-	}, [drawing, startingPosition, NewCircle, selectedTool]);
+		document.addEventListener("mousedown", handleMouseDown);
+		document.addEventListener("mousemove", handleMouseMove);
+		document.addEventListener("mouseup", handleMouseUp);
+		return () => {
+			document.removeEventListener("mousedown", handleMouseDown);
+			document.removeEventListener("mousemove", handleMouseMove);
+			document.removeEventListener("mouseup", handleMouseUp);
+		};
+	}, [drawing, startingPosition, NewCircle]);
 
 	return NewCircle;
 }

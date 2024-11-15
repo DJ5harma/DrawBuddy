@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Line } from "react-konva";
-import { useTools } from "../providers/ToolsProvider";
 import { useStage } from "../providers/StageProvider";
 
 export default function LineHandler() {
@@ -16,7 +15,6 @@ export default function LineHandler() {
 		pointsArr: [],
 	});
 
-	const { selectedTool } = useTools();
 	const { addElementToStage } = useStage();
 
 	const handleMouseDown = (e: MouseEvent) => {
@@ -88,19 +86,17 @@ export default function LineHandler() {
 	};
 
 	useEffect(() => {
-		if (selectedTool.name === "Line") {
-			document.addEventListener("mousedown", handleMouseDown);
-			document.addEventListener("mousemove", handleMouseMove);
-			document.addEventListener("mouseup", handleMouseUp);
-			document.addEventListener("keyup", handleKeyUp);
-			return () => {
-				document.removeEventListener("mousedown", handleMouseDown);
-				document.removeEventListener("mousemove", handleMouseMove);
-				document.removeEventListener("mouseup", handleMouseUp);
-				document.removeEventListener("keyup", handleKeyUp);
-			};
-		}
-	}, [drawing, startingPosition, NewLine, selectedTool, multipleLines]);
+		document.addEventListener("mousedown", handleMouseDown);
+		document.addEventListener("mousemove", handleMouseMove);
+		document.addEventListener("mouseup", handleMouseUp);
+		document.addEventListener("keyup", handleKeyUp);
+		return () => {
+			document.removeEventListener("mousedown", handleMouseDown);
+			document.removeEventListener("mousemove", handleMouseMove);
+			document.removeEventListener("mouseup", handleMouseUp);
+			document.removeEventListener("keyup", handleKeyUp);
+		};
+	}, [drawing, startingPosition, NewLine, multipleLines]);
 
 	return NewLine;
 }
