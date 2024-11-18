@@ -99,7 +99,7 @@ export default function StageProvider() {
 
 	const handleOnWheel = (e: KonvaEventObject<WheelEvent, Node<NodeConfig>>) => {
 		const newScale = e.evt.deltaY < 0 ? scale * 1.1 : scale / 1.1;
-		if (newScale < 0.2 || newScale > 400) return;
+		if (newScale < 0.05 || newScale > 20) return;
 
 		const stage = e.target.getStage();
 		if (!stage) return;
