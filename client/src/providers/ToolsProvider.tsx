@@ -12,6 +12,7 @@ import CircleHandler from "../handlers/shape/CircleHandler";
 import LineHandler from "../handlers/shape/LineHandler";
 import ClearAllHandler from "../handlers/functional/ClearAllHandler";
 import UndoHandler from "../handlers/functional/UndoHandler";
+import PencilHandler from "../handlers/shape/PencilHandler";
 
 type ITool = {
 	name:
@@ -71,7 +72,7 @@ const toolArr: ITool[] = [
 	{
 		name: "Pencil",
 		icon: <BiPencil />,
-		handler: <></>,
+		handler: <PencilHandler />,
 	},
 	{
 		name: "Text",
