@@ -1,5 +1,6 @@
 import ElementsProvider from "./providers/ElementsProvider";
 import StageProvider from "./providers/StageProvider";
+import ToolSettingsProvider from "./providers/ToolSettingsProvider";
 import ToolsProvider from "./providers/ToolsProvider";
 
 export default function App() {
@@ -7,7 +8,9 @@ export default function App() {
 		<>
 			<ElementsProvider>
 				<ToolsProvider>
-					<StageProvider />
+					<ToolSettingsProvider>
+						<StageProvider />
+					</ToolSettingsProvider>
 				</ToolsProvider>
 			</ElementsProvider>
 		</>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Rect } from "react-konva";
 import { useStage } from "../../providers/StageProvider";
 import { useElements } from "../../providers/ElementsProvider";
+import { useToolSettings } from "../../providers/ToolSettingsProvider";
 
 export default function RectangleHandler() {
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
@@ -10,6 +11,7 @@ export default function RectangleHandler() {
 	const { mousePos } = useStage();
 	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
 		useElements();
+	const { backgroundColor, strokeColor, strokeWidth } = useToolSettings();
 
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
@@ -27,8 +29,9 @@ export default function RectangleHandler() {
 					width={mousePos.x - startingPosition.x}
 					height={mousePos.y - startingPosition.y}
 					strokeEnabled
-					strokeWidth={4}
-					stroke={"red"}
+					strokeWidth={strokeWidth}
+					stroke={strokeColor}
+					fill={backgroundColor}
 				/>
 			);
 		};

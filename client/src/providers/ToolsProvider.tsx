@@ -13,6 +13,7 @@ import LineHandler from "../handlers/shape/LineHandler";
 import ClearAllHandler from "../handlers/functional/ClearAllHandler";
 import UndoHandler from "../handlers/functional/UndoHandler";
 import PencilHandler from "../handlers/shape/PencilHandler";
+import ToolMenuHandler from "./ToolSettingsProvider";
 
 type ITool = {
 	name:

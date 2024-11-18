@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Circle } from "react-konva";
 import { useStage } from "../../providers/StageProvider";
 import { useElements } from "../../providers/ElementsProvider";
+import { useToolSettings } from "../../providers/ToolSettingsProvider";
 
 export default function CircleHandler() {
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
@@ -10,6 +11,8 @@ export default function CircleHandler() {
 	const { mousePos } = useStage();
 	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
 		useElements();
+
+	const { backgroundColor, strokeColor, strokeWidth } = useToolSettings();
 
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
@@ -31,8 +34,9 @@ export default function CircleHandler() {
 							Math.pow(y - startingPosition.y, 2)
 					)}
 					strokeEnabled
-					strokeWidth={4}
-					stroke={"red"}
+					strokeWidth={strokeWidth}
+					stroke={strokeColor}
+					fill={backgroundColor}
 				/>
 			);
 		};

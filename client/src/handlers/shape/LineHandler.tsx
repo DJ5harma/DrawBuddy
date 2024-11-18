@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Line } from "react-konva";
 import { useStage } from "../../providers/StageProvider";
 import { useElements } from "../../providers/ElementsProvider";
+import { useToolSettings } from "../../providers/ToolSettingsProvider";
 
 export default function LineHandler() {
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
@@ -18,6 +19,8 @@ export default function LineHandler() {
 	const { mousePos } = useStage();
 	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
 		useElements();
+
+	const { strokeColor, strokeWidth } = useToolSettings();
 
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
@@ -45,8 +48,8 @@ export default function LineHandler() {
 							: [startingPosition.x, startingPosition.y, x, y]
 					}
 					strokeEnabled
-					strokeWidth={4}
-					stroke={"red"}
+					strokeWidth={strokeWidth}
+					stroke={strokeColor}
 				/>
 			);
 		};

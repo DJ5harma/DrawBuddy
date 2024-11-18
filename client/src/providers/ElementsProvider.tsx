@@ -7,10 +7,7 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import {
-	deserializeKonvaElement,
-	serializeKonvaElement,
-} from "../utils/konva/convertKonva";
+import { serializeKonvaElement } from "../utils/konva/convertKonva";
 
 const context = createContext<{
 	elementsArr: JSX.Element[];
