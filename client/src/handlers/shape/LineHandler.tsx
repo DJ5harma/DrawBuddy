@@ -20,7 +20,7 @@ export default function LineHandler() {
 	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
 		useElements();
 
-	const { strokeColor, strokeWidth } = useToolSettings();
+	const { strokeColor, strokeWidth, opacity } = useToolSettings();
 
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
@@ -50,6 +50,7 @@ export default function LineHandler() {
 					strokeEnabled
 					strokeWidth={strokeWidth}
 					stroke={strokeColor}
+					opacity={opacity}
 				/>
 			);
 		};

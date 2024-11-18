@@ -11,7 +11,7 @@ export default function PencilHandler() {
 	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
 		useElements();
 
-	const { strokeColor, strokeWidth } = useToolSettings();
+	const { strokeColor, strokeWidth, opacity } = useToolSettings();
 
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
@@ -32,6 +32,7 @@ export default function PencilHandler() {
 					strokeWidth={strokeWidth}
 					stroke={strokeColor}
 					lineCap="round"
+					opacity={opacity}
 				/>
 			);
 		};

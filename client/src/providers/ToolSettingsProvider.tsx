@@ -26,10 +26,12 @@ const context = createContext<{
 	strokeColor: string;
 	backgroundColor: string;
 	strokeWidth: number;
+	opacity: number;
 }>({
 	strokeColor: strokeColors[0],
 	backgroundColor: backgroundColors[0],
 	strokeWidth: 10,
+	opacity: 1,
 });
 
 export default function ToolSettingsProvider({
@@ -41,7 +43,7 @@ export default function ToolSettingsProvider({
 	const [backgroundColor, setBackgroundColor] = useState(backgroundColors[0]);
 
 	const [strokeWidth, setStrokeWidth] = useState(10);
-	const [backgroundOpacity, setBackgroundOpacity] = useState(0.5);
+	const [opacity, setOpacity] = useState(1);
 
 	useEffect(() => {
 		localStorage.setItem(
@@ -105,8 +107,21 @@ export default function ToolSettingsProvider({
 						))}
 					</div>
 				</div>
+				<div>
+					<p>Opacity</p>
+					<input
+						type="range"
+						min={0.05}
+						max={1}
+						step={0.01}
+						value={opacity}
+						onChange={(e) => setOpacity(e.target.valueAsNumber)}
+					/>
+				</div>
 			</div>
-			<context.Provider value={{ strokeColor, backgroundColor, strokeWidth }}>
+			<context.Provider
+				value={{ strokeColor, backgroundColor, strokeWidth, opacity }}
+			>
 				{children}
 			</context.Provider>
 		</>

@@ -11,7 +11,8 @@ export default function RectangleHandler() {
 	const { mousePos } = useStage();
 	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
 		useElements();
-	const { backgroundColor, strokeColor, strokeWidth } = useToolSettings();
+	const { backgroundColor, strokeColor, strokeWidth, opacity } =
+		useToolSettings();
 
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
@@ -32,6 +33,7 @@ export default function RectangleHandler() {
 					strokeWidth={strokeWidth}
 					stroke={strokeColor}
 					fill={backgroundColor}
+					opacity={opacity}
 				/>
 			);
 		};

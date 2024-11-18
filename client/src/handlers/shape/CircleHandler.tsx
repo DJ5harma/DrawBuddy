@@ -12,7 +12,8 @@ export default function CircleHandler() {
 	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
 		useElements();
 
-	const { backgroundColor, strokeColor, strokeWidth } = useToolSettings();
+	const { backgroundColor, strokeColor, strokeWidth, opacity } =
+		useToolSettings();
 
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
@@ -37,6 +38,7 @@ export default function CircleHandler() {
 					strokeWidth={strokeWidth}
 					stroke={strokeColor}
 					fill={backgroundColor}
+					opacity={opacity}
 				/>
 			);
 		};
