@@ -23,11 +23,12 @@ export default function PencilHandler() {
 			setPointsArr([...pointsArr, x, y]);
 			setMyNewElement(
 				<Line
-					key={"PencilPoint" + elementsArr.length}
+					key={"Pencil" + elementsArr.length}
 					points={pointsArr}
 					strokeEnabled
 					strokeWidth={4}
 					stroke={"red"}
+					lineCap="round"
 				/>
 			);
 		};

@@ -32,24 +32,16 @@ export default function ElementsProvider({
 	children: ReactNode;
 }) {
 	const [elementsArr, setElementsArr] = useState<JSX.Element[]>(() => {
-		const serializedShapes = JSON.parse(
-			localStorage.getItem("serializedShapes") || "[]"
-		) as string[];
-		return serializedShapes.map((serial) => deserializeKonvaElement(serial));
+		return JSON.parse(localStorage.getItem("serializedShapes") || "[]");
 	});
 	const [myNewElement, setMyNewElement] = useState<JSX.Element | null>(null);
 	const addElementToStage = () => {
 		if (!myNewElement) return;
-		setElementsArr([...elementsArr, myNewElement]);
+		setElementsArr([...elementsArr, serializeKonvaElement(myNewElement)]);
 		setMyNewElement(null);
 	};
 	useEffect(() => {
-		localStorage.setItem(
-			"serializedShapes",
-			JSON.stringify(
-				elementsArr.map((element) => serializeKonvaElement(element))
-			)
-		);
+		localStorage.setItem("serializedShapes", JSON.stringify(elementsArr));
 	}, [elementsArr]);
 	return (
 		<context.Provider

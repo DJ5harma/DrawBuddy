@@ -1,12 +1,13 @@
+import { ReactNode } from "react";
 import { Circle, Line, Rect } from "react-konva";
 
 export function serializeKonvaElement(element: JSX.Element) {
 	const { type, props, key } = element;
-	return JSON.stringify({ type, props, key }) as string;
+	return { type, props, key };
 }
 
-export function deserializeKonvaElement(serial: string) {
-	const { type, props, key } = JSON.parse(serial) as JSX.Element;
+export function deserializeKonvaElement(serial: JSX.Element): ReactNode {
+	const { type, props, key } = serial;
 	switch (type) {
 		case "Rect":
 			return <Rect key={key} {...props} />;

@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useTools } from "./ToolsProvider";
 import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
 import { useElements } from "./ElementsProvider";
+import { deserializeKonvaElement } from "../utils/konva/convertKonva";
 
 const context = createContext<{
 	mousePos: { x: number; y: number };
@@ -129,7 +130,7 @@ export default function StageProvider() {
 			onWheel={handleOnWheel}
 		>
 			<Layer>
-				{elementsArr}
+				{elementsArr.map((elem) => deserializeKonvaElement(elem))}
 				{myNewElement && myNewElement}
 				<context.Provider
 					value={{
