@@ -22,28 +22,39 @@ const backgroundColors = [
 	"",
 ];
 
-const context = createContext<{
+interface IToolSettings {
 	strokeColor: string;
 	backgroundColor: string;
 	strokeWidth: number;
 	opacity: number;
-}>({
+}
+
+const sampleToolSettings = {
 	strokeColor: strokeColors[0],
 	backgroundColor: backgroundColors[0],
 	strokeWidth: 10,
 	opacity: 1,
-});
+};
+
+const context = createContext<IToolSettings>(sampleToolSettings);
 
 export default function ToolSettingsProvider({
 	children,
 }: {
 	children: ReactNode;
 }) {
-	const [strokeColor, setStrokeColor] = useState(strokeColors[0]);
-	const [backgroundColor, setBackgroundColor] = useState(backgroundColors[0]);
+	const toolSettings: IToolSettings = (() => {
+		const ts = localStorage.getItem("toolSettings");
+		if (!ts) return sampleToolSettings;
+		return JSON.parse(ts);
+	})();
+	const [strokeColor, setStrokeColor] = useState(toolSettings.strokeColor);
+	const [backgroundColor, setBackgroundColor] = useState(
+		toolSettings.backgroundColor
+	);
 
-	const [strokeWidth, setStrokeWidth] = useState(10);
-	const [opacity, setOpacity] = useState(1);
+	const [strokeWidth, setStrokeWidth] = useState(toolSettings.strokeWidth);
+	const [opacity, setOpacity] = useState(toolSettings.opacity);
 
 	useEffect(() => {
 		localStorage.setItem(
@@ -52,9 +63,10 @@ export default function ToolSettingsProvider({
 				strokeColor,
 				backgroundColor,
 				strokeWidth,
+				opacity,
 			})
 		);
-	}, [strokeColor, strokeWidth, backgroundColor]);
+	}, [strokeColor, strokeWidth, backgroundColor, opacity]);
 	return (
 		<>
 			<div
