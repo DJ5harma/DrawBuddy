@@ -1,12 +1,14 @@
-import { createContext, ReactNode, useContext, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
+import { createContext, ReactNode, useContext, useEffect, useRef } from "react";
 
-const context = createContext<{ socket: Socket | null }>({
-	socket: null,
+const socketSample = io("localhost:3000", { autoConnect: false });
+
+const context = createContext<{ socket: Socket }>({
+	socket: socketSample,
 });
 
 export default function SocketProvider({ children }: { children: ReactNode }) {
-	const socketRef = useRef(io("localhost:3000"));
+	const socketRef = useRef(socketSample);
 
 	useEffect(() => {
 		const socket = socketRef.current;
@@ -22,4 +24,4 @@ export default function SocketProvider({ children }: { children: ReactNode }) {
 	);
 }
 
-export const useSocket = () => useContext(context) as { socket: Socket };
+export const useSocket = () => useContext(context);

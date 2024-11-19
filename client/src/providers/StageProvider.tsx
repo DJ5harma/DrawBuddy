@@ -122,7 +122,7 @@ export default function StageProvider() {
 		<Stage
 			width={dimensions.width}
 			height={dimensions.height}
-			className="bg-neutral-900 overflow-hidden"
+			className="bg-neutral-900"
 			scaleX={scale}
 			scaleY={scale}
 			x={position.x}
