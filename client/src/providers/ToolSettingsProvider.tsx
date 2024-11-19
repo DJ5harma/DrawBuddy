@@ -36,18 +36,16 @@ const sampleToolSettings = {
 	opacity: 1,
 };
 
-const context = createContext<IToolSettings>(sampleToolSettings);
-
+const toolSettings: IToolSettings = (() => {
+	const ts = localStorage.getItem("toolSettings");
+	if (!ts) return sampleToolSettings;
+	return JSON.parse(ts);
+})();
 export default function ToolSettingsProvider({
 	children,
 }: {
 	children: ReactNode;
 }) {
-	const toolSettings: IToolSettings = (() => {
-		const ts = localStorage.getItem("toolSettings");
-		if (!ts) return sampleToolSettings;
-		return JSON.parse(ts);
-	})();
 	const [strokeColor, setStrokeColor] = useState(toolSettings.strokeColor);
 	const [backgroundColor, setBackgroundColor] = useState(
 		toolSettings.backgroundColor
@@ -140,4 +138,5 @@ export default function ToolSettingsProvider({
 	);
 }
 
+const context = createContext<IToolSettings>(sampleToolSettings);
 export const useToolSettings = () => useContext(context);
