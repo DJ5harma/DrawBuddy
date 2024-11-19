@@ -31,6 +31,8 @@ function closeSocketServer() {
 			socketClosed = true;
 			startedTimerToCloseServer = false;
 			console.log("Socket server closed");
+			roomToUsersMap.clear();
+			useridToRoomMap.clear();
 		} else {
 			console.log("Didn't close");
 			startedTimerToCloseServer = false;
@@ -38,20 +40,54 @@ function closeSocketServer() {
 	}, 10000);
 }
 
-app.get("/GENERATE_ROOM", (req, res) => {
-	startSocketServer();
+// app.get("/START_SOCKET_SERVER", startSocketServer, (_, res) => {
+// 	res.status(200).send("Socket is on now");
+// });
+io.listen(3000);
+app.get("/GENERATE_ROOM", (_, res) => {
 	res.json({ roomId: randomUUID() });
 });
+
+interface IPeerUser {
+	userid: string;
+	username: string;
+}
+const roomToUsersMap = new Map<string, IPeerUser[]>();
+const useridToRoomMap = new Map<string, string>();
 
 io.on("connection", (socket) => {
 	console.log(++clients);
 
-	socket.on("i arrived at room", (id) => {
+	socket.on("i arrived at room", ({ roomId, username }) => {
 		console.log(socket.id, " arrived");
+
+		const userObj = { userid: socket.id, username };
+
+		let prevUsers = roomToUsersMap.get(roomId) || [];
+		prevUsers = [...prevUsers, userObj];
+		roomToUsersMap.set(roomId, prevUsers);
+		socket.emit("previous_users", prevUsers);
+
+		socket.broadcast.to(roomId).emit("new_user", userObj);
+		socket.join(roomId);
+
+		useridToRoomMap.set(socket.id, roomId);
+	});
+
+	socket.on("my new element", ({ element, roomId }) => {
+		socket.broadcast.to(roomId).emit("incoming_element", element);
 	});
 
 	socket.on("disconnect", () => {
 		console.log(--clients);
-		closeSocketServer();
+		const roomId = useridToRoomMap.get(socket.id);
+		if (roomId) {
+			let prevUsers = roomToUsersMap
+				.get(roomId)
+				?.filter(({ userid }) => userid !== socket.id);
+			useridToRoomMap.delete(socket.id);
+			roomToUsersMap.set(roomId, prevUsers || []);
+		}
+		// closeSocketServer();
 	});
 });

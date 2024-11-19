@@ -12,12 +12,16 @@ import { serializeKonvaElement } from "../utils/konva/convertKonva";
 const context = createContext<{
 	elementsArr: JSX.Element[];
 	setElementsArr: Dispatch<SetStateAction<JSX.Element[]>>;
+	peerElementsArr: JSX.Element[];
+	setPeerElementsArr: Dispatch<SetStateAction<JSX.Element[]>>;
 	addElementToStage: () => void;
 	myNewElement: JSX.Element | null;
 	setMyNewElement: Dispatch<SetStateAction<JSX.Element | null>>;
 }>({
 	elementsArr: [],
 	setElementsArr: () => {},
+	peerElementsArr: [],
+	setPeerElementsArr: () => {},
 	addElementToStage: () => {},
 	myNewElement: null,
 	setMyNewElement: () => {},
@@ -31,6 +35,7 @@ export default function ElementsProvider({
 	const [elementsArr, setElementsArr] = useState<JSX.Element[]>(() => {
 		return JSON.parse(localStorage.getItem("serializedShapes") || "[]");
 	});
+	const [peerElementsArr, setPeerElementsArr] = useState<JSX.Element[]>([]);
 	const [myNewElement, setMyNewElement] = useState<JSX.Element | null>(null);
 	const addElementToStage = () => {
 		if (!myNewElement) return;
@@ -45,6 +50,8 @@ export default function ElementsProvider({
 			value={{
 				elementsArr,
 				setElementsArr,
+				peerElementsArr,
+				setPeerElementsArr,
 				addElementToStage,
 				myNewElement,
 				setMyNewElement,
