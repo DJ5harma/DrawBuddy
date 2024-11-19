@@ -12,7 +12,7 @@ const context = createContext<{
 });
 
 export default function StageProvider() {
-	const { elementsArr, myNewElement, peerElementsArr } = useElements();
+	const { elementsArr, myNewElement } = useElements();
 
 	const [dimensions, setDimensions] = useState({
 		width: window.innerWidth,
@@ -131,7 +131,6 @@ export default function StageProvider() {
 		>
 			<Layer>
 				{elementsArr.map((elem) => deserializeKonvaElement(elem))}
-				{peerElementsArr.map((elem) => deserializeKonvaElement(elem))}
 				{myNewElement && myNewElement}
 				<context.Provider
 					value={{

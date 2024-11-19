@@ -1,13 +1,7 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../providers/SocketProvider";
 import { useElements } from "../../providers/ElementsProvider";
-import {
-	deserializeKonvaElement,
-	serializeKonvaElement,
-} from "../../utils/konva/convertKonva";
-import axios from "axios";
-import { START_SOCKET_SERVER } from "../../utils/apiRoutes";
 
 interface IPeerUser {
 	userid: string;
@@ -44,7 +38,8 @@ export default function RoomHandler() {
 
 	const [peers, setPeers] = useState<IPeerUser[]>([]);
 
-	const { elementsArr, peerElementsArr, setPeerElementsArr } = useElements();
+	const { elementsArr, setElementsArr, flickerForLocalCreation } =
+		useElements();
 	// useEffect(() => {
 	// 	axios.get(START_SOCKET_SERVER);
 	// }, []);
@@ -56,21 +51,17 @@ export default function RoomHandler() {
 			});
 			console.log("yes");
 		}
-	}, [elementsArr]);
+	}, [flickerForLocalCreation]);
 	useEffect(() => {
 		socket.on("incoming_element", (element: JSX.Element) => {
 			console.log("came:", element);
-
-			setPeerElementsArr((p) => [...p, element]);
+			setElementsArr((p) => [...p, element]);
 		});
 	}, []);
 
 	useEffect(() => {
 		console.log(peers);
 	}, [peers]);
-	useEffect(() => {
-		console.log({ peerElementsArr });
-	}, [peerElementsArr]);
 
 	useEffect(() => {
 		socket.connect();

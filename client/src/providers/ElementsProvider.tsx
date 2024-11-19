@@ -12,19 +12,17 @@ import { serializeKonvaElement } from "../utils/konva/convertKonva";
 const context = createContext<{
 	elementsArr: JSX.Element[];
 	setElementsArr: Dispatch<SetStateAction<JSX.Element[]>>;
-	peerElementsArr: JSX.Element[];
-	setPeerElementsArr: Dispatch<SetStateAction<JSX.Element[]>>;
 	addElementToStage: () => void;
 	myNewElement: JSX.Element | null;
 	setMyNewElement: Dispatch<SetStateAction<JSX.Element | null>>;
+	flickerForLocalCreation: boolean;
 }>({
 	elementsArr: [],
 	setElementsArr: () => {},
-	peerElementsArr: [],
-	setPeerElementsArr: () => {},
 	addElementToStage: () => {},
 	myNewElement: null,
 	setMyNewElement: () => {},
+	flickerForLocalCreation: false,
 });
 
 export default function ElementsProvider({
@@ -35,12 +33,13 @@ export default function ElementsProvider({
 	const [elementsArr, setElementsArr] = useState<JSX.Element[]>(() => {
 		return JSON.parse(localStorage.getItem("serializedShapes") || "[]");
 	});
-	const [peerElementsArr, setPeerElementsArr] = useState<JSX.Element[]>([]);
+	const [flickerForLocalCreation, setFlickerForLocalCreation] = useState(false);
 	const [myNewElement, setMyNewElement] = useState<JSX.Element | null>(null);
 	const addElementToStage = () => {
 		if (!myNewElement) return;
 		setElementsArr([...elementsArr, serializeKonvaElement(myNewElement)]);
 		setMyNewElement(null);
+		setFlickerForLocalCreation((p) => !p);
 	};
 	useEffect(() => {
 		localStorage.setItem("serializedShapes", JSON.stringify(elementsArr));
@@ -50,11 +49,10 @@ export default function ElementsProvider({
 			value={{
 				elementsArr,
 				setElementsArr,
-				peerElementsArr,
-				setPeerElementsArr,
 				addElementToStage,
 				myNewElement,
 				setMyNewElement,
+				flickerForLocalCreation,
 			}}
 		>
 			{children}
