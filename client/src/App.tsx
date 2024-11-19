@@ -6,29 +6,36 @@ import StageProvider from "./providers/StageProvider";
 import ToolSettingsProvider from "./providers/ToolSettingsProvider";
 import ToolsProvider from "./providers/ToolsProvider";
 import RoomHandler from "./handlers/functional/RoomHandler";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
 	return (
-		<BrowserRouter
-			future={{
-				v7_startTransition: true,
-				v7_relativeSplatPath: true,
-			}}
-		>
-			<SocketProvider>
-				<ElementsProvider>
-					<ToolsProvider>
-						<ToolSettingsProvider>
-							<StageProvider />
-							<NavMenu />
-							<Routes>
-								<Route index element={<></>} />
-								<Route path="room/:id" element={<RoomHandler />} />
-							</Routes>
-						</ToolSettingsProvider>
-					</ToolsProvider>
-				</ElementsProvider>
-			</SocketProvider>
-		</BrowserRouter>
+		<>
+			<Toaster
+				toastOptions={{ style: { backgroundColor: "black", color: "white" } }}
+				position="bottom-center"
+			/>
+			<BrowserRouter
+				future={{
+					v7_startTransition: true,
+					v7_relativeSplatPath: true,
+				}}
+			>
+				<SocketProvider>
+					<ElementsProvider>
+						<ToolsProvider>
+							<ToolSettingsProvider>
+								<StageProvider />
+								<NavMenu />
+								<Routes>
+									<Route index element={<></>} />
+									<Route path="room/:id" element={<RoomHandler />} />
+								</Routes>
+							</ToolSettingsProvider>
+						</ToolsProvider>
+					</ElementsProvider>
+				</SocketProvider>
+			</BrowserRouter>
+		</>
 	);
 }
