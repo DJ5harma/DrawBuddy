@@ -8,7 +8,7 @@ export default function CircleHandler() {
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
 	const [drawing, setDrawing] = useState(false);
 
-	const { mousePos } = useStage();
+	const { getMousePos } = useStage();
 	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
 		useElements();
 
@@ -19,12 +19,12 @@ export default function CircleHandler() {
 		const handleMouseDown = (e: MouseEvent) => {
 			if (e.button !== 0) return;
 			setDrawing(true);
-			const { x, y } = mousePos;
+			const { x, y } = getMousePos(e.clientX, e.clientY);
 			setStartingPosition({ x, y });
 		};
-		const handleMouseMove = () => {
+		const handleMouseMove = (e: MouseEvent) => {
 			if (!drawing) return;
-			const { x, y } = mousePos;
+			const { x, y } = getMousePos(e.clientX, e.clientY);
 			setMyNewElement(
 				<Circle
 					key={"Circle" + elementsArr.length}
@@ -54,6 +54,6 @@ export default function CircleHandler() {
 			document.removeEventListener("mousemove", handleMouseMove);
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [drawing, startingPosition, myNewElement, mousePos]);
+	}, [drawing, startingPosition, myNewElement]);
 	return null;
 }

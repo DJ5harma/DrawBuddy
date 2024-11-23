@@ -6,9 +6,9 @@ import { useElements } from "./ElementsProvider";
 import { deserializeKonvaElement } from "../utils/konva/convertKonva";
 
 const context = createContext<{
-	mousePos: { x: number; y: number };
+	getMousePos: (currX: number, currY: number) => { x: number; y: number };
 }>({
-	mousePos: { x: 0, y: 0 },
+	getMousePos: () => ({ x: 0, y: 0 }),
 });
 
 export default function StageProvider() {
@@ -30,12 +30,30 @@ export default function StageProvider() {
 		return storedPos ? JSON.parse(storedPos) : { x: 0, y: 0 };
 	});
 
-	const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 	const [isPanning, setIsPanning] = useState(false);
 	const [panStartPos, setPanStartPos] = useState<{ x: number; y: number }>({
 		x: 0,
 		y: 0,
 	});
+
+	const getMousePos = (currX: number, currY: number) => {
+		const stage = document.querySelector("canvas")?.getBoundingClientRect();
+
+		const [scaleX, scaleY] = [scale, scale];
+		const [offsetX, offsetY] = [position.x, position.y];
+
+		const [mouseX, mouseY] = [
+			currX - (stage?.left || 0),
+			currY - (stage?.top || 0),
+		];
+
+		const [adjustedX, adjustedY] = [
+			(mouseX - offsetX) / scaleX,
+			(mouseY - offsetY) / scaleY,
+		];
+
+		return { x: adjustedX, y: adjustedY };
+	};
 
 	useEffect(() => {
 		localStorage.setItem("stagePosition", JSON.stringify(position));
@@ -47,40 +65,23 @@ export default function StageProvider() {
 	useEffect(() => {
 		const updateDimensions = () =>
 			setDimensions({ width: window.innerWidth, height: window.innerHeight });
-		const handleMouseMove = (e: MouseEvent) => {
-			const stage = document.querySelector("canvas")?.getBoundingClientRect();
-			const scaleX = scale;
-			const scaleY = scale;
-			const offsetX = position.x;
-			const offsetY = position.y;
 
-			const mouseX = e.clientX - (stage?.left || 0);
-			const mouseY = e.clientY - (stage?.top || 0);
-
-			const adjustedX = (mouseX - offsetX) / scaleX;
-			const adjustedY = (mouseY - offsetY) / scaleY;
-
-			setMousePos({ x: adjustedX, y: adjustedY });
-
-			if (isPanning) {
-				const dx = e.clientX - panStartPos.x;
-				const dy = e.clientY - panStartPos.y;
-				setPosition((prev) => ({ x: prev.x + dx, y: prev.y + dy }));
-				setPanStartPos({ x: e.clientX, y: e.clientY });
-			}
-		};
-		const handleWheel = (e: WheelEvent) => {
-			e.preventDefault();
-		};
 		const handleMouseDown = (e: MouseEvent) => {
-			if (e.button === 1) {
-				setIsPanning(true);
-				setPanStartPos({ x: e.clientX, y: e.clientY });
-			}
+			if (e.button !== 1) return;
+			setIsPanning(true);
+			setPanStartPos({ x: e.clientX, y: e.clientY });
 		};
 		const handleMouseUp = (e: MouseEvent) => {
 			if (e.button === 1) setIsPanning(false);
 		};
+		const handleMouseMove = (e: MouseEvent) => {
+			if (!isPanning) return;
+			const dx = e.clientX - panStartPos.x;
+			const dy = e.clientY - panStartPos.y;
+			setPosition((prev) => ({ x: prev.x + dx, y: prev.y + dy }));
+			setPanStartPos({ x: e.clientX, y: e.clientY });
+		};
+		const handleWheel = (e: WheelEvent) => e.preventDefault();
 
 		window.addEventListener("resize", updateDimensions);
 		window.addEventListener("wheel", handleWheel, { passive: false });
@@ -131,13 +132,13 @@ export default function StageProvider() {
 		>
 			<Layer>
 				{elementsArr.map((elem) => deserializeKonvaElement(elem))}
-				{myNewElement && myNewElement}
+				{myNewElement}
 				<context.Provider
 					value={{
-						mousePos,
+						getMousePos,
 					}}
 				>
-					{selectedTool && selectedTool.handler}
+					{!isPanning && selectedTool && selectedTool.handler}
 				</context.Provider>
 			</Layer>
 		</Stage>

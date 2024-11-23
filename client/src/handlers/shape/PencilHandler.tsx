@@ -7,7 +7,8 @@ import { useToolSettings } from "../../providers/ToolSettingsProvider";
 export default function PencilHandler() {
 	const [pointsArr, setPointsArr] = useState<number[]>([]);
 	const [drawing, setDrawing] = useState(false);
-	const { mousePos } = useStage();
+	const { getMousePos } = useStage();
+
 	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
 		useElements();
 
@@ -16,13 +17,13 @@ export default function PencilHandler() {
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
 			if (e.button !== 0) return;
-			const { x, y } = mousePos;
+			const { x, y } = getMousePos(e.clientX, e.clientY);
 			setPointsArr([x, y]);
 			setDrawing(true);
 		};
-		const handleMouseMove = () => {
+		const handleMouseMove = (e: MouseEvent) => {
 			if (!drawing) return;
-			const { x, y } = mousePos;
+			const { x, y } = getMousePos(e.clientX, e.clientY);
 			setPointsArr([...pointsArr, x, y]);
 			setMyNewElement(
 				<Line
@@ -48,6 +49,6 @@ export default function PencilHandler() {
 			document.removeEventListener("mousemove", handleMouseMove);
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [drawing, myNewElement, mousePos, pointsArr, elementsArr]);
+	}, [drawing, myNewElement, pointsArr, elementsArr]);
 	return null;
 }

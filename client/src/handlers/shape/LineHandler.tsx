@@ -16,7 +16,7 @@ export default function LineHandler() {
 		pointsArr: [],
 	});
 
-	const { mousePos } = useStage();
+	const { getMousePos } = useStage();
 	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
 		useElements();
 
@@ -25,7 +25,7 @@ export default function LineHandler() {
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
 			if (e.button !== 0) return;
-			const { x, y } = mousePos;
+			const { x, y } = getMousePos(e.clientX, e.clientY);
 			if (multipleLines.exist)
 				return setMultipleLines((p) => ({
 					...p,
@@ -35,10 +35,10 @@ export default function LineHandler() {
 			setDrawing(true);
 			setStartingPosition({ x, y });
 		};
-		const handleMouseMove = () => {
+		const handleMouseMove = (e: MouseEvent) => {
 			if (!drawing) return;
 
-			const { x, y } = mousePos;
+			const { x, y } = getMousePos(e.clientX, e.clientY);
 			setMyNewElement(
 				<Line
 					key={"Line" + elementsArr.length}
@@ -54,8 +54,8 @@ export default function LineHandler() {
 				/>
 			);
 		};
-		const handleMouseUp = () => {
-			const { x, y } = mousePos;
+		const handleMouseUp = (e: MouseEvent) => {
+			const { x, y } = getMousePos(e.clientX, e.clientY);
 			if (multipleLines.exist) return;
 			if (x === startingPosition.x && y === startingPosition.y) {
 				setMultipleLines({ pointsArr: [x, y], exist: true });
@@ -81,6 +81,6 @@ export default function LineHandler() {
 			document.removeEventListener("mouseup", handleMouseUp);
 			document.removeEventListener("keyup", handleKeyUp);
 		};
-	}, [drawing, startingPosition, myNewElement, multipleLines, mousePos]);
+	}, [drawing, startingPosition, myNewElement, multipleLines]);
 	return null;
 }
