@@ -160,9 +160,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 				onWheel={handleOnWheel}
 			>
 				<Layer>
-					<Group>
-						{elementsArr.map((elem) => deserializeKonvaElement(elem))}
-					</Group>
+					<Group>{elementsArr}</Group>
 					<Group>{myNewElement}</Group>
 					<Group>
 						{Object.keys(peers).map((userid) => {

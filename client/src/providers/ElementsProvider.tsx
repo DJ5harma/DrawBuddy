@@ -7,7 +7,10 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import { serializeKonvaElement } from "../utils/konva/convertKonva";
+import {
+	deserializeKonvaElement,
+	serializeKonvaElement,
+} from "../utils/konva/convertKonva";
 import { IPeers } from "../utils/types";
 
 const context = createContext<{
@@ -36,7 +39,11 @@ export default function ElementsProvider({
 	children: ReactNode;
 }) {
 	const [elementsArr, setElementsArr] = useState<JSX.Element[]>(() => {
-		return JSON.parse(localStorage.getItem("serializedShapes") || "[]");
+		return (
+			JSON.parse(
+				localStorage.getItem("serializedShapes") || "[]"
+			) as JSX.Element[]
+		).map((elem) => deserializeKonvaElement(elem));
 	});
 	const [flickerForLocalCreation, setFlickerForLocalCreation] = useState(false);
 
@@ -44,7 +51,7 @@ export default function ElementsProvider({
 
 	const addElementToStage = () => {
 		if (!myNewElement) return;
-		setElementsArr([...elementsArr, serializeKonvaElement(myNewElement)]);
+		setElementsArr([...elementsArr, myNewElement]);
 		setMyNewElement(null);
 		setFlickerForLocalCreation((p) => !p);
 	};
@@ -52,7 +59,10 @@ export default function ElementsProvider({
 	const [peers, setPeers] = useState<IPeers>({});
 
 	useEffect(() => {
-		localStorage.setItem("serializedShapes", JSON.stringify(elementsArr));
+		localStorage.setItem(
+			"serializedShapes",
+			JSON.stringify(elementsArr.map((elem) => serializeKonvaElement(elem)))
+		);
 	}, [elementsArr]);
 	return (
 		<context.Provider

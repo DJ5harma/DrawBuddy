@@ -2,7 +2,10 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../providers/SocketProvider";
 import { useElements } from "../../providers/ElementsProvider";
-import { serializeKonvaElement } from "../../utils/konva/convertKonva";
+import {
+	deserializeKonvaElement,
+	serializeKonvaElement,
+} from "../../utils/konva/convertKonva";
 import toast from "react-hot-toast";
 import { IPeers } from "../../utils/types";
 
@@ -36,7 +39,7 @@ export default function RoomHandler() {
 	useEffect(() => {
 		if (elementsArr.length)
 			socket.emit("finalized new element", {
-				element: elementsArr[elementsArr.length - 1],
+				element: serializeKonvaElement(elementsArr[elementsArr.length - 1]),
 				roomId,
 			});
 	}, [flickerForLocalCreation]);
@@ -59,7 +62,7 @@ export default function RoomHandler() {
 		});
 
 		socket.on("incoming finalized element", (element: JSX.Element) => {
-			setElementsArr((p) => [...p, element]);
+			setElementsArr((p) => [...p, deserializeKonvaElement(element)]);
 		});
 
 		socket.on(
