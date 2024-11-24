@@ -16,6 +16,8 @@ const context = createContext<{
 	myNewElement: JSX.Element | null;
 	setMyNewElement: Dispatch<SetStateAction<JSX.Element | null>>;
 	flickerForLocalCreation: boolean;
+	peers: IPeers;
+	setPeers: Dispatch<SetStateAction<IPeers>>;
 }>({
 	elementsArr: [],
 	setElementsArr: () => {},
@@ -23,7 +25,16 @@ const context = createContext<{
 	myNewElement: null,
 	setMyNewElement: () => {},
 	flickerForLocalCreation: false,
+	peers: {},
+	setPeers: () => {},
 });
+
+export interface IPeers {
+	[userid: string]: {
+		username: string;
+		tempElement: JSX.Element | null;
+	};
+}
 
 export default function ElementsProvider({
 	children,
@@ -34,13 +45,18 @@ export default function ElementsProvider({
 		return JSON.parse(localStorage.getItem("serializedShapes") || "[]");
 	});
 	const [flickerForLocalCreation, setFlickerForLocalCreation] = useState(false);
+
 	const [myNewElement, setMyNewElement] = useState<JSX.Element | null>(null);
+
 	const addElementToStage = () => {
 		if (!myNewElement) return;
 		setElementsArr([...elementsArr, serializeKonvaElement(myNewElement)]);
 		setMyNewElement(null);
 		setFlickerForLocalCreation((p) => !p);
 	};
+
+	const [peers, setPeers] = useState<IPeers>({});
+
 	useEffect(() => {
 		localStorage.setItem("serializedShapes", JSON.stringify(elementsArr));
 	}, [elementsArr]);
@@ -53,6 +69,8 @@ export default function ElementsProvider({
 				myNewElement,
 				setMyNewElement,
 				flickerForLocalCreation,
+				peers,
+				setPeers,
 			}}
 		>
 			{children}

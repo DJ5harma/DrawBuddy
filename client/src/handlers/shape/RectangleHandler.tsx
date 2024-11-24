@@ -24,6 +24,7 @@ export default function RectangleHandler() {
 		};
 		const handleMouseMove = (e: MouseEvent) => {
 			if (!drawing) return;
+
 			const { x, y } = getMousePos(e.clientX, e.clientY);
 			setMyNewElement(
 				<Rect
@@ -52,6 +53,6 @@ export default function RectangleHandler() {
 			document.removeEventListener("mousemove", handleMouseMove);
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [drawing, startingPosition, myNewElement]);
+	}, [drawing && startingPosition, myNewElement]);
 	return null;
 }

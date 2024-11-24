@@ -11,9 +11,7 @@ import RectangleHandler from "../handlers/shape/RectangleHandler";
 import CircleHandler from "../handlers/shape/CircleHandler";
 import LineHandler from "../handlers/shape/LineHandler";
 import ClearAllHandler from "../handlers/functional/ClearAllHandler";
-import UndoHandler from "../handlers/functional/UndoHandler";
 import PencilHandler from "../handlers/shape/PencilHandler";
-import ToolMenuHandler from "./ToolSettingsProvider";
 
 type ITool = {
 	name:
@@ -129,7 +127,6 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 					))}
 				</nav>
 			</div>
-			<UndoHandler />
 			{children}
 		</context.Provider>
 	);

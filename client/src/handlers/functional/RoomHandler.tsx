@@ -1,86 +1,82 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../providers/SocketProvider";
-import { useElements } from "../../providers/ElementsProvider";
-
-interface IPeerUser {
-	userid: string;
-	username: string;
-}
-
-// function PeerDrawing({ userid, roomId }: { userid: string; roomId: string }) {
-// 	const { elementsArr, setElementsArr } = useElements();
-// 	const { socket } = useSocket();
-
-// 	useEffect(() => {
-// 		socket.on("incoming_element/" + userid, (element: JSX.Element | null) => {
-// 			if (
-// 				!element ||
-// 				elementsArr.length === 0 ||
-// 				!element.key ||
-// 				element.key != elementsArr[elementsArr.length - 1].key
-// 			)
-// 				return;
-// 			setElementsArr((p) => [...p, element]);
-// 		});
-// 	}, []);
-
-// 	return null;
-// }
+import { IPeers, useElements } from "../../providers/ElementsProvider";
+import { serializeKonvaElement } from "../../utils/konva/convertKonva";
 
 export default function RoomHandler() {
-	const { id } = useParams();
+	const { id: roomId } = useParams();
 	const { socket } = useSocket();
 
-	const username =
-		localStorage.getItem("username") ||
-		"InstantUser" + (Math.random() * 1000).toFixed();
+	const username = (() => {
+		const x = localStorage.getItem("username");
+		if (x) return x;
+		const newName = "InstantUser " + (Math.random() * 1000).toFixed();
+		localStorage.setItem("username", newName);
+		return newName;
+	})();
 
-	const [peers, setPeers] = useState<IPeerUser[]>([]);
-
-	const { elementsArr, setElementsArr, flickerForLocalCreation } =
-		useElements();
+	const {
+		elementsArr,
+		setElementsArr,
+		flickerForLocalCreation,
+		setPeers,
+		myNewElement,
+	} = useElements();
 	// useEffect(() => {
 	// 	axios.get(START_SOCKET_SERVER);
 	// }, []);
-	useEffect(() => {
-		if (elementsArr.length) {
-			socket.emit("my new element", {
-				element: elementsArr[elementsArr.length - 1],
-				roomId: id,
-			});
-			console.log("yes");
-		}
-	}, [flickerForLocalCreation]);
-	useEffect(() => {
-		socket.on("incoming_element", (element: JSX.Element) => {
-			console.log("came:", element);
-			setElementsArr((p) => [...p, element]);
-		});
-	}, []);
 
 	useEffect(() => {
-		console.log(peers);
-	}, [peers]);
+		socket.emit("creating new element", {
+			element: myNewElement ? serializeKonvaElement(myNewElement) : null,
+			roomId,
+		});
+	}, [myNewElement]);
+
+	useEffect(() => {
+		if (elementsArr.length)
+			socket.emit("finalized new element", {
+				element: elementsArr[elementsArr.length - 1],
+				roomId,
+			});
+	}, [flickerForLocalCreation]);
 
 	useEffect(() => {
 		socket.connect();
-		socket.emit("i arrived at room", { roomId: id, username });
 
-		socket.on("previous_users", (prevUsers: IPeerUser[]) =>
-			setPeers([...peers, ...prevUsers].filter((x) => username !== x.username))
+		socket.emit("i arrived at room", { roomId, username });
+
+		socket.on("previous_users", (prevUsers: IPeers) => setPeers(prevUsers));
+
+		socket.on("new_user", (userObj: IPeers[string]) =>
+			setPeers((p) => ({ ...p, userObj }))
 		);
-		socket.on("new_user", (userObj: IPeerUser) => {
-			if (userObj.username !== username) setPeers([...peers, userObj]);
+
+		socket.on("incoming finalized element", (element: JSX.Element) => {
+			console.log("came:", element);
+			setElementsArr((p) => [...p, element]);
 		});
+
+		socket.on(
+			"incoming element in making",
+			({
+				element,
+				userid,
+			}: {
+				element: JSX.Element | null;
+				userid: string;
+			}) => {
+				setPeers((p) => ({
+					...p,
+					[userid]: { ...p[userid], tempElement: element },
+				}));
+			}
+		);
 
 		return () => {
 			socket.disconnect();
 		};
 	}, []);
-	if (!id) return null;
-	// return peers.map(({ userid }) => (
-	// 	<PeerDrawing key={userid} roomId={id} userid={userid} />
-	// ));
 	return null;
 }

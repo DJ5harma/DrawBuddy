@@ -12,7 +12,7 @@ const context = createContext<{
 });
 
 export default function StageProvider() {
-	const { elementsArr, myNewElement } = useElements();
+	const { elementsArr, myNewElement, peers } = useElements();
 
 	const [dimensions, setDimensions] = useState({
 		width: window.innerWidth,
@@ -39,7 +39,6 @@ export default function StageProvider() {
 	const getMousePos = (currX: number, currY: number) => {
 		const stage = document.querySelector("canvas")?.getBoundingClientRect();
 
-		const [scaleX, scaleY] = [scale, scale];
 		const [offsetX, offsetY] = [position.x, position.y];
 
 		const [mouseX, mouseY] = [
@@ -48,8 +47,8 @@ export default function StageProvider() {
 		];
 
 		const [adjustedX, adjustedY] = [
-			(mouseX - offsetX) / scaleX,
-			(mouseY - offsetY) / scaleY,
+			(mouseX - offsetX) / scale,
+			(mouseY - offsetY) / scale,
 		];
 
 		return { x: adjustedX, y: adjustedY };
@@ -101,22 +100,22 @@ export default function StageProvider() {
 	const handleOnWheel = (e: KonvaEventObject<WheelEvent, Node<NodeConfig>>) => {
 		const newScale = e.evt.deltaY < 0 ? scale * 1.1 : scale / 1.1;
 		if (newScale < 0.05 || newScale > 20) return;
+		setScale(newScale);
 
 		const stage = e.target.getStage();
 		if (!stage) return;
 
 		const scaleFactor = newScale / scale;
-		setScale(newScale);
 
 		const stagePointerPos = stage.getPointerPosition();
-		if (stagePointerPos) {
-			const { x, y } = stagePointerPos;
-			const newPos = {
-				x: x - (x - position.x) * scaleFactor,
-				y: y - (y - position.y) * scaleFactor,
-			};
-			setPosition(newPos);
-		}
+		if (!stagePointerPos) return;
+
+		const { x, y } = stagePointerPos;
+
+		setPosition({
+			x: x - (x - position.x) * scaleFactor,
+			y: y - (y - position.y) * scaleFactor,
+		});
 	};
 
 	return (
@@ -133,6 +132,10 @@ export default function StageProvider() {
 			<Layer>
 				{elementsArr.map((elem) => deserializeKonvaElement(elem))}
 				{myNewElement}
+				{Object.keys(peers).map((userid) => {
+					const elem = peers[userid].tempElement;
+					return elem ? deserializeKonvaElement(elem) : null;
+				})}
 				<context.Provider
 					value={{
 						getMousePos,
