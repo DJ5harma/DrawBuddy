@@ -22,9 +22,9 @@ export default function App() {
 					v7_relativeSplatPath: true,
 				}}
 			>
-				<ElementsProvider>
-					<ToolsProvider>
-						<ToolSettingsProvider>
+				<ToolsProvider>
+					<ToolSettingsProvider>
+						<ElementsProvider>
 							<StageProvider />
 							<NavMenu />
 							<Routes>
@@ -38,9 +38,9 @@ export default function App() {
 									}
 								/>
 							</Routes>
-						</ToolSettingsProvider>
-					</ToolsProvider>
-				</ElementsProvider>
+						</ElementsProvider>
+					</ToolSettingsProvider>
+				</ToolsProvider>
 			</BrowserRouter>
 		</>
 	);
