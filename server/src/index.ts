@@ -40,7 +40,8 @@ function closeSocketServer() {
 	}, 10000);
 }
 
-app.get("/START_SOCKET_SERVER", startSocketServer, (_, res) => {
+app.get("/START_SOCKET_SERVER", (_, res) => {
+	startSocketServer();
 	console.log("Socket Server opening requested");
 
 	res.status(200).send("Socket is on now");

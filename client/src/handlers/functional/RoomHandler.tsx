@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import { useSocket } from "../../providers/SocketProvider";
 import { IPeers, useElements } from "../../providers/ElementsProvider";
 import { serializeKonvaElement } from "../../utils/konva/convertKonva";
-import axios from "axios";
-import { START_SOCKET_SERVER_API } from "../../utils/apiRoutes";
 import toast from "react-hot-toast";
 
 export default function RoomHandler() {
@@ -43,11 +41,7 @@ export default function RoomHandler() {
 	}, [flickerForLocalCreation]);
 
 	useEffect(() => {
-		axios.get(START_SOCKET_SERVER_API).then(() => socket.connect());
-		socket.on("connection", () => {
-			toast.success("Socket server connected!");
-			socket.emit("i arrived at room", { roomId, username });
-		});
+		socket.emit("i arrived at room", { roomId, username });
 		socket.on("previous_users", (prevUsers: IPeers) => {
 			setPeers(prevUsers);
 			toast(`Joined in a room with ${Object.keys(prevUsers).length} other(s)`);
@@ -79,7 +73,7 @@ export default function RoomHandler() {
 			}
 		);
 		return () => {
-			socket.disconnect();
+			socket.removeAllListeners();
 		};
 	}, []);
 	return null;

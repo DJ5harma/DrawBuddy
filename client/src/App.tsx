@@ -7,6 +7,7 @@ import ToolSettingsProvider from "./providers/ToolSettingsProvider";
 import ToolsProvider from "./providers/ToolsProvider";
 import RoomHandler from "./handlers/functional/RoomHandler";
 import { Toaster } from "react-hot-toast";
+import Collaborate from "./components/Collaborate";
 
 export default function App() {
 	return (
@@ -27,7 +28,7 @@ export default function App() {
 							<StageProvider />
 							<NavMenu />
 							<Routes>
-								<Route index element={<></>} />
+								<Route index element={<Collaborate />} />
 								<Route
 									path="room/:id"
 									element={

@@ -11,13 +11,13 @@ export default function PopUpWrapper({
 }) {
 	return (
 		<div
-			className="absolute left-0 top-0 w-screen h-screen flex items-center justify-center bg-opacity-50 bg-black z-50 cursor-pointer"
+			className="absolute left-0 top-0 w-screen h-screen flex items-center justify-center bg-opacity-50 bg-black z-50 cursor-pointer "
 			onClick={() => setShow(false)}
 		>
 			<div
 				className={
 					"bg-neutral-200 text-black flex flex-col gap-4 cursor-default p-4 w-fit h-fit" +
-					" " +
+					" [&>*]:px-4 [&>*]:py-3 [&>p]:cursor-pointer [&>button]:bg-white text-blue-900 bg-gray-300 font-semibold " +
 					className
 				}
 				onClick={(e) => e.stopPropagation()}
