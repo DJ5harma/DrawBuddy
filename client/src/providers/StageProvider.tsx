@@ -1,5 +1,11 @@
-import { Layer, Stage } from "react-konva";
-import { createContext, useContext, useEffect, useState } from "react";
+import { Group, Layer, Stage } from "react-konva";
+import {
+	createContext,
+	ReactNode,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 import { useTools } from "./ToolsProvider";
 import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
 import { useElements } from "./ElementsProvider";
@@ -7,11 +13,22 @@ import { deserializeKonvaElement } from "../utils/konva/convertKonva";
 
 const context = createContext<{
 	getMousePos: (currX: number, currY: number) => { x: number; y: number };
+	revertMousePos: (currX: number, currY: number) => { x: number; y: number };
+	stageScale: number;
+	stagePosition: { x: number; y: number };
+	stageDimensions: { width: number; height: number };
 }>({
 	getMousePos: () => ({ x: 0, y: 0 }),
+	revertMousePos: () => ({ x: 0, y: 0 }),
+	stageScale: 1,
+	stagePosition: { x: 0, y: 0 },
+	stageDimensions: {
+		width: window.innerWidth,
+		height: window.innerHeight,
+	},
 });
 
-export default function StageProvider() {
+export default function StageProvider({ children }: { children: ReactNode }) {
 	const { elementsArr, myNewElement, peers } = useElements();
 
 	const [dimensions, setDimensions] = useState({
@@ -39,19 +56,31 @@ export default function StageProvider() {
 	const getMousePos = (currX: number, currY: number) => {
 		const stage = document.querySelector("canvas")?.getBoundingClientRect();
 
-		const [offsetX, offsetY] = [position.x, position.y];
-
 		const [mouseX, mouseY] = [
 			currX - (stage?.left || 0),
 			currY - (stage?.top || 0),
 		];
 
 		const [adjustedX, adjustedY] = [
-			(mouseX - offsetX) / scale,
-			(mouseY - offsetY) / scale,
+			(mouseX - position.x) / scale,
+			(mouseY - position.y) / scale,
 		];
 
 		return { x: adjustedX, y: adjustedY };
+	};
+	const revertMousePos = (adjustedX: number, adjustedY: number) => {
+		const stage = document.querySelector("canvas")?.getBoundingClientRect();
+
+		const [mouseX, mouseY] = [
+			adjustedX * scale + position.x,
+			adjustedY * scale + position.y,
+		];
+		const [currX, currY] = [
+			mouseX + (stage?.left || 0),
+			mouseY + (stage?.top || 0),
+		];
+
+		return { x: currX, y: currY };
 	};
 
 	useEffect(() => {
@@ -119,32 +148,58 @@ export default function StageProvider() {
 	};
 
 	return (
-		<Stage
-			width={dimensions.width}
-			height={dimensions.height}
-			className="bg-neutral-900"
-			scaleX={scale}
-			scaleY={scale}
-			x={position.x}
-			y={position.y}
-			onWheel={handleOnWheel}
-		>
-			<Layer>
-				{elementsArr.map((elem) => deserializeKonvaElement(elem))}
-				{myNewElement}
-				{Object.keys(peers).map((userid) => {
-					const elem = peers[userid].tempElement;
-					return elem ? deserializeKonvaElement(elem) : null;
-				})}
-				<context.Provider
-					value={{
-						getMousePos,
-					}}
-				>
-					{!isPanning && selectedTool && selectedTool.handler}
-				</context.Provider>
-			</Layer>
-		</Stage>
+		<>
+			<Stage
+				width={dimensions.width}
+				height={dimensions.height}
+				className="bg-neutral-900"
+				scaleX={scale}
+				scaleY={scale}
+				x={position.x}
+				y={position.y}
+				onWheel={handleOnWheel}
+			>
+				<Layer>
+					<Group>
+						{elementsArr.map((elem) => deserializeKonvaElement(elem))}
+					</Group>
+					<Group>{myNewElement}</Group>
+
+					<Group>
+						{Object.keys(peers).map((userid) => {
+							const elem = peers[userid].tempElement;
+							return elem ? deserializeKonvaElement(elem) : null;
+						})}
+					</Group>
+					{/* <Group>
+						{Object.keys(peerMousePositions).map((userid) => {
+							const { x, y } = peerMousePositions[userid];
+							return (
+								<Circle
+									key={"Circle" + elementsArr.length}
+									x={x}
+									y={y}
+									radius={(1 / scale) * 5}
+									fill={"red"}
+								/>
+							);
+						})}
+					</Group> */}
+				</Layer>
+			</Stage>
+			<context.Provider
+				value={{
+					getMousePos,
+					revertMousePos,
+					stageScale: scale,
+					stagePosition: position,
+					stageDimensions: dimensions,
+				}}
+			>
+				{!isPanning && selectedTool && selectedTool.handler}
+				{children}
+			</context.Provider>
+		</>
 	);
 }
 

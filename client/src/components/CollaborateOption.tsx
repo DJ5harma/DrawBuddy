@@ -6,7 +6,7 @@ import { BiCopy } from "react-icons/bi";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
-export default function Collaborate() {
+export default function CollaborateOption() {
 	const [roomUrl, setRoomUrl] = useState("");
 	const [show, setShow] = useState(false);
 

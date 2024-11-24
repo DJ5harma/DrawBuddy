@@ -96,6 +96,12 @@ io.on("connection", (socket) => {
 			.emit("incoming element in making", { element, userid: socket.id });
 	});
 
+	socket.on("my mouse position", ({ mousePos, roomId }) => {
+		socket.broadcast
+			.to(roomId)
+			.emit("incoming peer mouse position", { mousePos, userid: socket.id });
+	});
+
 	socket.on("disconnect", () => {
 		console.log(--clients);
 		const roomId = useridToRoomMap.get(socket.id);
