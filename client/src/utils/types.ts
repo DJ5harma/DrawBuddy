@@ -24,3 +24,12 @@ export interface IToolSettings {
 	strokeWidth: number;
 	opacity: number;
 }
+export interface IPeerMousePositions {
+	[userid: string]: { x: number; y: number };
+}
+export interface IPeers {
+	[userid: string]: {
+		username: string;
+		tempElement: JSX.Element | null;
+	};
+}

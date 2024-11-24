@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../providers/SocketProvider";
-import { IPeers, useElements } from "../../providers/ElementsProvider";
+import { useElements } from "../../providers/ElementsProvider";
 import { serializeKonvaElement } from "../../utils/konva/convertKonva";
 import toast from "react-hot-toast";
+import { IPeers } from "../../utils/types";
 
 export default function RoomHandler() {
 	const { id: roomId } = useParams();
@@ -45,15 +46,19 @@ export default function RoomHandler() {
 		socket.on("previous_users", (prevUsers: IPeers) => {
 			setPeers(prevUsers);
 			toast(`Joined in a room with ${Object.keys(prevUsers).length} other(s)`);
+			console.log(prevUsers);
 		});
 
-		socket.on("new_user", (userObj: IPeers[string]) => {
-			setPeers((p) => ({ ...p, userObj }));
+		socket.on("new_user", (userObj: { userid: string; username: string }) => {
+			setPeers((p) => {
+				p[userObj.userid] = { tempElement: null, username: userObj.username };
+				return p;
+			});
 			toast(userObj.username + " joined!");
+			console.log({ userObj });
 		});
 
 		socket.on("incoming finalized element", (element: JSX.Element) => {
-			console.log("came:", element);
 			setElementsArr((p) => [...p, element]);
 		});
 

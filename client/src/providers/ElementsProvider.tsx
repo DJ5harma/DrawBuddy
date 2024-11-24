@@ -8,6 +8,7 @@ import {
 	useState,
 } from "react";
 import { serializeKonvaElement } from "../utils/konva/convertKonva";
+import { IPeers } from "../utils/types";
 
 const context = createContext<{
 	elementsArr: JSX.Element[];
@@ -28,13 +29,6 @@ const context = createContext<{
 	peers: {},
 	setPeers: () => {},
 });
-
-export interface IPeers {
-	[userid: string]: {
-		username: string;
-		tempElement: JSX.Element | null;
-	};
-}
 
 export default function ElementsProvider({
 	children,

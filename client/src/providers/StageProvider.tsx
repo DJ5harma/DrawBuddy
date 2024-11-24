@@ -164,27 +164,12 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 						{elementsArr.map((elem) => deserializeKonvaElement(elem))}
 					</Group>
 					<Group>{myNewElement}</Group>
-
 					<Group>
 						{Object.keys(peers).map((userid) => {
 							const elem = peers[userid].tempElement;
 							return elem ? deserializeKonvaElement(elem) : null;
 						})}
 					</Group>
-					{/* <Group>
-						{Object.keys(peerMousePositions).map((userid) => {
-							const { x, y } = peerMousePositions[userid];
-							return (
-								<Circle
-									key={"Circle" + elementsArr.length}
-									x={x}
-									y={y}
-									radius={(1 / scale) * 5}
-									fill={"red"}
-								/>
-							);
-						})}
-					</Group> */}
 				</Layer>
 			</Stage>
 			<context.Provider
