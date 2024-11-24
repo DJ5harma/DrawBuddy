@@ -1,7 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import { createContext, ReactNode, useContext, useEffect, useRef } from "react";
 
-const socketSample = io("localhost:3000", { autoConnect: false });
+const socketSample = io("ws://localhost:3000");
 
 const context = createContext<{ socket: Socket }>({
 	socket: socketSample,

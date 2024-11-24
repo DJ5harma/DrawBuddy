@@ -21,20 +21,25 @@ export default function App() {
 					v7_relativeSplatPath: true,
 				}}
 			>
-				<SocketProvider>
-					<ElementsProvider>
-						<ToolsProvider>
-							<ToolSettingsProvider>
-								<StageProvider />
-								<NavMenu />
-								<Routes>
-									<Route index element={<></>} />
-									<Route path="room/:id" element={<RoomHandler />} />
-								</Routes>
-							</ToolSettingsProvider>
-						</ToolsProvider>
-					</ElementsProvider>
-				</SocketProvider>
+				<ElementsProvider>
+					<ToolsProvider>
+						<ToolSettingsProvider>
+							<StageProvider />
+							<NavMenu />
+							<Routes>
+								<Route index element={<></>} />
+								<Route
+									path="room/:id"
+									element={
+										<SocketProvider>
+											<RoomHandler />
+										</SocketProvider>
+									}
+								/>
+							</Routes>
+						</ToolSettingsProvider>
+					</ToolsProvider>
+				</ElementsProvider>
 			</BrowserRouter>
 		</>
 	);

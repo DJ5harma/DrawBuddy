@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import { useSocket } from "../../providers/SocketProvider";
 import { IPeers, useElements } from "../../providers/ElementsProvider";
 import { serializeKonvaElement } from "../../utils/konva/convertKonva";
+import axios from "axios";
+import { START_SOCKET_SERVER_API } from "../../utils/apiRoutes";
+import toast from "react-hot-toast";
 
 export default function RoomHandler() {
 	const { id: roomId } = useParams();
@@ -23,9 +26,6 @@ export default function RoomHandler() {
 		setPeers,
 		myNewElement,
 	} = useElements();
-	// useEffect(() => {
-	// 	axios.get(START_SOCKET_SERVER);
-	// }, []);
 
 	useEffect(() => {
 		socket.emit("creating new element", {
@@ -43,15 +43,20 @@ export default function RoomHandler() {
 	}, [flickerForLocalCreation]);
 
 	useEffect(() => {
-		socket.connect();
+		axios.get(START_SOCKET_SERVER_API).then(() => socket.connect());
+		socket.on("connection", () => {
+			toast.success("Socket server connected!");
+			socket.emit("i arrived at room", { roomId, username });
+		});
+		socket.on("previous_users", (prevUsers: IPeers) => {
+			setPeers(prevUsers);
+			toast(`Joined in a room with ${Object.keys(prevUsers).length} other(s)`);
+		});
 
-		socket.emit("i arrived at room", { roomId, username });
-
-		socket.on("previous_users", (prevUsers: IPeers) => setPeers(prevUsers));
-
-		socket.on("new_user", (userObj: IPeers[string]) =>
-			setPeers((p) => ({ ...p, userObj }))
-		);
+		socket.on("new_user", (userObj: IPeers[string]) => {
+			setPeers((p) => ({ ...p, userObj }));
+			toast(userObj.username + " joined!");
+		});
 
 		socket.on("incoming finalized element", (element: JSX.Element) => {
 			console.log("came:", element);
@@ -73,7 +78,6 @@ export default function RoomHandler() {
 				}));
 			}
 		);
-
 		return () => {
 			socket.disconnect();
 		};

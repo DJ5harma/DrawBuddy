@@ -40,10 +40,13 @@ function closeSocketServer() {
 	}, 10000);
 }
 
-// app.get("/START_SOCKET_SERVER", startSocketServer, (_, res) => {
-// 	res.status(200).send("Socket is on now");
-// });
-io.listen(3000);
+app.get("/START_SOCKET_SERVER", startSocketServer, (_, res) => {
+	console.log("Socket Server opening requested");
+
+	res.status(200).send("Socket is on now");
+	return;
+});
+
 app.get("/GENERATE_ROOM", (_, res) => {
 	res.json({ roomId: randomUUID() });
 });
@@ -60,6 +63,7 @@ const useridToRoomMap = new Map<string, string>();
 
 io.on("connection", (socket) => {
 	console.log(++clients);
+	socket.emit("connection");
 
 	socket.on("i arrived at room", ({ roomId, username }) => {
 		console.log(socket.id, " arrived");
@@ -100,6 +104,6 @@ io.on("connection", (socket) => {
 				roomToUsersMap.set(roomId, prevUsers);
 			}
 		}
-		// closeSocketServer();
+		closeSocketServer();
 	});
 });
