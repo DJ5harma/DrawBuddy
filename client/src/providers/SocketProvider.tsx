@@ -23,7 +23,7 @@ export default function SocketProvider({ children }: { children: ReactNode }) {
 	useEffect(() => {
 		axios.get(START_SOCKET_SERVER_API).then(() => socketRef.current.connect());
 
-		socketRef.current.on("connection", () => {
+		socketRef.current.on("connect", () => {
 			toast.success("Socket server connected!");
 			setIsConnected(true);
 		});

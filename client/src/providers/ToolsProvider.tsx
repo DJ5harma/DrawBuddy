@@ -14,7 +14,7 @@ import ClearAllHandler from "../handlers/functional/ClearAllHandler";
 import PencilHandler from "../handlers/shape/PencilHandler";
 import { ITool } from "../utils/types";
 
-export const toolArr: ITool[] = [
+const toolArr: ITool[] = [
 	{
 		name: "Hand",
 		icon: <FaHand />,

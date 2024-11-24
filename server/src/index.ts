@@ -37,15 +37,14 @@ function closeSocketServer() {
 			console.log("Didn't close");
 			startedTimerToCloseServer = false;
 		}
-	}, 10000);
+	}, 20000);
 }
 
 app.get("/START_SOCKET_SERVER", (_, res) => {
-	startSocketServer();
 	console.log("Socket Server opening requested");
+	startSocketServer();
 
-	res.status(200).send("Socket is on now");
-	return;
+	res.status(200).send("Server is on");
 });
 
 app.get("/GENERATE_ROOM", (_, res) => {
@@ -64,7 +63,6 @@ const useridToRoomMap = new Map<string, string>();
 
 io.on("connection", (socket) => {
 	console.log(++clients);
-	socket.emit("connection");
 
 	socket.on("i arrived at room", ({ roomId, username }) => {
 		console.log(socket.id, " arrived");
