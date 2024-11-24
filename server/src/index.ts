@@ -3,7 +3,11 @@ import express from "express";
 import cors from "cors";
 import { randomUUID } from "crypto";
 
-const io = new Server({ cors: { origin: "*" } });
+const io = new Server({
+	cors: { origin: "http://localhost:5173/" },
+	pingInterval: 25000,
+	pingTimeout: 10000,
+});
 const app = express();
 app.use(cors());
 app.use(express.json());

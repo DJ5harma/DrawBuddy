@@ -16,7 +16,9 @@ const context = createContext<{ socket: Socket | null }>({
 });
 
 export default function SocketProvider({ children }: { children: ReactNode }) {
-	const socketRef = useRef(io(SOCKET_URL, { autoConnect: false }));
+	const socketRef = useRef(
+		io(SOCKET_URL, { autoConnect: false, transports: ["websocket"] })
+	);
 
 	const [isConnected, setIsConnected] = useState(false);
 
