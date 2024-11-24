@@ -7,7 +7,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { START_SOCKET_SERVER_API } from "../utils/apiRoutes";
+import { SOCKET_URL, START_SOCKET_SERVER_API } from "../utils/apiRoutes";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -16,7 +16,7 @@ const context = createContext<{ socket: Socket | null }>({
 });
 
 export default function SocketProvider({ children }: { children: ReactNode }) {
-	const socketRef = useRef(io("ws://localhost:3000", { autoConnect: false }));
+	const socketRef = useRef(io(SOCKET_URL, { autoConnect: false }));
 
 	const [isConnected, setIsConnected] = useState(false);
 
