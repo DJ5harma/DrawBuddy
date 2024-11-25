@@ -9,7 +9,7 @@ import {
 import toast from "react-hot-toast";
 import { IPeers } from "../../utils/types";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
-import { Circle, Group } from "react-konva";
+import { Circle, Group, Text } from "react-konva";
 import { useStage } from "../../providers/StageProvider";
 
 export default function RoomHandler() {
@@ -24,7 +24,6 @@ export default function RoomHandler() {
 		return newName;
 	})();
 
-	const { getMousePos } = useStage();
 	const { elementsArrRef, addElementToStage, setMainElements } = useElements();
 
 	const { myNewElement } = useMyNewElement();
@@ -122,23 +121,38 @@ export default function RoomHandler() {
 		};
 	}, []);
 
+	const { getMousePos, stageScale, stagePosition } = useStage();
 	const handleMouseMove = (e: MouseEvent) => {
 		const { x, y } = getMousePos(e.clientX, e.clientY);
-		const mousePos = { x, y };
 		socket.emit("my_mouse_position", {
-			mousePos,
+			mousePos: {
+				x: x * stageScale + stagePosition.x,
+				y: y * stageScale + stagePosition.y,
+			},
 			roomId,
 		});
 	};
 
 	return Object.keys(peers).map((userid) => {
 		const { username, tempElement, mousePos } = peers[userid];
+		if (!mousePos) return null;
+
+		const x = (mousePos.x - stagePosition.x) / stageScale;
+		const y = (mousePos.y - stagePosition.y) / stageScale;
+
 		return (
 			<Group key={userid}>
 				{tempElement ? deserializeKonvaElement(tempElement) : null}
-				{mousePos && (
-					<Circle x={mousePos.x} y={mousePos.y} radius={10} fill={"red"} />
-				)}
+				<Circle radius={10 / stageScale} fill={"red"} x={x} y={y} />
+				<Text
+					text={username}
+					fill={"white"}
+					x={x}
+					y={y}
+					scaleX={1 / stageScale}
+					scaleY={1 / stageScale}
+					height={10}
+				/>
 			</Group>
 		);
 	});

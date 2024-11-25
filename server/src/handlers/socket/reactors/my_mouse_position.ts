@@ -1,9 +1,8 @@
 import { Socket } from "socket.io";
-import { roomToElementsMap } from "../../../cache";
 
 export default function my_mouse_position(
 	socket: Socket,
-	{ mousePos, roomId }: { mousePos: { x: number; y: number }; roomId: string }
+	{ mousePos, roomId }: { mousePos: unknown; roomId: string }
 ) {
 	socket.broadcast
 		.to(roomId)

@@ -19,8 +19,11 @@ export default function i_arrived_at_room(
 	socket.broadcast.to(roomId).emit("new_user", userObj);
 
 	const prevUsers = roomToUsersMap.get(roomId) || {};
-	socket.broadcast.to(roomId).emit("previous_users", prevUsers);
-	prevUsers[socket.id] = { username, tempElement: null };
+
+	socket.emit("previous_users", prevUsers);
+	socket.join(roomId);
+
+	prevUsers[socket.id] = { username };
 
 	if (!havingElements) {
 		console.log("sent prev elements", { havingElements });
@@ -29,9 +32,7 @@ export default function i_arrived_at_room(
 
 	roomToUsersMap.set(roomId, prevUsers);
 
-	console.log({ prevUsers });
-
-	socket.join(roomId);
+	console.log("this room users: ", prevUsers);
 
 	useridToRoomMap.set(socket.id, roomId);
 }

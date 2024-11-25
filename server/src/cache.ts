@@ -3,7 +3,6 @@ import { Server } from "socket.io";
 interface IPeers {
 	[userid: string]: {
 		username: string;
-		tempElement: any;
 	};
 }
 
