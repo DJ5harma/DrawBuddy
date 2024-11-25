@@ -31,5 +31,6 @@ export interface IPeers {
 	[userid: string]: {
 		username: string;
 		tempElement: JSX.Element | null;
+		mousePos: { x: number; y: number };
 	};
 }

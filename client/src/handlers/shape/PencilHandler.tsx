@@ -3,14 +3,15 @@ import { Line } from "react-konva";
 import { useStage } from "../../providers/StageProvider";
 import { useElements } from "../../providers/ElementsProvider";
 import { useToolSettings } from "../../providers/ToolSettingsProvider";
+import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
 export default function PencilHandler() {
 	const [pointsArr, setPointsArr] = useState<number[]>([]);
 	const [drawing, setDrawing] = useState(false);
 	const { getMousePos } = useStage();
 
-	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
-		useElements();
+	const { elementsArrRef, addElementToStage } = useElements();
+	const { myNewElement, setMyNewElement } = useMyNewElement();
 
 	const { strokeColor, strokeWidth, opacity } = useToolSettings();
 
@@ -27,7 +28,7 @@ export default function PencilHandler() {
 			setPointsArr([...pointsArr, x, y]);
 			setMyNewElement(
 				<Line
-					key={"Pencil" + elementsArr.length}
+					key={"Pencil" + elementsArrRef.current.length}
 					points={pointsArr}
 					strokeEnabled
 					strokeWidth={strokeWidth}
@@ -38,8 +39,9 @@ export default function PencilHandler() {
 			);
 		};
 		const handleMouseUp = () => {
-			addElementToStage();
+			addElementToStage(myNewElement);
 			setDrawing(false);
+			setMyNewElement(null);
 		};
 		document.addEventListener("mousedown", handleMouseDown);
 		document.addEventListener("mousemove", handleMouseMove);
@@ -49,6 +51,6 @@ export default function PencilHandler() {
 			document.removeEventListener("mousemove", handleMouseMove);
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [drawing, myNewElement, pointsArr, elementsArr]);
-	return null;
+	}, [drawing, myNewElement, pointsArr]);
+	return myNewElement;
 }

@@ -1,36 +1,27 @@
 import {
 	createContext,
-	Dispatch,
+	MutableRefObject,
 	ReactNode,
-	SetStateAction,
 	useContext,
 	useEffect,
+	useRef,
 	useState,
 } from "react";
 import {
 	deserializeKonvaElement,
 	serializeKonvaElement,
 } from "../utils/konva/convertKonva";
-import { IPeers } from "../utils/types";
 
 const context = createContext<{
-	elementsArr: JSX.Element[];
-	setElementsArr: Dispatch<SetStateAction<JSX.Element[]>>;
-	addElementToStage: () => void;
-	myNewElement: JSX.Element | null;
-	setMyNewElement: Dispatch<SetStateAction<JSX.Element | null>>;
+	elementsArrRef: MutableRefObject<JSX.Element[]>;
+	addElementToStage: (element: JSX.Element | null) => void;
+	setMainElements: (element: JSX.Element[]) => void;
 	flickerForLocalCreation: boolean;
-	peers: IPeers;
-	setPeers: Dispatch<SetStateAction<IPeers>>;
 }>({
-	elementsArr: [],
-	setElementsArr: () => {},
+	elementsArrRef: { current: [] },
 	addElementToStage: () => {},
-	myNewElement: null,
-	setMyNewElement: () => {},
+	setMainElements: () => {},
 	flickerForLocalCreation: false,
-	peers: {},
-	setPeers: () => {},
 });
 
 export default function ElementsProvider({
@@ -38,43 +29,43 @@ export default function ElementsProvider({
 }: {
 	children: ReactNode;
 }) {
-	const [elementsArr, setElementsArr] = useState<JSX.Element[]>(() => {
-		return (
-			JSON.parse(
-				localStorage.getItem("serializedShapes") || "[]"
-			) as JSX.Element[]
-		).map((elem) => deserializeKonvaElement(elem));
-	});
+	const elementsArrRef = useRef<JSX.Element[]>(
+		(() => {
+			return (
+				JSON.parse(
+					localStorage.getItem("serializedShapes") || "[]"
+				) as JSX.Element[]
+			).map((elem) => deserializeKonvaElement(elem));
+		})()
+	);
 	const [flickerForLocalCreation, setFlickerForLocalCreation] = useState(false);
 
-	const [myNewElement, setMyNewElement] = useState<JSX.Element | null>(null);
-
-	const addElementToStage = () => {
-		if (!myNewElement) return;
-		setElementsArr([...elementsArr, myNewElement]);
-		setMyNewElement(null);
+	const addElementToStage = (element: JSX.Element | null) => {
+		if (!element) return;
+		elementsArrRef.current.push(element);
 		setFlickerForLocalCreation((p) => !p);
 	};
-
-	const [peers, setPeers] = useState<IPeers>({});
+	const setMainElements = (elements: JSX.Element[]) => {
+		elementsArrRef.current = elements || [];
+		setFlickerForLocalCreation((p) => !p);
+	};
 
 	useEffect(() => {
 		localStorage.setItem(
 			"serializedShapes",
-			JSON.stringify(elementsArr.map((elem) => serializeKonvaElement(elem)))
+			JSON.stringify(
+				elementsArrRef.current.map((elem) => serializeKonvaElement(elem))
+			)
 		);
-	}, [elementsArr]);
+	}, [flickerForLocalCreation]);
+
 	return (
 		<context.Provider
 			value={{
-				elementsArr,
-				setElementsArr,
+				elementsArrRef,
 				addElementToStage,
-				myNewElement,
-				setMyNewElement,
+				setMainElements,
 				flickerForLocalCreation,
-				peers,
-				setPeers,
 			}}
 		>
 			{children}

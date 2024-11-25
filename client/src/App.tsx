@@ -8,7 +8,7 @@ import ToolsProvider from "./providers/ToolsProvider";
 import RoomHandler from "./handlers/functional/RoomHandler";
 import { Toaster } from "react-hot-toast";
 import CollaborateOption from "./components/CollaborateOption";
-import RoomPointersHandler from "./handlers/functional/RoomPointersHandler";
+import ClearAllButton from "./components/ClearAllButton";
 
 export default function App() {
 	return (
@@ -27,20 +27,31 @@ export default function App() {
 					<ToolSettingsProvider>
 						<ElementsProvider>
 							<NavMenu />
-							<StageProvider>
-								<Routes>
-									<Route index element={<CollaborateOption />} />
-									<Route
-										path="room/:id"
-										element={
-											<SocketProvider>
+							<Routes>
+								<Route
+									index
+									element={
+										<>
+											<CollaborateOption />
+											<ClearAllButton />
+											<StageProvider>
+												<></>
+											</StageProvider>
+										</>
+									}
+								/>
+								<Route
+									path="room/:id"
+									element={
+										<SocketProvider>
+											<StageProvider>
 												<RoomHandler />
-												<RoomPointersHandler />
-											</SocketProvider>
-										}
-									/>
-								</Routes>
-							</StageProvider>
+											</StageProvider>
+											<ClearAllButton />
+										</SocketProvider>
+									}
+								/>
+							</Routes>
 						</ElementsProvider>
 					</ToolSettingsProvider>
 				</ToolsProvider>

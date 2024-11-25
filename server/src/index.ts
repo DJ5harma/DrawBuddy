@@ -64,19 +64,25 @@ interface IPeers {
 
 const roomToUsersMap = new Map<string, IPeers>();
 const useridToRoomMap = new Map<string, string>();
+const roomToElementsMap = new Map<string, {}[]>();
 
 io.on("connection", (socket) => {
 	console.log(++clients);
 
-	socket.on("i arrived at room", ({ roomId, username }) => {
+	socket.on("i arrived at room", ({ roomId, username, havingElements }) => {
 		console.log(socket.id, " arrived");
 
 		const userObj = { userid: socket.id, username };
-		socket.to(roomId).emit("new_user", userObj);
+		socket.broadcast.to(roomId).emit("new_user", userObj);
 
-		let prevUsers = roomToUsersMap.get(roomId) || {};
-		socket.emit("previous_users", prevUsers);
+		const prevUsers = roomToUsersMap.get(roomId) || {};
+		socket.broadcast.to(roomId).emit("previous_users", prevUsers);
 		prevUsers[socket.id] = { username, tempElement: null };
+
+		if (!havingElements) {
+			console.log("sent prev elements", { havingElements });
+			socket.emit("update_elements", roomToElementsMap.get(roomId) || []);
+		}
 
 		roomToUsersMap.set(roomId, prevUsers);
 
@@ -88,23 +94,36 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("finalized new element", ({ element, roomId }) => {
-		socket.broadcast.to(roomId).emit("incoming finalized element", element);
+		socket.broadcast.to(roomId).emit("incoming_finalized_element", element);
+		const prevElements = roomToElementsMap.get(roomId) || [];
+
+		roomToElementsMap.set(roomId, [...prevElements, element]);
 	});
 	socket.on("creating new element", ({ element, roomId }) => {
 		socket.broadcast
 			.to(roomId)
-			.emit("incoming element in making", { element, userid: socket.id });
+			.emit("incoming_element_in_making", { element, userid: socket.id });
 	});
 
 	socket.on("my mouse position", ({ mousePos, roomId }) => {
 		socket.broadcast
 			.to(roomId)
-			.emit("incoming peer mouse position", { mousePos, userid: socket.id });
+			.emit("incoming_peer_mouse_position", { mousePos, userid: socket.id });
+	});
+
+	socket.on("clear all elements", ({ roomId }) => {
+		if (roomToElementsMap.has(roomId)) {
+			console.log("\nHIIII\n");
+			roomToElementsMap.delete(roomId);
+			socket.broadcast.to(roomId).emit("update_elements", []);
+		}
 	});
 
 	socket.on("disconnect", () => {
 		console.log(--clients);
+
 		const roomId = useridToRoomMap.get(socket.id);
+
 		if (roomId) {
 			useridToRoomMap.delete(socket.id);
 			let prevUsers = roomToUsersMap.get(roomId);
@@ -112,6 +131,7 @@ io.on("connection", (socket) => {
 				delete prevUsers[socket.id];
 				roomToUsersMap.set(roomId, prevUsers);
 			}
+			socket.broadcast.to(roomId).emit("user_left", socket.id);
 		}
 		closeSocketServer();
 	});

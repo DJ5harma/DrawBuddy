@@ -3,6 +3,7 @@ import { Line } from "react-konva";
 import { useStage } from "../../providers/StageProvider";
 import { useElements } from "../../providers/ElementsProvider";
 import { useToolSettings } from "../../providers/ToolSettingsProvider";
+import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
 export default function LineHandler() {
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
@@ -17,8 +18,9 @@ export default function LineHandler() {
 	});
 
 	const { getMousePos } = useStage();
-	const { elementsArr, addElementToStage, myNewElement, setMyNewElement } =
-		useElements();
+	const { elementsArrRef, addElementToStage } = useElements();
+
+	const { myNewElement, setMyNewElement } = useMyNewElement();
 
 	const { strokeColor, strokeWidth, opacity } = useToolSettings();
 
@@ -41,7 +43,7 @@ export default function LineHandler() {
 			const { x, y } = getMousePos(e.clientX, e.clientY);
 			setMyNewElement(
 				<Line
-					key={"Line" + elementsArr.length}
+					key={"Line" + elementsArrRef.current.length}
 					points={
 						multipleLines.exist
 							? [...multipleLines.pointsArr, x, y]
@@ -61,14 +63,16 @@ export default function LineHandler() {
 				setMultipleLines({ pointsArr: [x, y], exist: true });
 				return;
 			}
-			addElementToStage();
+			addElementToStage(myNewElement);
 			setDrawing(false);
+			setMyNewElement(null);
 		};
 		const handleKeyUp = (e: KeyboardEvent) => {
 			if (multipleLines.exist && e.key === "Escape") {
 				setMultipleLines({ exist: false, pointsArr: [] });
-				addElementToStage();
+				addElementToStage(myNewElement);
 				setDrawing(false);
+				setMyNewElement(null);
 			}
 		};
 		document.addEventListener("mousedown", handleMouseDown);
@@ -82,5 +86,5 @@ export default function LineHandler() {
 			document.removeEventListener("keyup", handleKeyUp);
 		};
 	}, [drawing, startingPosition, myNewElement, multipleLines]);
-	return null;
+	return myNewElement;
 }

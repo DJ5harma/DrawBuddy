@@ -9,17 +9,15 @@ import {
 import { useTools } from "./ToolsProvider";
 import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
 import { useElements } from "./ElementsProvider";
-import { deserializeKonvaElement } from "../utils/konva/convertKonva";
+import MyNewElementProvider from "./MyNewElementProvider";
 
 const context = createContext<{
 	getMousePos: (currX: number, currY: number) => { x: number; y: number };
-	revertMousePos: (currX: number, currY: number) => { x: number; y: number };
 	stageScale: number;
 	stagePosition: { x: number; y: number };
 	stageDimensions: { width: number; height: number };
 }>({
 	getMousePos: () => ({ x: 0, y: 0 }),
-	revertMousePos: () => ({ x: 0, y: 0 }),
 	stageScale: 1,
 	stagePosition: { x: 0, y: 0 },
 	stageDimensions: {
@@ -29,7 +27,7 @@ const context = createContext<{
 });
 
 export default function StageProvider({ children }: { children: ReactNode }) {
-	const { elementsArr, myNewElement, peers } = useElements();
+	const { elementsArrRef } = useElements();
 
 	const [dimensions, setDimensions] = useState({
 		width: window.innerWidth,
@@ -68,20 +66,20 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 
 		return { x: adjustedX, y: adjustedY };
 	};
-	const revertMousePos = (adjustedX: number, adjustedY: number) => {
-		const stage = document.querySelector("canvas")?.getBoundingClientRect();
+	// const revertMousePos = (adjustedX: number, adjustedY: number) => {
+	// 	const stage = document.querySelector("canvas")?.getBoundingClientRect();
 
-		const [mouseX, mouseY] = [
-			adjustedX * scale + position.x,
-			adjustedY * scale + position.y,
-		];
-		const [currX, currY] = [
-			mouseX + (stage?.left || 0),
-			mouseY + (stage?.top || 0),
-		];
+	// 	const [mouseX, mouseY] = [
+	// 		adjustedX * scale + position.x,
+	// 		adjustedY * scale + position.y,
+	// 	];
+	// 	const [currX, currY] = [
+	// 		mouseX + (stage?.left || 0),
+	// 		mouseY + (stage?.top || 0),
+	// 	];
 
-		return { x: currX, y: currY };
-	};
+	// 	return { x: currX, y: currY };
+	// };
 
 	useEffect(() => {
 		localStorage.setItem("stagePosition", JSON.stringify(position));
@@ -160,28 +158,24 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 				onWheel={handleOnWheel}
 			>
 				<Layer>
-					<Group>{elementsArr}</Group>
-					<Group>{myNewElement}</Group>
-					<Group>
-						{Object.keys(peers).map((userid) => {
-							const elem = peers[userid].tempElement;
-							return elem ? deserializeKonvaElement(elem) : null;
-						})}
-					</Group>
+					<context.Provider
+						value={{
+							getMousePos,
+							stageScale: scale,
+							stagePosition: position,
+							stageDimensions: dimensions,
+						}}
+					>
+						<Group>{elementsArrRef.current}</Group>
+						<Group>
+							<MyNewElementProvider>
+								{!isPanning && selectedTool && selectedTool.handler}
+								{children}
+							</MyNewElementProvider>
+						</Group>
+					</context.Provider>
 				</Layer>
 			</Stage>
-			<context.Provider
-				value={{
-					getMousePos,
-					revertMousePos,
-					stageScale: scale,
-					stagePosition: position,
-					stageDimensions: dimensions,
-				}}
-			>
-				{!isPanning && selectedTool && selectedTool.handler}
-				{children}
-			</context.Provider>
 		</>
 	);
 }
