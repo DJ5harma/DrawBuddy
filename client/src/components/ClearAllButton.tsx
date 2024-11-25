@@ -18,7 +18,7 @@ export default function ClearAllButton() {
 			onClick={() => {
 				setMainElements([]);
 				setMyNewElement(null);
-				if (socket) socket.emit("clear all elements", { roomId });
+				if (socket) socket.emit("clear_all_elements", { roomId });
 			}}
 			className="absolute p-2 bottom-4 right-4 z-10 hover:bg-neutral-700 bg-neutral-800"
 		>

@@ -31,12 +31,12 @@ export default function RoomHandler() {
 	const [peers, setPeers] = useState<IPeers>({});
 
 	useEffect(() => {
-		socket.emit("creating new element", {
+		socket.emit("creating_new_element", {
 			element: myNewElement ? serializeKonvaElement(myNewElement) : null,
 			roomId,
 		});
 		if (!myNewElement && elementsArrRef.current.length)
-			socket.emit("finalized new element", {
+			socket.emit("finalized_new_element", {
 				element: serializeKonvaElement(
 					elementsArrRef.current[elementsArrRef.current.length - 1]
 				),
@@ -45,7 +45,7 @@ export default function RoomHandler() {
 	}, [myNewElement]);
 
 	useEffect(() => {
-		socket.emit("i arrived at room", {
+		socket.emit("i_arrived_at_room", {
 			roomId,
 			username,
 			havingElements: elementsArrRef.current.length,
@@ -125,7 +125,7 @@ export default function RoomHandler() {
 	const handleMouseMove = (e: MouseEvent) => {
 		const { x, y } = getMousePos(e.clientX, e.clientY);
 		const mousePos = { x, y };
-		socket.emit("my mouse position", {
+		socket.emit("my_mouse_position", {
 			mousePos,
 			roomId,
 		});
