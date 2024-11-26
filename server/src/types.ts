@@ -4,3 +4,9 @@ export interface IPeers {
 		usercolor: string;
 	};
 }
+
+export interface IElement {
+	key: string;
+	props: Object;
+	name: string;
+}
