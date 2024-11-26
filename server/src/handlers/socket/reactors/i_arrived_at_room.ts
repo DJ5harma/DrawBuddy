@@ -5,6 +5,19 @@ import {
 	useridToRoomMap,
 } from "../../../cache";
 
+function randomColor() {
+	const randomColorVal = () => (Math.random() * 155 + 100).toFixed();
+	return (
+		"rgb(" +
+		randomColorVal() +
+		", " +
+		randomColorVal() +
+		", " +
+		randomColorVal() +
+		")"
+	);
+}
+
 export default function i_arrived_at_room(
 	socket: Socket,
 	{
@@ -15,7 +28,9 @@ export default function i_arrived_at_room(
 ) {
 	console.log(socket.id, " arrived");
 
-	const userObj = { userid: socket.id, username };
+	const userObj = { userid: socket.id, username, usercolor: randomColor() };
+	console.log(userObj);
+
 	socket.broadcast.to(roomId).emit("new_user", userObj);
 
 	const prevUsers = roomToUsersMap.get(roomId) || {};
@@ -23,7 +38,7 @@ export default function i_arrived_at_room(
 	socket.emit("previous_users", prevUsers);
 	socket.join(roomId);
 
-	prevUsers[socket.id] = { username };
+	prevUsers[socket.id] = { username, usercolor: randomColor() };
 
 	if (!havingElements) {
 		console.log("sent prev elements", { havingElements });

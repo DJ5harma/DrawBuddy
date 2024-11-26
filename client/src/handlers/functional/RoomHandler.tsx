@@ -4,6 +4,7 @@ import { useSocket } from "../../providers/SocketProvider";
 import { useElements } from "../../providers/ElementsProvider";
 import {
 	deserializeKonvaElement,
+	getShapeEnds,
 	serializeKonvaElement,
 } from "../../utils/konva/convertKonva";
 import toast from "react-hot-toast";
@@ -62,17 +63,20 @@ export default function RoomHandler() {
 			);
 		});
 
-		socket.on("new_user", (userObj: { userid: string; username: string }) => {
-			setPeers((p) => {
-				p[userObj.userid] = {
-					tempElement: null,
-					username: userObj.username,
-					mousePos: { x: 0, y: 0 },
-				};
-				return p;
-			});
-			toast(userObj.username + " joined!");
-		});
+		socket.on(
+			"new_user",
+			(userObj: { userid: string; username: string; usercolor: string }) => {
+				setPeers((p) => {
+					p[userObj.userid] = {
+						tempElement: null,
+						username: userObj.username,
+						usercolor: userObj.usercolor,
+					};
+					return p;
+				});
+				toast(userObj.username + " joined!");
+			}
+		);
 
 		socket.on("incoming_finalized_element", (element: JSX.Element) => {
 			addElementToStage(deserializeKonvaElement(element));
@@ -102,48 +106,21 @@ export default function RoomHandler() {
 				return p;
 			});
 		});
-		socket.on(
-			"incoming_peer_mouse_position",
-			({
-				mousePos,
-				userid,
-			}: {
-				mousePos: { x: number; y: number };
-				userid: string;
-			}) => {
-				setPeers((p) => ({ ...p, [userid]: { ...p[userid], mousePos } }));
-			}
-		);
-		document.addEventListener("mousemove", handleMouseMove);
 		return () => {
 			socket.removeAllListeners();
-			document.removeEventListener("mousemove", handleMouseMove);
 		};
 	}, []);
 
-	const { getMousePos, stageScale, stagePosition } = useStage();
-	const handleMouseMove = (e: MouseEvent) => {
-		const { x, y } = getMousePos(e.clientX, e.clientY);
-		socket.emit("my_mouse_position", {
-			mousePos: {
-				x: x * stageScale + stagePosition.x,
-				y: y * stageScale + stagePosition.y,
-			},
-			roomId,
-		});
-	};
+	const { stageScale } = useStage();
 
 	return Object.keys(peers).map((userid) => {
-		const { username, tempElement, mousePos } = peers[userid];
-		if (!mousePos) return null;
-
-		const x = (mousePos.x - stagePosition.x) / stageScale;
-		const y = (mousePos.y - stagePosition.y) / stageScale;
-
+		const { username, tempElement, usercolor } = peers[userid];
+		if (!tempElement) return null;
+		const { x, y } = getShapeEnds(tempElement);
 		return (
 			<Group key={userid}>
 				{tempElement ? deserializeKonvaElement(tempElement) : null}
-				<Circle radius={10 / stageScale} fill={"red"} x={x} y={y} />
+				<Circle radius={10 / stageScale} fill={usercolor} x={x} y={y} />
 				<Text
 					text={username}
 					fill={"white"}

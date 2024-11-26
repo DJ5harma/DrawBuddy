@@ -18,3 +18,28 @@ export function deserializeKonvaElement(serial: JSX.Element): JSX.Element {
 			return <></>;
 	}
 }
+export function getShapeEnds(shape: JSX.Element) {
+	const { type, props } = shape;
+	switch (type) {
+		case "Rect":
+			return {
+				x: props.x + props.width,
+				y: props.y + props.height,
+			};
+		case "Circle":
+			return {
+				x: props.x + props.radius,
+				y: props.y,
+			};
+		case "Line": {
+			const ptsArray = props.points as [];
+			if (ptsArray.length < 2) return { x: 0, y: 0 };
+			return {
+				x: ptsArray[ptsArray.length - 2],
+				y: ptsArray[ptsArray.length - 1],
+			};
+		}
+		default:
+			return { x: 0, y: 0 };
+	}
+}
