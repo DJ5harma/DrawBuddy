@@ -47,8 +47,9 @@ export default function App() {
 									element={
 										<SocketProvider>
 											<StageProvider>
-												<RoomHandler />
-												<MyNewElementProvider />
+												<MyNewElementProvider>
+													<RoomHandler />
+												</MyNewElementProvider>
 											</StageProvider>
 											<ClearAllButton />
 										</SocketProvider>

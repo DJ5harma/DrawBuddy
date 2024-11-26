@@ -31,6 +31,8 @@ export default function RoomHandler() {
 	const [peers, setPeers] = useState<IPeers>({});
 
 	useEffect(() => {
+		console.log("new elem");
+
 		socket.emit("creating_new_element", {
 			element: myNewElement ? serializeKonvaElement(myNewElement) : null,
 			roomId,
@@ -91,6 +93,7 @@ export default function RoomHandler() {
 		});
 		socket.on("incoming_finalized_element", (element: JSX.Element) => {
 			addElementToStage(deserializeKonvaElement(element));
+			console.log("came", element);
 		});
 		socket.on(
 			"incoming_element_in_making",

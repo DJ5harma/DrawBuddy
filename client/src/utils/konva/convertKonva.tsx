@@ -1,4 +1,4 @@
-import { Circle, Line, Rect } from "react-konva";
+import { Circle, Line, Rect, Text } from "react-konva";
 
 export function serializeKonvaElement(element: JSX.Element): JSX.Element {
 	const { type, props, key } = element;
@@ -14,6 +14,8 @@ export function deserializeKonvaElement(serial: JSX.Element): JSX.Element {
 			return <Circle key={key} {...props} />;
 		case "Line":
 			return <Line key={key} {...props} />;
+		case "Text":
+			return <Text key={key} {...props} />;
 		default:
 			return <></>;
 	}
