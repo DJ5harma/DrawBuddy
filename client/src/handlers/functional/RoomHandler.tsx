@@ -99,7 +99,10 @@ export default function RoomHandler() {
 			}) => {
 				setPeers((p) => ({
 					...p,
-					[userid]: { ...p[userid], tempElement: element },
+					[userid]: {
+						...p[userid],
+						tempElement: element ? deserializeKonvaElement(element) : null,
+					},
 				}));
 			}
 		);
@@ -116,7 +119,7 @@ export default function RoomHandler() {
 		const { x, y } = getShapeEnds(tempElement);
 		return (
 			<Group key={userid}>
-				{tempElement ? deserializeKonvaElement(tempElement) : null}
+				{tempElement}
 				<Circle radius={10 / stageScale} fill={usercolor} x={x} y={y} />
 				<Text
 					text={username}
