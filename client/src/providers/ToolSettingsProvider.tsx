@@ -8,14 +8,14 @@ import {
 import { IToolSettings } from "../utils/types";
 import {
 	BACKGROUND_COLORS,
-	sampleToolSettings,
+	SAMPLE_TOOL_SETTINGS,
 	STROKE_COLORS,
 } from "../utils/constants";
 import { useTools } from "./ToolsProvider";
 
 const toolSettings: IToolSettings = (() => {
 	const ts = localStorage.getItem("toolSettings");
-	if (!ts) return sampleToolSettings;
+	if (!ts) return SAMPLE_TOOL_SETTINGS;
 	return JSON.parse(ts);
 })();
 export default function ToolSettingsProvider({
@@ -48,7 +48,7 @@ export default function ToolSettingsProvider({
 	}, [strokeColor, strokeWidth, backgroundColor, opacity, dashGap]);
 	return (
 		<>
-			<div className="fixed left-4 h-screen flex items-center z-50">
+			<div className="fixed left-4 h-screen flex items-center z-50 select-none">
 				<div
 					className="border-4 p-4 text-sm flex flex-col gap-4 [&>div]:gap-2 [&>div]:flex [&>div]:flex-col bg-neutral-800"
 					style={{ top: "10vh" }}
@@ -137,5 +137,5 @@ export default function ToolSettingsProvider({
 	);
 }
 
-const context = createContext<IToolSettings>(sampleToolSettings);
+const context = createContext<IToolSettings>(SAMPLE_TOOL_SETTINGS);
 export const useToolSettings = () => useContext(context);

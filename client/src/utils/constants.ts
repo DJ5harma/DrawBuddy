@@ -15,7 +15,7 @@ export const BACKGROUND_COLORS = [
 	"",
 ];
 
-export const sampleToolSettings = {
+export const SAMPLE_TOOL_SETTINGS = {
 	strokeColor: STROKE_COLORS[0],
 	backgroundColor: BACKGROUND_COLORS[0],
 	strokeWidth: 10,
