@@ -8,10 +8,10 @@ import {
 } from "react";
 
 const context = createContext<{
-	myNewElement: JSX.Element | null;
-	setMyNewElement: Dispatch<SetStateAction<JSX.Element | null>>;
+	myNewElement: JSX.Element | null | undefined;
+	setMyNewElement: Dispatch<SetStateAction<JSX.Element | null | undefined>>;
 }>({
-	myNewElement: null,
+	myNewElement: undefined,
 	setMyNewElement: () => {},
 });
 
@@ -20,7 +20,9 @@ export default function MyNewElementProvider({
 }: {
 	children: ReactNode;
 }) {
-	const [myNewElement, setMyNewElement] = useState<JSX.Element | null>(null);
+	const [myNewElement, setMyNewElement] = useState<
+		JSX.Element | null | undefined
+	>(undefined);
 	return (
 		<context.Provider
 			value={{

@@ -35,7 +35,11 @@ export default function RoomHandler() {
 			element: myNewElement ? serializeKonvaElement(myNewElement) : null,
 			roomId,
 		});
-		if (!myNewElement && elementsArrRef.current.length)
+		if (
+			!myNewElement &&
+			myNewElement !== undefined &&
+			elementsArrRef.current.length
+		)
 			socket.emit("finalized_new_element", {
 				element: serializeKonvaElement(
 					elementsArrRef.current[elementsArrRef.current.length - 1]
