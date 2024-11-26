@@ -5,7 +5,7 @@ import { useElements } from "../../providers/ElementsProvider";
 import { useToolSettings } from "../../providers/ToolSettingsProvider";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
-export default function CircleHandler() {
+export default function TextHandler() {
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
 
 	const [drawing, setDrawing] = useState(false);
@@ -14,8 +14,7 @@ export default function CircleHandler() {
 	const { elementsArrRef, addElementToStage } = useElements();
 	const { myNewElement, setMyNewElement } = useMyNewElement();
 
-	const { backgroundColor, strokeColor, strokeWidth, opacity, dashGap } =
-		useToolSettings();
+	const { strokeColor, opacity } = useToolSettings();
 
 	const INITIAL_TEXT = "Type (Esc to stop)...";
 
