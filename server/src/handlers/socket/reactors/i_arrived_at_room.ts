@@ -23,8 +23,12 @@ export default function i_arrived_at_room(
 	{
 		roomId,
 		username,
-		havingElements,
-	}: { roomId: string; username: string; havingElements: number }
+	}: // havingElements,
+	{
+		roomId: string;
+		username: string;
+		//  havingElements: number
+	}
 ) {
 	// console.log(socket.id, " arrived");
 
@@ -39,10 +43,10 @@ export default function i_arrived_at_room(
 
 	prevUsers[socket.id] = { username, usercolor: randomColor() };
 
-	if (!havingElements) {
-		// console.log("sent prev elements", { havingElements });
-		socket.emit("update_elements", roomToElementsMap.get(roomId) || []);
-	}
+	// if (!havingElements) {
+	// 	// console.log("sent prev elements", { havingElements });
+	// 	socket.emit("update_elements", roomToElementsMap.get(roomId) || []);
+	// }
 
 	roomToUsersMap.set(roomId, prevUsers);
 

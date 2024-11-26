@@ -25,7 +25,13 @@ export default function RoomHandler() {
 		return newName;
 	})();
 
-	const { elementsArrRef, addElementToStage, setMainElements } = useElements();
+	const {
+		elementsArrRef,
+		addElementToStage,
+		setMainElements,
+		updateProject,
+		projectId,
+	} = useElements();
 
 	const { myNewElement } = useMyNewElement();
 	const [peers, setPeers] = useState<IPeers>({});
@@ -47,10 +53,15 @@ export default function RoomHandler() {
 	}, [myNewElement]);
 
 	useEffect(() => {
+		if (roomId && projectId !== roomId) {
+			updateProject(roomId);
+			return;
+		}
+
 		socket.emit("i_arrived_at_room", {
 			roomId,
 			username,
-			havingElements: elementsArrRef.current.length,
+			// havingElements: elementsArrRef.current.length,
 		});
 
 		socket.on("previous_users", (prevUsers: IPeers) => {
@@ -116,7 +127,7 @@ export default function RoomHandler() {
 		return () => {
 			socket.removeAllListeners();
 		};
-	}, []);
+	}, [projectId]);
 
 	const { stageScale } = useStage();
 

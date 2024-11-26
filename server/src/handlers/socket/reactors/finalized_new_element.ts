@@ -7,11 +7,13 @@ export default function finalized_new_element(
 	{ element, roomId }: { element: IElement; roomId: string }
 ) {
 	socket.broadcast.to(roomId).emit("incoming_finalized_element", element);
+	// console.log("incoming finalizing element: ", element);
 
 	const prevElements = roomToElementsMap.get(roomId) || [];
 	if (
-		prevElements.length &&
-		element.key === prevElements[prevElements.length - 1].key
+		!element ||
+		(prevElements.length &&
+			element.key === prevElements[prevElements.length - 1].key)
 	)
 		return;
 	prevElements.push(element);
