@@ -19,12 +19,11 @@ export default function RectangleHandler() {
 
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
-			console.log(e.button);
-
 			if (e.button !== 0) return;
 			setDrawing(true);
 			setStartingPosition(getMousePos(e.clientX, e.clientY));
 		};
+
 		const handleMouseMove = (e: MouseEvent) => {
 			if (!drawing) return;
 

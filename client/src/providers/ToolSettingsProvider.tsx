@@ -48,7 +48,7 @@ export default function ToolSettingsProvider({
 	}, [strokeColor, strokeWidth, backgroundColor, opacity, dashGap]);
 	return (
 		<>
-			<div className="fixed left-4 h-screen flex items-center z-50 select-none">
+			<div className="fixed left-4 h-screen flex items-center select-none z-10">
 				<div
 					className="border-4 p-4 text-sm flex flex-col gap-4 [&>div]:gap-2 [&>div]:flex [&>div]:flex-col bg-neutral-800"
 					style={{ top: "10vh" }}

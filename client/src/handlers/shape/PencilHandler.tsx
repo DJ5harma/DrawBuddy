@@ -18,9 +18,9 @@ export default function PencilHandler() {
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
 			if (e.button !== 0) return;
+			setDrawing(true);
 			const { x, y } = getMousePos(e.clientX, e.clientY);
 			setPointsArr([x, y]);
-			setDrawing(true);
 		};
 		const handleMouseMove = (e: MouseEvent) => {
 			if (!drawing) return;
@@ -54,5 +54,6 @@ export default function PencilHandler() {
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
 	}, [drawing, myNewElement, pointsArr]);
+
 	return null;
 }

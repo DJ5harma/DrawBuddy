@@ -31,23 +31,19 @@ export default function RoomHandler() {
 	const [peers, setPeers] = useState<IPeers>({});
 
 	useEffect(() => {
-		console.log("new elem");
-
 		socket.emit("creating_new_element", {
-			element: myNewElement ? serializeKonvaElement(myNewElement) : null,
+			element: myNewElement
+				? serializeKonvaElement(myNewElement)
+				: myNewElement,
 			roomId,
 		});
-		if (
-			!myNewElement &&
-			myNewElement !== undefined &&
-			elementsArrRef.current.length
-		)
-			socket.emit("finalized_new_element", {
-				element: serializeKonvaElement(
-					elementsArrRef.current[elementsArrRef.current.length - 1]
-				),
-				roomId,
-			});
+		if (!elementsArrRef.current.length) return;
+		socket.emit("finalized_new_element", {
+			element: serializeKonvaElement(
+				elementsArrRef.current[elementsArrRef.current.length - 1]
+			),
+			roomId,
+		});
 	}, [myNewElement]);
 
 	useEffect(() => {
@@ -60,7 +56,6 @@ export default function RoomHandler() {
 		socket.on("previous_users", (prevUsers: IPeers) => {
 			setPeers(prevUsers);
 			toast(`Joined in a room with ${Object.keys(prevUsers).length} other(s)`);
-			console.log(prevUsers);
 		});
 
 		socket.on(
@@ -92,8 +87,13 @@ export default function RoomHandler() {
 			);
 		});
 		socket.on("incoming_finalized_element", (element: JSX.Element) => {
+			if (
+				elementsArrRef.current.length &&
+				element.key ===
+					elementsArrRef.current[elementsArrRef.current.length - 1].key
+			)
+				return;
 			addElementToStage(deserializeKonvaElement(element));
-			console.log("came", element);
 		});
 		socket.on(
 			"incoming_element_in_making",
@@ -131,8 +131,8 @@ export default function RoomHandler() {
 				<Text
 					text={username}
 					fill={"white"}
-					x={x}
-					y={y}
+					x={x + 10 / stageScale}
+					y={y + 10 / stageScale}
 					scaleX={1 / stageScale}
 					scaleY={1 / stageScale}
 					height={10}

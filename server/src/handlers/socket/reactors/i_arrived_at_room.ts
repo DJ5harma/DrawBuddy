@@ -26,7 +26,7 @@ export default function i_arrived_at_room(
 		havingElements,
 	}: { roomId: string; username: string; havingElements: number }
 ) {
-	console.log(socket.id, " arrived");
+	// console.log(socket.id, " arrived");
 
 	const userObj = { userid: socket.id, username, usercolor: randomColor() };
 
@@ -40,13 +40,13 @@ export default function i_arrived_at_room(
 	prevUsers[socket.id] = { username, usercolor: randomColor() };
 
 	if (!havingElements) {
-		console.log("sent prev elements", { havingElements });
+		// console.log("sent prev elements", { havingElements });
 		socket.emit("update_elements", roomToElementsMap.get(roomId) || []);
 	}
 
 	roomToUsersMap.set(roomId, prevUsers);
 
-	console.log("this room users: ", prevUsers);
+	// console.log("this room users: ", prevUsers);
 
 	useridToRoomMap.set(socket.id, roomId);
 }

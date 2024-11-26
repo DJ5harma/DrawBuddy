@@ -74,7 +74,10 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		setPanStartPos({ x: e.evt.clientX, y: e.evt.clientY });
 	};
 	const handleMouseUp = (e: KonvaEventObject<MouseEvent, Node<NodeConfig>>) => {
-		if (e.evt.button === 1) setIsPanning(false);
+		if (e.evt.button === 1) {
+			setIsPanning(false);
+			console.log("rerendered");
+		}
 	};
 	const handleMouseMove = (
 		e: KonvaEventObject<MouseEvent, Node<NodeConfig>>
@@ -85,11 +88,12 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		setPosition((prev) => ({ x: prev.x + dx, y: prev.y + dy }));
 		setPanStartPos({ x: e.evt.clientX, y: e.evt.clientY });
 	};
-
 	useEffect(() => {
 		const handleWheel = (e: WheelEvent) => e.preventDefault();
+
 		window.addEventListener("resize", updateDimensions);
 		window.addEventListener("wheel", handleWheel, { passive: false });
+
 		return () => {
 			window.removeEventListener("resize", updateDimensions);
 			window.removeEventListener("wheel", handleWheel);
@@ -139,7 +143,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 					}}
 				>
 					<Group>{elementsArrRef.current}</Group>
-					{!isPanning && <Group>{children}</Group>}
+					<Group>{children}</Group>
 				</context.Provider>
 			</Layer>
 		</Stage>

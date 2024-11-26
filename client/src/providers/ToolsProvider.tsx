@@ -81,9 +81,9 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 	);
 
 	return (
-		<context.Provider value={{ selectedTool }}>
+		<>
 			<div
-				className="w-screen absolute top-4 left-0 flex justify-center items-center z-10"
+				className="w-screen absolute top-4 left-0 flex justify-center items-center z-50"
 				style={{
 					transform: "scale(1)",
 				}}
@@ -110,8 +110,8 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 					))}
 				</nav>
 			</div>
-			{children}
-		</context.Provider>
+			<context.Provider value={{ selectedTool }}>{children}</context.Provider>
+		</>
 	);
 }
 

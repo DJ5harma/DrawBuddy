@@ -4,15 +4,16 @@ import {
 	ReactNode,
 	SetStateAction,
 	useContext,
+	useEffect,
 	useState,
 } from "react";
 import { useTools } from "./ToolsProvider";
 
 const context = createContext<{
-	myNewElement: JSX.Element | null | undefined;
-	setMyNewElement: Dispatch<SetStateAction<JSX.Element | null | undefined>>;
+	myNewElement: JSX.Element | null;
+	setMyNewElement: Dispatch<SetStateAction<JSX.Element | null>>;
 }>({
-	myNewElement: undefined,
+	myNewElement: null,
 	setMyNewElement: () => {},
 });
 
@@ -21,11 +22,10 @@ export default function MyNewElementProvider({
 }: {
 	children?: ReactNode;
 }) {
-	const [myNewElement, setMyNewElement] = useState<
-		JSX.Element | null | undefined
-	>(undefined);
+	const [myNewElement, setMyNewElement] = useState<JSX.Element | null>(null);
 
 	const { selectedTool } = useTools();
+
 	return (
 		<context.Provider
 			value={{
@@ -33,8 +33,8 @@ export default function MyNewElementProvider({
 				setMyNewElement,
 			}}
 		>
-			{selectedTool && selectedTool.handler}
-			{children && children}
+			{selectedTool.handler}
+			{children}
 			{myNewElement}
 		</context.Provider>
 	);
