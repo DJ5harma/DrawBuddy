@@ -6,6 +6,8 @@ import {
 	useContext,
 	useState,
 } from "react";
+import { useTools } from "./ToolsProvider";
+import { useStage } from "./StageProvider";
 
 const context = createContext<{
 	myNewElement: JSX.Element | null | undefined;
@@ -15,14 +17,12 @@ const context = createContext<{
 	setMyNewElement: () => {},
 });
 
-export default function MyNewElementProvider({
-	children,
-}: {
-	children: ReactNode;
-}) {
+export default function MyNewElementProvider() {
 	const [myNewElement, setMyNewElement] = useState<
 		JSX.Element | null | undefined
 	>(undefined);
+
+	const { selectedTool } = useTools();
 	return (
 		<context.Provider
 			value={{
@@ -30,7 +30,8 @@ export default function MyNewElementProvider({
 				setMyNewElement,
 			}}
 		>
-			{children}
+			{myNewElement}
+			{selectedTool && selectedTool.handler}
 		</context.Provider>
 	);
 }

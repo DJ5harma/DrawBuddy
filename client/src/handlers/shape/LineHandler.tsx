@@ -22,7 +22,7 @@ export default function LineHandler() {
 
 	const { myNewElement, setMyNewElement } = useMyNewElement();
 
-	const { strokeColor, strokeWidth, opacity } = useToolSettings();
+	const { strokeColor, strokeWidth, opacity, dashGap } = useToolSettings();
 
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
@@ -53,6 +53,8 @@ export default function LineHandler() {
 					strokeWidth={strokeWidth}
 					stroke={strokeColor}
 					opacity={opacity}
+					dashEnabled={dashGap > 0}
+					dash={[dashGap]}
 				/>
 			);
 		};
@@ -86,5 +88,5 @@ export default function LineHandler() {
 			document.removeEventListener("keyup", handleKeyUp);
 		};
 	}, [drawing, startingPosition, myNewElement, multipleLines]);
-	return myNewElement;
+	return null;
 }

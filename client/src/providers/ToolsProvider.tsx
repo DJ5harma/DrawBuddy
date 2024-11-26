@@ -12,6 +12,7 @@ import CircleHandler from "../handlers/shape/CircleHandler";
 import LineHandler from "../handlers/shape/LineHandler";
 import PencilHandler from "../handlers/shape/PencilHandler";
 import { ITool } from "../utils/types";
+import TextHandler from "../handlers/shape/TextHandler";
 
 const toolArr: ITool[] = [
 	{
@@ -57,7 +58,7 @@ const toolArr: ITool[] = [
 	{
 		name: "Text",
 		icon: <ImTextColor />,
-		handler: <></>,
+		handler: <TextHandler />,
 	},
 	{
 		name: "Gallery",
@@ -87,12 +88,15 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 					transform: "scale(1)",
 				}}
 			>
-				<nav className="top-2 bg-neutral-800 flex p-1 [&>button]:p-3 gap-1">
+				<nav
+					className="top-2 bg-neutral-800 flex p-1 [&>button]:p-3 gap-1"
+					onMouseDown={(e) => e.stopPropagation()}
+				>
 					{toolArr.map((tool, i) => (
 						<button
 							onClick={() => {
-								localStorage.setItem("selectedToolIndex", i.toString());
 								setSelectedTool(tool);
+								localStorage.setItem("selectedToolIndex", i.toString());
 							}}
 							className={
 								selectedTool.name === tool.name

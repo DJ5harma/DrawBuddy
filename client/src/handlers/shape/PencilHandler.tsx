@@ -13,7 +13,7 @@ export default function PencilHandler() {
 	const { elementsArrRef, addElementToStage } = useElements();
 	const { myNewElement, setMyNewElement } = useMyNewElement();
 
-	const { strokeColor, strokeWidth, opacity } = useToolSettings();
+	const { strokeColor, strokeWidth, opacity, dashGap } = useToolSettings();
 
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
@@ -35,6 +35,8 @@ export default function PencilHandler() {
 					stroke={strokeColor}
 					lineCap="round"
 					opacity={opacity}
+					dashEnabled={dashGap > 0}
+					dash={[dashGap]}
 				/>
 			);
 		};
@@ -52,5 +54,5 @@ export default function PencilHandler() {
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
 	}, [drawing, myNewElement, pointsArr]);
-	return myNewElement;
+	return null;
 }

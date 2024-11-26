@@ -38,6 +38,7 @@ export default function CollaborateOption() {
 			<button
 				className="bg-blue-700 text-white absolute left-4 bottom-4 p-3 z-50"
 				onClick={handleCollaborate}
+				onMouseDown={(e) => e.stopPropagation()}
 			>
 				Collaborate
 			</button>

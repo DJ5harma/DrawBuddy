@@ -14,7 +14,7 @@ export default function RectangleHandler() {
 
 	const { myNewElement, setMyNewElement } = useMyNewElement();
 
-	const { backgroundColor, strokeColor, strokeWidth, opacity } =
+	const { backgroundColor, strokeColor, strokeWidth, opacity, dashGap } =
 		useToolSettings();
 
 	useEffect(() => {
@@ -41,6 +41,8 @@ export default function RectangleHandler() {
 					stroke={strokeColor}
 					fill={backgroundColor}
 					opacity={opacity}
+					dashEnabled={dashGap > 0}
+					dash={[dashGap]}
 				/>
 			);
 		};
@@ -58,5 +60,5 @@ export default function RectangleHandler() {
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
 	}, [drawing, startingPosition, myNewElement]);
-	return myNewElement;
+	return null;
 }

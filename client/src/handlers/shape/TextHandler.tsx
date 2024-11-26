@@ -18,6 +18,8 @@ export default function CircleHandler() {
 
 	useEffect(() => {
 		const handleMouseDown = (e: MouseEvent) => {
+			console.log("Doc: ", e.clientX, e.clientY);
+
 			if (e.button !== 0) return;
 			setDrawing(true);
 			const { x, y } = getMousePos(e.clientX, e.clientY);

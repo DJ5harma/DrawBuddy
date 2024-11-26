@@ -10,7 +10,7 @@ export default function NavMenu() {
 			<button
 				onClick={() => setShow(!show)}
 				onMouseDown={(e) => e.stopPropagation()}
-				className="absolute p-2 top-4 left-4 z-10 hover:bg-neutral-700 bg-neutral-800"
+				className="absolute p-2 top-4 left-4 z-50 hover:bg-neutral-700 bg-neutral-800"
 			>
 				<BiMenu size={30} />
 			</button>

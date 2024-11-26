@@ -9,6 +9,7 @@ import RoomHandler from "./handlers/functional/RoomHandler";
 import { Toaster } from "react-hot-toast";
 import CollaborateOption from "./components/CollaborateOption";
 import ClearAllButton from "./components/ClearAllButton";
+import MyNewElementProvider from "./providers/MyNewElementProvider";
 
 export default function App() {
 	return (
@@ -34,8 +35,9 @@ export default function App() {
 										<>
 											<CollaborateOption />
 											<ClearAllButton />
+
 											<StageProvider>
-												<></>
+												<MyNewElementProvider />
 											</StageProvider>
 										</>
 									}
@@ -46,6 +48,7 @@ export default function App() {
 										<SocketProvider>
 											<StageProvider>
 												<RoomHandler />
+												<MyNewElementProvider />
 											</StageProvider>
 											<ClearAllButton />
 										</SocketProvider>

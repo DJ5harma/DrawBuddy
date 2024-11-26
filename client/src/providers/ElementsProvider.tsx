@@ -14,7 +14,7 @@ import {
 
 const context = createContext<{
 	elementsArrRef: MutableRefObject<JSX.Element[]>;
-	addElementToStage: (element: JSX.Element | null) => void;
+	addElementToStage: (element: JSX.Element | null | undefined) => void;
 	setMainElements: (element: JSX.Element[]) => void;
 	flickerForLocalCreation: boolean;
 }>({
@@ -40,7 +40,7 @@ export default function ElementsProvider({
 	);
 	const [flickerForLocalCreation, setFlickerForLocalCreation] = useState(false);
 
-	const addElementToStage = (element: JSX.Element | null) => {
+	const addElementToStage = (element: JSX.Element | null | undefined) => {
 		if (!element) return;
 		elementsArrRef.current.push(element);
 		setFlickerForLocalCreation((p) => !p);

@@ -20,6 +20,7 @@ export default function ClearAllButton() {
 				setMyNewElement(null);
 				if (socket) socket.emit("clear_all_elements", { roomId });
 			}}
+			onMouseDown={(e) => e.stopPropagation()}
 			className="absolute p-2 bottom-4 right-4 z-10 hover:bg-neutral-700 bg-neutral-800"
 		>
 			<MdOutlineDelete size={25} />

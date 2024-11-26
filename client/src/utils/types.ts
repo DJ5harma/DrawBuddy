@@ -23,6 +23,7 @@ export interface IToolSettings {
 	backgroundColor: string;
 	strokeWidth: number;
 	opacity: number;
+	dashGap: number;
 }
 export interface IPeerMousePositions {
 	[userid: string]: { x: number; y: number };

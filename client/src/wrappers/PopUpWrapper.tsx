@@ -13,6 +13,7 @@ export default function PopUpWrapper({
 		<div
 			className="absolute left-0 top-0 w-screen h-screen flex items-center justify-center bg-opacity-50 bg-black z-50 cursor-pointer "
 			onClick={() => setShow(false)}
+			onMouseDown={(e) => e.stopPropagation()}
 		>
 			<div
 				className={
