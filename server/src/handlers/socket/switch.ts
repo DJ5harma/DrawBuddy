@@ -4,13 +4,15 @@ export function start_socket_server() {
 	if (!socketCache.closed) return;
 	io.listen(3000);
 	socketCache.closed = false;
-	console.log("Socket running at 3000");
+
+	console.log("Socket server running on 3000");
 }
 
 export function close_socket_server() {
 	if (socketCache.clients > 0 || socketCache.startedToClose) return;
 	socketCache.startedToClose = true;
-	console.log("Started to close wss", socketCache.clients);
+
+	console.log("Started to close socket server");
 
 	setTimeout(() => {
 		if (!socketCache.clients) {

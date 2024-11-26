@@ -3,12 +3,16 @@ import cors from "cors";
 import { randomUUID } from "crypto";
 import socket_listeners_init from "./handlers/socket/socket_listeners_init";
 import { start_socket_server } from "./handlers/socket/switch";
+import { EXPRESS_PORT } from "./constants";
+
+socket_listeners_init();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-app.listen(3001, () => console.log("express running on 3001"));
+app.listen(EXPRESS_PORT, () =>
+	console.log("express running on " + EXPRESS_PORT)
+);
 
 app.get("/START_SOCKET_SERVER", (_, res) => {
 	console.log("Socket Server opening requested");
@@ -18,7 +22,5 @@ app.get("/START_SOCKET_SERVER", (_, res) => {
 });
 
 app.get("/GENERATE_ROOM", (_, res) => {
-	res.json({ roomId: randomUUID() });
+	res.status(200).json({ roomId: randomUUID() });
 });
-
-socket_listeners_init();

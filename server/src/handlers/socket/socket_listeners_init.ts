@@ -6,10 +6,8 @@ import finalized_new_element from "./reactors/finalized_new_element";
 import i_arrived_at_room from "./reactors/i_arrived_at_room";
 
 export default function socket_listeners_init() {
-	console.log("listeners init");
-
 	io.on("connection", (socket) => {
-		console.log(++socketCache.clients);
+		console.log("clients: ", ++socketCache.clients);
 
 		socket.on("i_arrived_at_room", (data) => i_arrived_at_room(socket, data));
 

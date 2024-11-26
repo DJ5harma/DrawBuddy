@@ -6,6 +6,7 @@ export const strokeColors = [
 	"orange",
 	"",
 ];
+
 export const backgroundColors = [
 	"rgb(255, 201, 201)",
 	"rgb(178, 242, 187)",
@@ -13,7 +14,6 @@ export const backgroundColors = [
 	"rgb(255, 236, 153)",
 	"",
 ];
-export const mouseColors = ["red", "cyan", "green", "white"];
 
 export const sampleToolSettings = {
 	strokeColor: strokeColors[0],

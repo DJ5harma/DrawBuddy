@@ -6,6 +6,8 @@ export default function finalized_new_element(
 	{ element, roomId }: { element: string; roomId: string }
 ) {
 	socket.broadcast.to(roomId).emit("incoming_finalized_element", element);
+
 	const prevElements = roomToElementsMap.get(roomId) || [];
+
 	roomToElementsMap.set(roomId, [...prevElements, element]);
 }

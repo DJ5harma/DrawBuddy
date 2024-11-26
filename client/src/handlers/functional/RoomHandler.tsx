@@ -57,12 +57,6 @@ export default function RoomHandler() {
 			console.log(prevUsers);
 		});
 
-		socket.on("update_elements", (prevElements: JSX.Element[]) => {
-			setMainElements(
-				prevElements.map((elem) => deserializeKonvaElement(elem))
-			);
-		});
-
 		socket.on(
 			"new_user",
 			(userObj: { userid: string; username: string; usercolor: string }) => {
@@ -77,11 +71,23 @@ export default function RoomHandler() {
 				toast(userObj.username + " joined!");
 			}
 		);
+		socket.on("user_left", (userid) => {
+			setPeers((p) => {
+				if (!p[userid]) return p;
+				toast(p[userid].username + " left the room");
+				delete p[userid];
+				return p;
+			});
+		});
 
+		socket.on("update_elements", (prevElements: JSX.Element[]) => {
+			setMainElements(
+				prevElements.map((elem) => deserializeKonvaElement(elem))
+			);
+		});
 		socket.on("incoming_finalized_element", (element: JSX.Element) => {
 			addElementToStage(deserializeKonvaElement(element));
 		});
-
 		socket.on(
 			"incoming_element_in_making",
 			({
@@ -97,15 +103,6 @@ export default function RoomHandler() {
 				}));
 			}
 		);
-
-		socket.on("user_left", (userid) => {
-			setPeers((p) => {
-				if (!p[userid]) return p;
-				toast(p[userid].username + " left the room");
-				delete p[userid];
-				return p;
-			});
-		});
 		return () => {
 			socket.removeAllListeners();
 		};
