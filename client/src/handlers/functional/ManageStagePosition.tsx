@@ -14,16 +14,20 @@ export default function ManageStagePosition({
 	}, [stagePosition]);
 
 	return (
-		<div className="w-full absolute top-1 right-0 flex flex-col items-end gap-4 select-none">
+		<div
+			className="w-full absolute top-1 right-0 flex flex-col items-end gap-4 select-none z-50"
+			onMouseDown={(e) => e.stopPropagation()}
+		>
 			<div className="[&>input]:text-black [&>input]:px-1 [&>input]:w-16 [&>input]:text-center flex gap-2 font-semibold">
 				<p className="font-normal">Change: </p>
 				<p>x : </p>
 				<input
 					value={inputPos.x.toFixed()}
 					onChange={(e) => {
+						const val = parseInt(e.target.value);
 						setStagePosition((p) => ({
 							...p,
-							x: parseInt(e.target.value || "0"),
+							x: Number.isNaN(val) ? 0 : val,
 						}));
 					}}
 				/>
@@ -31,9 +35,10 @@ export default function ManageStagePosition({
 				<input
 					value={inputPos.y.toFixed()}
 					onChange={(e) => {
+						const val = parseInt(e.target.value);
 						setStagePosition((p) => ({
 							...p,
-							y: parseInt(e.target.value || "0"),
+							y: Number.isNaN(val) ? 0 : val,
 						}));
 					}}
 				/>
