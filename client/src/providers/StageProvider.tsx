@@ -153,7 +153,6 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 					</context.Provider>
 				</Layer>
 			</Stage>
-
 			<ManageStagePosition
 				stagePosition={stagePosition}
 				setStagePosition={setStagePosition}

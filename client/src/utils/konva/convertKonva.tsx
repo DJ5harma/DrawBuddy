@@ -20,7 +20,7 @@ export function deserializeKonvaElement(serial: JSX.Element): JSX.Element {
 			return <></>;
 	}
 }
-export function getShapeEnds(shape: JSX.Element) {
+export function getShapeEnds(shape: JSX.Element): { x: number; y: number } {
 	const { type, props } = shape;
 	switch (type) {
 		case "Rect":

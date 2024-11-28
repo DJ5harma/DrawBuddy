@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-
 export default function ManageStagePosition({
 	stagePosition,
 	setStagePosition,
@@ -15,7 +14,7 @@ export default function ManageStagePosition({
 
 	return (
 		<div
-			className="w-full absolute top-1 right-0 flex flex-col items-end gap-4 select-none z-50"
+			className="absolute top-4 right-4 flex flex-col items-end gap-4 select-none z-50"
 			onMouseDown={(e) => e.stopPropagation()}
 		>
 			<div className="[&>input]:text-black [&>input]:px-1 [&>input]:w-16 [&>input]:text-center flex gap-2 font-semibold">
@@ -43,6 +42,22 @@ export default function ManageStagePosition({
 					}}
 				/>
 			</div>
+			{/* <button
+				className="bg-blue-700 p-2"
+				onClick={() => {
+					if (!elementsArrRef.current.length) return;
+
+					// setStagePosition(
+					const { x, y } = getShapeEnds(
+						elementsArrRef.current[elementsArrRef.current.length - 1]
+					);
+					console.log(getMousePos(x, y));
+
+					// );
+				}}
+			>
+				GoTo Recent Activity
+			</button> */}
 		</div>
 	);
 }
