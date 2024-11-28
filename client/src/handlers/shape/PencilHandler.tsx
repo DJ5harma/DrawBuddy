@@ -16,35 +16,6 @@ export default function PencilHandler() {
 	const { strokeColor, strokeWidth, opacity, dashGap } = useToolSettings();
 
 	useEffect(() => {
-		const handleMouseDown = (e: MouseEvent) => {
-			if (e.button !== 0) return;
-			setDrawing(true);
-			const { x, y } = getMousePos(e.clientX, e.clientY);
-			setPointsArr([x, y]);
-		};
-		const handleMouseMove = (e: MouseEvent) => {
-			if (!drawing) return;
-			const { x, y } = getMousePos(e.clientX, e.clientY);
-			setPointsArr([...pointsArr, x, y]);
-			setMyNewElement(
-				<Line
-					key={"Pencil" + elementsArrRef.current.length}
-					points={pointsArr}
-					strokeEnabled
-					strokeWidth={strokeWidth}
-					stroke={strokeColor}
-					lineCap="round"
-					opacity={opacity}
-					dashEnabled={dashGap > 0}
-					dash={[dashGap]}
-				/>
-			);
-		};
-		const handleMouseUp = () => {
-			addElementToStage(myNewElement);
-			setDrawing(false);
-			setMyNewElement(null);
-		};
 		document.addEventListener("mousedown", handleMouseDown);
 		document.addEventListener("mousemove", handleMouseMove);
 		document.addEventListener("mouseup", handleMouseUp);
@@ -54,6 +25,35 @@ export default function PencilHandler() {
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
 	}, [drawing, myNewElement, pointsArr]);
+
+	const handleMouseDown = (e: MouseEvent) => {
+		if (e.button !== 0) return;
+		setDrawing(true);
+	};
+	const handleMouseMove = (e: MouseEvent) => {
+		if (!drawing) return;
+		const { x, y } = getMousePos(e.clientX, e.clientY);
+		setPointsArr([...pointsArr, x, y]);
+		setMyNewElement(
+			<Line
+				key={"Pencil" + elementsArrRef.current.length}
+				points={pointsArr}
+				strokeEnabled
+				strokeWidth={strokeWidth}
+				stroke={strokeColor}
+				lineCap="round"
+				opacity={opacity}
+				dashEnabled={dashGap > 0}
+				dash={[dashGap]}
+			/>
+		);
+	};
+	const handleMouseUp = () => {
+		addElementToStage(myNewElement);
+		setDrawing(false);
+		setMyNewElement(null);
+		setPointsArr([]);
+	};
 
 	return null;
 }

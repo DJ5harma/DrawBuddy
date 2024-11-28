@@ -18,38 +18,6 @@ export default function RectangleHandler() {
 		useToolSettings();
 
 	useEffect(() => {
-		const handleMouseDown = (e: MouseEvent) => {
-			if (e.button !== 0) return;
-			setDrawing(true);
-			setStartingPosition(getMousePos(e.clientX, e.clientY));
-		};
-
-		const handleMouseMove = (e: MouseEvent) => {
-			if (!drawing) return;
-
-			const { x, y } = getMousePos(e.clientX, e.clientY);
-			setMyNewElement(
-				<Rect
-					key={"Rect" + elementsArrRef.current.length}
-					x={startingPosition.x}
-					y={startingPosition.y}
-					width={x - startingPosition.x}
-					height={y - startingPosition.y}
-					strokeEnabled
-					strokeWidth={strokeWidth}
-					stroke={strokeColor}
-					fill={backgroundColor}
-					opacity={opacity}
-					dashEnabled={dashGap > 0}
-					dash={[dashGap]}
-				/>
-			);
-		};
-		const handleMouseUp = () => {
-			addElementToStage(myNewElement);
-			setDrawing(false);
-			setMyNewElement(null);
-		};
 		document.addEventListener("mousedown", handleMouseDown);
 		document.addEventListener("mousemove", handleMouseMove);
 		document.addEventListener("mouseup", handleMouseUp);
@@ -59,5 +27,44 @@ export default function RectangleHandler() {
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
 	}, [drawing, startingPosition, myNewElement]);
+
+	const handleMouseDown = (e: MouseEvent) => {
+		if (e.button !== 0) return;
+		setDrawing(true);
+	};
+
+	const handleMouseMove = (e: MouseEvent) => {
+		if (!drawing) return;
+
+		const { x, y } = getMousePos(e.clientX, e.clientY);
+		if (!startingPosition.x && !startingPosition.y) {
+			setStartingPosition(getMousePos(e.clientX, e.clientY));
+			return;
+		}
+
+		setMyNewElement(
+			<Rect
+				key={"Rect" + elementsArrRef.current.length}
+				x={startingPosition.x}
+				y={startingPosition.y}
+				width={x - startingPosition.x}
+				height={y - startingPosition.y}
+				strokeEnabled
+				strokeWidth={strokeWidth}
+				stroke={strokeColor}
+				fill={backgroundColor}
+				opacity={opacity}
+				dashEnabled={dashGap > 0}
+				dash={[dashGap]}
+			/>
+		);
+	};
+	const handleMouseUp = () => {
+		addElementToStage(myNewElement);
+		setDrawing(false);
+		setMyNewElement(null);
+		setStartingPosition({ x: 0, y: 0 });
+	};
+
 	return null;
 }

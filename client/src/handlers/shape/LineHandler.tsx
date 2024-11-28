@@ -24,59 +24,14 @@ export default function LineHandler() {
 
 	const { strokeColor, strokeWidth, opacity, dashGap } = useToolSettings();
 
+	const addPointsToMultipleLines = (x: number, y: number) => {
+		setMultipleLines((p) => ({
+			...p,
+			pointsArr: [...p.pointsArr, x, y],
+		}));
+	};
+
 	useEffect(() => {
-		const handleMouseDown = (e: MouseEvent) => {
-			if (e.button !== 0) return;
-			const { x, y } = getMousePos(e.clientX, e.clientY);
-			if (multipleLines.exist)
-				return setMultipleLines((p) => ({
-					...p,
-					pointsArr: [...p.pointsArr, x, y],
-				}));
-
-			setDrawing(true);
-			setStartingPosition({ x, y });
-		};
-		const handleMouseMove = (e: MouseEvent) => {
-			if (!drawing) return;
-
-			const { x, y } = getMousePos(e.clientX, e.clientY);
-			setMyNewElement(
-				<Line
-					key={"Line" + elementsArrRef.current.length}
-					points={
-						multipleLines.exist
-							? [...multipleLines.pointsArr, x, y]
-							: [startingPosition.x, startingPosition.y, x, y]
-					}
-					strokeEnabled
-					strokeWidth={strokeWidth}
-					stroke={strokeColor}
-					opacity={opacity}
-					dashEnabled={dashGap > 0}
-					dash={[dashGap]}
-				/>
-			);
-		};
-		const handleMouseUp = (e: MouseEvent) => {
-			const { x, y } = getMousePos(e.clientX, e.clientY);
-			if (multipleLines.exist) return;
-			if (x === startingPosition.x && y === startingPosition.y) {
-				setMultipleLines({ pointsArr: [x, y], exist: true });
-				return;
-			}
-			addElementToStage(myNewElement);
-			setDrawing(false);
-			setMyNewElement(null);
-		};
-		const handleKeyUp = (e: KeyboardEvent) => {
-			if (multipleLines.exist && e.key === "Escape") {
-				setMultipleLines({ exist: false, pointsArr: [] });
-				addElementToStage(myNewElement);
-				setDrawing(false);
-				setMyNewElement(null);
-			}
-		};
 		document.addEventListener("mousedown", handleMouseDown);
 		document.addEventListener("mousemove", handleMouseMove);
 		document.addEventListener("mouseup", handleMouseUp);
@@ -88,5 +43,58 @@ export default function LineHandler() {
 			document.removeEventListener("keyup", handleKeyUp);
 		};
 	}, [drawing, startingPosition, myNewElement, multipleLines]);
+	const handleMouseDown = (e: MouseEvent) => {
+		if (e.button !== 0) return;
+		if (multipleLines.exist) return;
+
+		const { x, y } = getMousePos(e.clientX, e.clientY);
+		setDrawing(true);
+		setStartingPosition({ x, y });
+	};
+	const handleMouseMove = (e: MouseEvent) => {
+		if (!drawing) return;
+
+		const { x, y } = getMousePos(e.clientX, e.clientY);
+
+		if (multipleLines.exist && !multipleLines.pointsArr.length)
+			return addPointsToMultipleLines(x, y);
+
+		setMyNewElement(
+			<Line
+				key={"Line" + elementsArrRef.current.length}
+				points={
+					multipleLines.exist
+						? [...multipleLines.pointsArr, x, y]
+						: [startingPosition.x, startingPosition.y, x, y]
+				}
+				strokeEnabled
+				strokeWidth={strokeWidth}
+				stroke={strokeColor}
+				opacity={opacity}
+				dashEnabled={dashGap > 0}
+				dash={[dashGap]}
+			/>
+		);
+	};
+	const handleMouseUp = (e: MouseEvent) => {
+		const { x, y } = getMousePos(e.clientX, e.clientY);
+
+		if (multipleLines.exist) return addPointsToMultipleLines(x, y);
+
+		if (x === startingPosition.x && y === startingPosition.y)
+			return setMultipleLines({ pointsArr: [x, y], exist: true });
+
+		addElementToStage(myNewElement);
+		setDrawing(false);
+		setMyNewElement(null);
+	};
+	const handleKeyUp = (e: KeyboardEvent) => {
+		if (multipleLines.exist && e.key === "Escape") {
+			setMultipleLines({ exist: false, pointsArr: [] });
+			addElementToStage(myNewElement);
+			setDrawing(false);
+			setMyNewElement(null);
+		}
+	};
 	return null;
 }

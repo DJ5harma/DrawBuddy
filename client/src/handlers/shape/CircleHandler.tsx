@@ -17,42 +17,6 @@ export default function CircleHandler() {
 		useToolSettings();
 
 	useEffect(() => {
-		const handleMouseDown = (e: MouseEvent) => {
-			if (e.button !== 0) return;
-			setDrawing(true);
-			const { x, y } = getMousePos(e.clientX, e.clientY);
-			setStartingPosition({ x, y });
-		};
-
-		const handleMouseMove = (e: MouseEvent) => {
-			if (!drawing) return;
-			const { x, y } = getMousePos(e.clientX, e.clientY);
-			setMyNewElement(
-				<Circle
-					key={"Circle" + elementsArrRef.current.length}
-					x={startingPosition.x}
-					y={startingPosition.y}
-					radius={Math.sqrt(
-						Math.pow(x - startingPosition.x, 2) +
-							Math.pow(y - startingPosition.y, 2)
-					)}
-					strokeEnabled
-					strokeWidth={strokeWidth}
-					stroke={strokeColor}
-					fill={backgroundColor}
-					opacity={opacity}
-					dashEnabled={dashGap > 0}
-					dash={[dashGap]}
-				/>
-			);
-		};
-
-		const handleMouseUp = () => {
-			addElementToStage(myNewElement);
-			setDrawing(false);
-			setMyNewElement(null);
-		};
-
 		document.addEventListener("mousedown", handleMouseDown);
 		document.addEventListener("mousemove", handleMouseMove);
 		document.addEventListener("mouseup", handleMouseUp);
@@ -63,6 +27,46 @@ export default function CircleHandler() {
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
 	}, [drawing, startingPosition, myNewElement]);
+
+	const handleMouseDown = (e: MouseEvent) => {
+		if (e.button !== 0) return;
+		setDrawing(true);
+	};
+
+	const handleMouseMove = (e: MouseEvent) => {
+		if (!drawing) {
+			return;
+		}
+		const { x, y } = getMousePos(e.clientX, e.clientY);
+		if (!startingPosition.x && !startingPosition.y) {
+			setStartingPosition({ x, y });
+			return;
+		}
+		setMyNewElement(
+			<Circle
+				key={"Circle" + elementsArrRef.current.length}
+				x={startingPosition.x}
+				y={startingPosition.y}
+				radius={Math.sqrt(
+					Math.pow(x - startingPosition.x, 2) +
+						Math.pow(y - startingPosition.y, 2)
+				)}
+				strokeEnabled
+				strokeWidth={strokeWidth}
+				stroke={strokeColor}
+				fill={backgroundColor}
+				opacity={opacity}
+				dashEnabled={dashGap > 0}
+				dash={[dashGap]}
+			/>
+		);
+	};
+	const handleMouseUp = () => {
+		addElementToStage(myNewElement);
+		setDrawing(false);
+		setMyNewElement(null);
+		setStartingPosition({ x: 0, y: 0 });
+	};
 
 	return null;
 }

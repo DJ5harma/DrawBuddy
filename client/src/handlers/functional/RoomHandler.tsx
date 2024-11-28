@@ -37,17 +37,18 @@ export default function RoomHandler() {
 	const [peers, setPeers] = useState<IPeers>({});
 
 	useEffect(() => {
+		if (elementsArrRef.current.length && !myNewElement) {
+			socket.emit("finalized_new_element", {
+				element: serializeKonvaElement(
+					elementsArrRef.current[elementsArrRef.current.length - 1]
+				),
+				roomId,
+			});
+		}
 		socket.emit("creating_new_element", {
 			element: myNewElement
 				? serializeKonvaElement(myNewElement)
 				: myNewElement,
-			roomId,
-		});
-		if (!elementsArrRef.current.length || myNewElement) return;
-		socket.emit("finalized_new_element", {
-			element: serializeKonvaElement(
-				elementsArrRef.current[elementsArrRef.current.length - 1]
-			),
 			roomId,
 		});
 	}, [myNewElement]);
@@ -61,7 +62,6 @@ export default function RoomHandler() {
 		socket.emit("i_arrived_at_room", {
 			roomId,
 			username,
-			// havingElements: elementsArrRef.current.length,
 		});
 
 		socket.on("previous_users", (prevUsers: IPeers) => {
@@ -98,13 +98,13 @@ export default function RoomHandler() {
 			);
 		});
 		socket.on("incoming_finalized_element", (element: JSX.Element) => {
+			addElementToStage(deserializeKonvaElement(element));
 			if (
 				elementsArrRef.current.length &&
 				element.key ===
 					elementsArrRef.current[elementsArrRef.current.length - 1].key
 			)
 				return;
-			addElementToStage(deserializeKonvaElement(element));
 		});
 		socket.on(
 			"incoming_element_in_making",

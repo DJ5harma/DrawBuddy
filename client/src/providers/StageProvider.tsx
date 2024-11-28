@@ -8,6 +8,7 @@ import {
 } from "react";
 import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
 import { useElements } from "./ElementsProvider";
+import ManageStagePosition from "../handlers/functional/ManageStagePosition";
 
 const context = createContext<{
 	getMousePos: (currX: number, currY: number) => { x: number; y: number };
@@ -25,14 +26,16 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		height: window.innerHeight,
 	});
 
-	const [scale, setScale] = useState(() => {
+	const [stageScale, setStageScale] = useState(() => {
 		const storedScale = localStorage.getItem("stageScale");
 		return (storedScale ? JSON.parse(storedScale) : 1) as number;
 	});
-	const [position, setPosition] = useState<{ x: number; y: number }>(() => {
-		const storedPos = localStorage.getItem("stagePosition");
-		return storedPos ? JSON.parse(storedPos) : { x: 0, y: 0 };
-	});
+	const [stagePosition, setStagePosition] = useState<{ x: number; y: number }>(
+		() => {
+			const storedPos = localStorage.getItem("stagePosition");
+			return storedPos ? JSON.parse(storedPos) : { x: 0, y: 0 };
+		}
+	);
 
 	const [isPanning, setIsPanning] = useState(false);
 	const [panStartPos, setPanStartPos] = useState<{ x: number; y: number }>({
@@ -49,19 +52,19 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		];
 
 		const [adjustedX, adjustedY] = [
-			(mouseX - position.x) / scale,
-			(mouseY - position.y) / scale,
+			(mouseX - stagePosition.x) / stageScale,
+			(mouseY - stagePosition.y) / stageScale,
 		];
 
 		return { x: adjustedX, y: adjustedY };
 	};
 
 	useEffect(() => {
-		localStorage.setItem("stagePosition", JSON.stringify(position));
-	}, [position]);
+		localStorage.setItem("stagePosition", JSON.stringify(stagePosition));
+	}, [stagePosition]);
 	useEffect(() => {
-		localStorage.setItem("stageScale", scale.toString());
-	}, [scale]);
+		localStorage.setItem("stageScale", stageScale.toString());
+	}, [stageScale]);
 
 	const updateDimensions = () =>
 		setDimensions({ width: window.innerWidth, height: window.innerHeight });
@@ -73,8 +76,8 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		setIsPanning(true);
 		setPanStartPos({ x: e.evt.clientX, y: e.evt.clientY });
 	};
-	const handleMouseUp = (e: KonvaEventObject<MouseEvent, Node<NodeConfig>>) => {
-		if (e.evt.button === 1) {
+	const handleMouseUp = (e: MouseEvent) => {
+		if (e.button === 1) {
 			setIsPanning(false);
 			console.log("rerendered");
 		}
@@ -85,7 +88,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		if (!isPanning) return;
 		const dx = e.evt.clientX - panStartPos.x;
 		const dy = e.evt.clientY - panStartPos.y;
-		setPosition((prev) => ({ x: prev.x + dx, y: prev.y + dy }));
+		setStagePosition((p) => ({ x: p.x + dx, y: p.y + dy }));
 		setPanStartPos({ x: e.evt.clientX, y: e.evt.clientY });
 	};
 	useEffect(() => {
@@ -93,60 +96,69 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 
 		window.addEventListener("resize", updateDimensions);
 		window.addEventListener("wheel", handleWheel, { passive: false });
+		document.addEventListener("mouseup", handleMouseUp);
 
 		return () => {
 			window.removeEventListener("resize", updateDimensions);
 			window.removeEventListener("wheel", handleWheel);
+			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [scale, position, isPanning, panStartPos]);
+	}, [stageScale, stagePosition, isPanning, panStartPos]);
 
 	const handleOnWheel = (e: KonvaEventObject<WheelEvent, Node<NodeConfig>>) => {
-		const newScale = e.evt.deltaY < 0 ? scale * 1.1 : scale / 1.1;
+		const newScale = e.evt.deltaY < 0 ? stageScale * 1.1 : stageScale / 1.1;
 		if (newScale < 0.05 || newScale > 20) return;
-		setScale(newScale);
+		setStageScale(newScale);
 
 		const stage = e.target.getStage();
 		if (!stage) return;
 
-		const scaleFactor = newScale / scale;
+		const scaleFactor = newScale / stageScale;
 
 		const stagePointerPos = stage.getPointerPosition();
 		if (!stagePointerPos) return;
 
 		const { x, y } = stagePointerPos;
 
-		setPosition({
-			x: x - (x - position.x) * scaleFactor,
-			y: y - (y - position.y) * scaleFactor,
+		setStagePosition({
+			x: x - (x - stagePosition.x) * scaleFactor,
+			y: y - (y - stagePosition.y) * scaleFactor,
 		});
 	};
 
 	return (
-		<Stage
-			width={dimensions.width}
-			height={dimensions.height}
-			className="bg-neutral-900"
-			scaleX={scale}
-			scaleY={scale}
-			x={position.x}
-			y={position.y}
-			onWheel={handleOnWheel}
-			onMouseMove={handleMouseMove}
-			onMouseDown={handleMouseDown}
-			onMouseUp={handleMouseUp}
-		>
-			<Layer>
-				<context.Provider
-					value={{
-						getMousePos,
-						stageScale: scale,
-					}}
-				>
-					<Group>{elementsArrRef.current}</Group>
-					<Group>{children}</Group>
-				</context.Provider>
-			</Layer>
-		</Stage>
+		<>
+			<Stage
+				width={dimensions.width}
+				height={dimensions.height}
+				className="bg-neutral-900"
+				scaleX={stageScale}
+				scaleY={stageScale}
+				x={stagePosition.x}
+				y={stagePosition.y}
+				onWheel={handleOnWheel}
+				onMouseMove={handleMouseMove}
+				onMouseDown={handleMouseDown}
+				onMouseEnter={() => setIsPanning(false)}
+			>
+				<Layer>
+					<context.Provider
+						value={{
+							getMousePos,
+							stageScale,
+						}}
+					>
+						<Group>{elementsArrRef.current}</Group>
+						<Group>{children}</Group>
+					</context.Provider>
+				</Layer>
+			</Stage>
+
+			<ManageStagePosition
+				stagePosition={stagePosition}
+				setStagePosition={setStagePosition}
+			/>
+		</>
 	);
 }
 
