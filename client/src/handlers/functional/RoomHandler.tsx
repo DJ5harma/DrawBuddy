@@ -33,10 +33,11 @@ export default function RoomHandler() {
 		projectId,
 	} = useElements();
 
-	const { myNewElement } = useMyNewElement();
+	const { getMyNewElement } = useMyNewElement();
 	const [peers, setPeers] = useState<IPeers>({});
 
 	useEffect(() => {
+		const myNewElement = getMyNewElement();
 		if (elementsArrRef.current.length && !myNewElement) {
 			socket.emit("finalized_new_element", {
 				element: serializeKonvaElement(
@@ -51,7 +52,7 @@ export default function RoomHandler() {
 				: myNewElement,
 			roomId,
 		});
-	}, [myNewElement]);
+	}, []);
 
 	useEffect(() => {
 		if (roomId && projectId !== roomId) {
@@ -123,12 +124,14 @@ export default function RoomHandler() {
 		};
 	}, [projectId]);
 
-	const { stageScale } = useStage();
+	const { getStageScale } = useStage();
 
 	return Object.keys(peers).map((userid) => {
 		const { username, tempElement, usercolor } = peers[userid];
 		if (!tempElement) return null;
 		const { x, y } = getShapeEnds(tempElement);
+
+		const stageScale = getStageScale();
 		return (
 			<Group key={userid}>
 				{tempElement}

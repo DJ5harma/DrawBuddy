@@ -9,13 +9,14 @@ import {
 import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
 import { useElements } from "./ElementsProvider";
 import ManageStagePosition from "../handlers/functional/ManageStagePosition";
+import { IPoint } from "../utils/types";
 
 const context = createContext<{
-	getMousePos: (currX: number, currY: number) => { x: number; y: number };
-	stageScale: number;
+	getMousePos: (currX: number, currY: number) => IPoint;
+	getStageScale: () => number;
 }>({
 	getMousePos: () => ({ x: 0, y: 0 }),
-	stageScale: 1,
+	getStageScale: () => 1,
 });
 
 export default function StageProvider({ children }: { children: ReactNode }) {
@@ -30,15 +31,13 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		const storedScale = localStorage.getItem("stageScale");
 		return (storedScale ? JSON.parse(storedScale) : 1) as number;
 	});
-	const [stagePosition, setStagePosition] = useState<{ x: number; y: number }>(
-		() => {
-			const storedPos = localStorage.getItem("stagePosition");
-			return storedPos ? JSON.parse(storedPos) : { x: 0, y: 0 };
-		}
-	);
+	const [stagePosition, setStagePosition] = useState<IPoint>(() => {
+		const storedPos = localStorage.getItem("stagePosition");
+		return storedPos ? JSON.parse(storedPos) : { x: 0, y: 0 };
+	});
 
 	const [isPanning, setIsPanning] = useState(false);
-	const [panStartPos, setPanStartPos] = useState<{ x: number; y: number }>({
+	const [panStartPos, setPanStartPos] = useState<IPoint>({
 		x: 0,
 		y: 0,
 	});
@@ -145,7 +144,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 					<context.Provider
 						value={{
 							getMousePos,
-							stageScale,
+							getStageScale: () => stageScale,
 						}}
 					>
 						<Group>{elementsArrRef.current}</Group>

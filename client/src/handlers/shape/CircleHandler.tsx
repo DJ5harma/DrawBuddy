@@ -11,7 +11,7 @@ export default function CircleHandler() {
 
 	const { getMousePos } = useStage();
 	const { elementsArrRef, addElementToStage } = useElements();
-	const { myNewElement, setMyNewElement } = useMyNewElement();
+	const { getMyNewElement, setMyNewElement } = useMyNewElement();
 
 	const { backgroundColor, strokeColor, strokeWidth, opacity, dashGap } =
 		useToolSettings();
@@ -26,7 +26,7 @@ export default function CircleHandler() {
 			document.removeEventListener("mousemove", handleMouseMove);
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [drawing, startingPosition, myNewElement]);
+	}, [drawing, startingPosition]);
 
 	const handleMouseDown = (e: MouseEvent) => {
 		if (e.button !== 0) return;
@@ -61,7 +61,7 @@ export default function CircleHandler() {
 		);
 	};
 	const handleMouseUp = () => {
-		addElementToStage(myNewElement);
+		addElementToStage(getMyNewElement());
 		setDrawing(false);
 		setMyNewElement(null);
 		setStartingPosition({ x: 0, y: 0 });

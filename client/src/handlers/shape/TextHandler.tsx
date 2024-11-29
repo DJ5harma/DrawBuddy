@@ -10,9 +10,9 @@ export default function TextHandler() {
 
 	const [drawing, setDrawing] = useState(false);
 
-	const { getMousePos, stageScale } = useStage();
+	const { getMousePos, getStageScale } = useStage();
 	const { elementsArrRef, addElementToStage } = useElements();
-	const { myNewElement, setMyNewElement } = useMyNewElement();
+	const { getMyNewElement, setMyNewElement } = useMyNewElement();
 
 	const { strokeColor, opacity } = useToolSettings();
 
@@ -24,11 +24,11 @@ export default function TextHandler() {
 			<Text
 				{...p?.props}
 				fill={strokeColor}
-				fontSize={25 / stageScale}
+				fontSize={25 / getStageScale()}
 				opacity={opacity}
 			/>
 		));
-	}, [stageScale, strokeColor, opacity]);
+	}, [strokeColor, opacity]);
 
 	useEffect(() => {
 		document.addEventListener("mousedown", handleMouseDown);
@@ -38,16 +38,15 @@ export default function TextHandler() {
 			document.removeEventListener("mousedown", handleMouseDown);
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [drawing, startingPosition, myNewElement]);
+	}, [drawing, startingPosition]);
 
 	const handleMouseDown = (e: MouseEvent) => {
 		if (e.button !== 0) return;
 		setDrawing(true);
 		const { x, y } = getMousePos(e.clientX, e.clientY);
 
-		const text = myNewElement
-			? (myNewElement.props.text as string)
-			: INITIAL_TEXT;
+		const elem = getMyNewElement();
+		const text = elem ? (elem.props.text as string) : INITIAL_TEXT;
 		setMyNewElement(
 			<Text
 				key={"Text" + elementsArrRef.current.length}
@@ -56,7 +55,7 @@ export default function TextHandler() {
 				fill={strokeColor}
 				text={text || INITIAL_TEXT}
 				fontFamily="monospace"
-				fontSize={25 / stageScale}
+				fontSize={25 / getStageScale()}
 				opacity={opacity}
 			/>
 		);
@@ -65,8 +64,8 @@ export default function TextHandler() {
 
 	const handleKeyDown = (e: KeyboardEvent) => {
 		if (!drawing) return;
-
-		let text = myNewElement?.props.text as string;
+		const elem = getMyNewElement();
+		let text = elem?.props.text as string;
 		let newText = "";
 
 		if (e.key.length === 1)
@@ -80,7 +79,7 @@ export default function TextHandler() {
 			newText = text.slice(0, text.length - 1);
 			if (!newText) text = "";
 		} else if (e.key === "Escape") {
-			addElementToStage(myNewElement);
+			addElementToStage(elem);
 			setMyNewElement(null);
 			setDrawing(false);
 			return;
@@ -93,7 +92,7 @@ export default function TextHandler() {
 				fill={strokeColor}
 				text={newText || text}
 				fontFamily="monospace"
-				fontSize={25 / stageScale}
+				fontSize={25 / getStageScale()}
 				opacity={opacity}
 			/>
 		);
