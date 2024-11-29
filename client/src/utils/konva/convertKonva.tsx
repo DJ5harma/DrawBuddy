@@ -1,4 +1,5 @@
 import { Circle, Line, Rect, Text } from "react-konva";
+import { IPoint } from "../types";
 
 export function serializeKonvaElement(element: JSX.Element): JSX.Element {
 	const { type, props, key } = element;
@@ -20,7 +21,7 @@ export function deserializeKonvaElement(serial: JSX.Element): JSX.Element {
 			return <></>;
 	}
 }
-export function getShapeEnds(shape: JSX.Element): { x: number; y: number } {
+export function getShapeEnds(shape: JSX.Element): IPoint {
 	const { type, props } = shape;
 	switch (type) {
 		case "Rect":
@@ -41,6 +42,11 @@ export function getShapeEnds(shape: JSX.Element): { x: number; y: number } {
 				y: ptsArray[ptsArray.length - 1],
 			};
 		}
+		case "Text":
+			return {
+				x: shape.props.x,
+				y: shape.props.y + shape.props.fontSize + 40,
+			};
 		default:
 			return { x: 0, y: 0 };
 	}

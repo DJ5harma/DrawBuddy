@@ -9,7 +9,7 @@ export default function RectangleHandler() {
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
 	const [drawing, setDrawing] = useState(false);
 
-	const { getMousePos, stagePos } = useStage();
+	const { getMousePos } = useStage();
 	const { elementsArrRef } = useElements();
 
 	const { myNewElement, setMyNewElement, handleCreatedElement } =
