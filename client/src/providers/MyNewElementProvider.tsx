@@ -9,10 +9,10 @@ import {
 import { useTools } from "./ToolsProvider";
 
 const context = createContext<{
-	getMyNewElement: () => JSX.Element | null;
+	myNewElement: JSX.Element | null;
 	setMyNewElement: Dispatch<SetStateAction<JSX.Element | null>>;
 }>({
-	getMyNewElement: () => null,
+	myNewElement: null,
 	setMyNewElement: () => {},
 });
 
@@ -28,7 +28,7 @@ export default function MyNewElementProvider({
 	return (
 		<context.Provider
 			value={{
-				getMyNewElement: () => myNewElement,
+				myNewElement,
 				setMyNewElement,
 			}}
 		>
