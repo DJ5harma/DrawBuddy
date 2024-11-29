@@ -10,8 +10,9 @@ export default function PencilHandler() {
 	const [drawing, setDrawing] = useState(false);
 	const { getMousePos } = useStage();
 
-	const { elementsArrRef, addElementToStage } = useElements();
-	const { myNewElement, setMyNewElement } = useMyNewElement();
+	const { elementsArrRef } = useElements();
+	const { myNewElement, setMyNewElement, handleCreatedElement } =
+		useMyNewElement();
 
 	const { strokeColor, strokeWidth, opacity, dashGap } = useToolSettings();
 
@@ -49,9 +50,8 @@ export default function PencilHandler() {
 		);
 	};
 	const handleMouseUp = () => {
-		addElementToStage(myNewElement);
 		setDrawing(false);
-		setMyNewElement(null);
+		handleCreatedElement();
 		setPointsArr([]);
 	};
 

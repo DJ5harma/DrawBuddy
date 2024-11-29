@@ -18,9 +18,10 @@ export default function LineHandler() {
 	});
 
 	const { getMousePos } = useStage();
-	const { elementsArrRef, addElementToStage } = useElements();
+	const { elementsArrRef } = useElements();
 
-	const { myNewElement, setMyNewElement } = useMyNewElement();
+	const { myNewElement, setMyNewElement, handleCreatedElement } =
+		useMyNewElement();
 
 	const { strokeColor, strokeWidth, opacity, dashGap } = useToolSettings();
 
@@ -84,16 +85,14 @@ export default function LineHandler() {
 		if (x === startingPosition.x && y === startingPosition.y)
 			return setMultipleLines({ pointsArr: [x, y], exist: true });
 
-		addElementToStage(myNewElement);
+		handleCreatedElement();
 		setDrawing(false);
-		setMyNewElement(null);
 	};
 	const handleKeyUp = (e: KeyboardEvent) => {
 		if (multipleLines.exist && e.key === "Escape") {
 			setMultipleLines({ exist: false, pointsArr: [] });
-			addElementToStage(myNewElement);
+			handleCreatedElement();
 			setDrawing(false);
-			setMyNewElement(null);
 		}
 	};
 	return null;

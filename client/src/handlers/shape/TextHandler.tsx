@@ -11,8 +11,9 @@ export default function TextHandler() {
 	const [drawing, setDrawing] = useState(false);
 
 	const { getMousePos, stageScale } = useStage();
-	const { elementsArrRef, addElementToStage } = useElements();
-	const { myNewElement, setMyNewElement } = useMyNewElement();
+	const { elementsArrRef } = useElements();
+	const { myNewElement, setMyNewElement, handleCreatedElement } =
+		useMyNewElement();
 
 	const { strokeColor, opacity } = useToolSettings();
 
@@ -80,8 +81,7 @@ export default function TextHandler() {
 			newText = text.slice(0, text.length - 1);
 			if (!newText) text = "";
 		} else if (e.key === "Escape") {
-			addElementToStage(myNewElement);
-			setMyNewElement(null);
+			handleCreatedElement();
 			setDrawing(false);
 			return;
 		}

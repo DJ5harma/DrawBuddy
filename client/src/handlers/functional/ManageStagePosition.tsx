@@ -1,16 +1,68 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-export default function ManageStagePosition({
-	stagePosition,
-	setStagePosition,
+import { useElements } from "../../providers/ElementsProvider";
+import { IPoint } from "../../utils/types";
+
+export default function ManageStagePos({
+	stagePos,
+	setStagePos,
+	setStageScale,
 }: {
-	stagePosition: { x: number; y: number };
-	setStagePosition: Dispatch<SetStateAction<{ x: number; y: number }>>;
+	stagePos: IPoint;
+	setStagePos: Dispatch<SetStateAction<IPoint>>;
+	setStageScale: Dispatch<SetStateAction<number>>;
 }) {
 	const [inputPos, setInputPos] = useState({ x: 0, y: 0 });
+	const { elementsArrRef } = useElements();
+
+	const [len, setLen] = useState(0);
+	const [curr, setCurr] = useState(-1);
 
 	useEffect(() => {
-		setInputPos(stagePosition);
-	}, [stagePosition]);
+		setInputPos(stagePos);
+	}, [stagePos]);
+
+	useEffect(() => {
+		const newLen = elementsArrRef.current.length;
+		setLen(newLen);
+	}, [elementsArrRef.current.length]);
+
+	useEffect(() => {
+		if (len <= 1) setCurr(-1);
+	}, [len]);
+
+	useEffect(() => {
+		if (curr > -1 && curr < elementsArrRef.current.length) {
+			setStagePos(elementsArrRef.current[curr].stagePos);
+			setStageScale(elementsArrRef.current[curr].stageScale);
+		}
+	}, [curr]);
+
+	const handleBack = () => {
+		let x = curr;
+		const thisPos = elementsArrRef.current[x].stagePos;
+		while (x >= 1) {
+			const prevPos = elementsArrRef.current[x - 1].stagePos;
+			if (thisPos.x !== prevPos.x || thisPos.y !== prevPos.y) {
+				setCurr(x - 1);
+				return;
+			}
+			x--;
+		}
+		setCurr(curr - 1);
+	};
+	// const handleNext = () => {
+	// 	let x = curr;
+	// 	const thisPos = elementsArrRef.current[x].stagePos;
+	// 	while (x <= len - 2) {
+	// 		const nextPos = elementsArrRef.current[x + 1].stagePos;
+	// 		if (thisPos.x !== nextPos.x || thisPos.y !== nextPos.y) {
+	// 			setCurr(x + 1);
+	// 			return;
+	// 		}
+	// 		x++;
+	// 	}
+	// 	setCurr(curr + 1);
+	// };
 
 	return (
 		<div
@@ -19,45 +71,45 @@ export default function ManageStagePosition({
 		>
 			<div className="[&>input]:text-black [&>input]:px-1 [&>input]:w-16 [&>input]:text-center flex gap-2 font-semibold">
 				<p className="font-normal">Change: </p>
-				<p>x : </p>
+				<p>x</p>
 				<input
 					value={inputPos.x.toFixed()}
 					onChange={(e) => {
 						const val = parseInt(e.target.value);
-						setStagePosition((p) => ({
+						setStagePos((p) => ({
 							...p,
 							x: Number.isNaN(val) ? 0 : val,
 						}));
 					}}
 				/>
-				<p>y : </p>
+				<p>y</p>
 				<input
 					value={inputPos.y.toFixed()}
 					onChange={(e) => {
 						const val = parseInt(e.target.value);
-						setStagePosition((p) => ({
+						setStagePos((p) => ({
 							...p,
 							y: Number.isNaN(val) ? 0 : val,
 						}));
 					}}
 				/>
 			</div>
-			{/* <button
-				className="bg-blue-700 p-2"
-				onClick={() => {
-					if (!elementsArrRef.current.length) return;
-
-					// setStagePosition(
-					const { x, y } = getShapeEnds(
-						elementsArrRef.current[elementsArrRef.current.length - 1]
-					);
-					console.log(getMousePos(x, y));
-
-					// );
-				}}
-			>
-				GoTo Recent Activity
-			</button> */}
+			{len ? (
+				<div className="[&>button]:bg-blue-700 [&>button]:p-2 flex gap-2 [&>button]:font-semibold items-center">
+					<p>Teleport: </p>
+					{curr >= 1 && <button onClick={handleBack}>Back</button>}
+					{/* {curr < len - 1 && <button onClick={handleNext}>Next</button>} */}
+					<button
+						onClick={() => {
+							setStagePos(elementsArrRef.current[len - 1].stagePos);
+							setStageScale(elementsArrRef.current[len - 1].stageScale);
+							setCurr(len - 1);
+						}}
+					>
+						Last
+					</button>
+				</div>
+			) : null}
 		</div>
 	);
 }

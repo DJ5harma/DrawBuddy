@@ -40,3 +40,9 @@ export interface IPoint {
 	x: number;
 	y: number;
 }
+
+export interface IElement {
+	shape: JSX.Element;
+	stagePos: IPoint;
+	stageScale: number;
+}

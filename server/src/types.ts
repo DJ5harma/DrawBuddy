@@ -5,13 +5,19 @@ export interface IPeers {
 	};
 }
 
-export interface IElement {
+export interface IPoint {
+	x: number;
+	y: number;
+}
+
+export interface IShape {
 	key: string;
 	props: Object;
 	name: string;
 }
 
-export interface IPoint {
-	x: number;
-	y: number;
+export interface IElement {
+	shape: IShape;
+	stagePos: IPoint;
+	stageScale: number;
 }

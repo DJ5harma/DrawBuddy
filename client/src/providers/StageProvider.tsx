@@ -9,13 +9,16 @@ import {
 import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
 import { useElements } from "./ElementsProvider";
 import ManageStagePosition from "../handlers/functional/ManageStagePosition";
+import { IPoint } from "../utils/types";
 
 const context = createContext<{
-	getMousePos: (currX: number, currY: number) => { x: number; y: number };
+	getMousePos: (currX: number, currY: number) => IPoint;
 	stageScale: number;
+	stagePos: IPoint;
 }>({
 	getMousePos: () => ({ x: 0, y: 0 }),
 	stageScale: 1,
+	stagePos: { x: 0, y: 0 },
 });
 
 export default function StageProvider({ children }: { children: ReactNode }) {
@@ -30,15 +33,13 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		const storedScale = localStorage.getItem("stageScale");
 		return (storedScale ? JSON.parse(storedScale) : 1) as number;
 	});
-	const [stagePosition, setStagePosition] = useState<{ x: number; y: number }>(
-		() => {
-			const storedPos = localStorage.getItem("stagePosition");
-			return storedPos ? JSON.parse(storedPos) : { x: 0, y: 0 };
-		}
-	);
+	const [stagePos, setStagePos] = useState<IPoint>(() => {
+		const storedPos = localStorage.getItem("stagePos");
+		return storedPos ? JSON.parse(storedPos) : { x: 0, y: 0 };
+	});
 
 	const [isPanning, setIsPanning] = useState(false);
-	const [panStartPos, setPanStartPos] = useState<{ x: number; y: number }>({
+	const [panStartPos, setPanStartPos] = useState<IPoint>({
 		x: 0,
 		y: 0,
 	});
@@ -52,16 +53,16 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		];
 
 		const [adjustedX, adjustedY] = [
-			(mouseX - stagePosition.x) / stageScale,
-			(mouseY - stagePosition.y) / stageScale,
+			(mouseX - stagePos.x) / stageScale,
+			(mouseY - stagePos.y) / stageScale,
 		];
 
 		return { x: adjustedX, y: adjustedY };
 	};
 
 	useEffect(() => {
-		localStorage.setItem("stagePosition", JSON.stringify(stagePosition));
-	}, [stagePosition]);
+		localStorage.setItem("stagePos", JSON.stringify(stagePos));
+	}, [stagePos]);
 	useEffect(() => {
 		localStorage.setItem("stageScale", stageScale.toString());
 	}, [stageScale]);
@@ -88,7 +89,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		if (!isPanning) return;
 		const dx = e.evt.clientX - panStartPos.x;
 		const dy = e.evt.clientY - panStartPos.y;
-		setStagePosition((p) => ({ x: p.x + dx, y: p.y + dy }));
+		setStagePos((p) => ({ x: p.x + dx, y: p.y + dy }));
 		setPanStartPos({ x: e.evt.clientX, y: e.evt.clientY });
 	};
 	useEffect(() => {
@@ -103,7 +104,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 			window.removeEventListener("wheel", handleWheel);
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [stageScale, stagePosition, isPanning, panStartPos]);
+	}, [stageScale, stagePos, isPanning, panStartPos]);
 
 	const handleOnWheel = (e: KonvaEventObject<WheelEvent, Node<NodeConfig>>) => {
 		const newScale = e.evt.deltaY < 0 ? stageScale * 1.1 : stageScale / 1.1;
@@ -120,9 +121,9 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 
 		const { x, y } = stagePointerPos;
 
-		setStagePosition({
-			x: x - (x - stagePosition.x) * scaleFactor,
-			y: y - (y - stagePosition.y) * scaleFactor,
+		setStagePos({
+			x: x - (x - stagePos.x) * scaleFactor,
+			y: y - (y - stagePos.y) * scaleFactor,
 		});
 	};
 
@@ -134,8 +135,8 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 				className="bg-neutral-900"
 				scaleX={stageScale}
 				scaleY={stageScale}
-				x={stagePosition.x}
-				y={stagePosition.y}
+				x={stagePos.x}
+				y={stagePos.y}
 				onWheel={handleOnWheel}
 				onMouseMove={handleMouseMove}
 				onMouseDown={handleMouseDown}
@@ -146,16 +147,18 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 						value={{
 							getMousePos,
 							stageScale,
+							stagePos,
 						}}
 					>
-						<Group>{elementsArrRef.current}</Group>
+						<Group>{elementsArrRef.current.map(({ shape }) => shape)}</Group>
 						<Group>{children}</Group>
 					</context.Provider>
 				</Layer>
 			</Stage>
 			<ManageStagePosition
-				stagePosition={stagePosition}
-				setStagePosition={setStagePosition}
+				stagePos={stagePos}
+				setStagePos={setStagePos}
+				setStageScale={setStageScale}
 			/>
 		</>
 	);

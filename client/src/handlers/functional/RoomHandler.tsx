@@ -8,7 +8,7 @@ import {
 	serializeKonvaElement,
 } from "../../utils/konva/convertKonva";
 import toast from "react-hot-toast";
-import { IPeers } from "../../utils/types";
+import { IElement, IPeers } from "../../utils/types";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
 import { Circle, Group, Text } from "react-konva";
 import { useStage } from "../../providers/StageProvider";
@@ -35,14 +35,17 @@ export default function RoomHandler() {
 
 	const { myNewElement } = useMyNewElement();
 	const [peers, setPeers] = useState<IPeers>({});
+	const { stagePos, stageScale } = useStage();
 
 	useEffect(() => {
 		if (elementsArrRef.current.length && !myNewElement) {
 			socket.emit("finalized_new_element", {
-				element: serializeKonvaElement(
-					elementsArrRef.current[elementsArrRef.current.length - 1]
+				shape: serializeKonvaElement(
+					elementsArrRef.current[elementsArrRef.current.length - 1].shape
 				),
 				roomId,
+				stagePos,
+				stageScale,
 			});
 		}
 		socket.emit("creating_new_element", {
@@ -92,14 +95,17 @@ export default function RoomHandler() {
 			});
 		});
 
-		socket.on("update_elements", (prevElements: JSX.Element[]) => {
-			setMainElements(
-				prevElements.map((elem) => deserializeKonvaElement(elem))
-			);
-		});
-		socket.on("incoming_finalized_element", (element: JSX.Element) => {
-			addElementToStage(deserializeKonvaElement(element));
-		});
+		socket.on(
+			"incoming_finalized_element",
+			({ shape, stagePos, stageScale }: IElement) => {
+				addElementToStage({
+					shape: deserializeKonvaElement(shape),
+					stagePos,
+					stageScale,
+				});
+			}
+		);
+
 		socket.on(
 			"incoming_element_in_making",
 			({
@@ -118,12 +124,13 @@ export default function RoomHandler() {
 				}));
 			}
 		);
+		socket.on("update_elements", (elements: IElement[]) =>
+			setMainElements(elements)
+		);
 		return () => {
 			socket.removeAllListeners();
 		};
 	}, [projectId]);
-
-	const { stageScale } = useStage();
 
 	return Object.keys(peers).map((userid) => {
 		const { username, tempElement, usercolor } = peers[userid];

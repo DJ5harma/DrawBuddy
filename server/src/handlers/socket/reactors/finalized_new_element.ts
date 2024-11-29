@@ -1,22 +1,29 @@
 import { Socket } from "socket.io";
 import { roomToElementsMap } from "../../../cache";
-import { IElement } from "../../../types";
+import { IPoint, IShape } from "../../../types";
 
 export default function finalized_new_element(
 	socket: Socket,
-	{ element, roomId }: { element: IElement; roomId: string }
+	{
+		shape,
+		roomId,
+		stagePos,
+		stageScale,
+	}: { shape: IShape; roomId: string; stagePos: IPoint; stageScale: number }
 ) {
-	socket.broadcast.to(roomId).emit("incoming_finalized_element", element);
+	socket.broadcast
+		.to(roomId)
+		.emit("incoming_finalized_element", { shape, stagePos, stageScale });
 	// console.log("incoming finalizing element: ", element);
 
 	const prevElements = roomToElementsMap.get(roomId) || [];
 	if (
-		!element ||
+		!shape ||
 		(prevElements.length &&
-			element.key === prevElements[prevElements.length - 1].key)
+			shape.key === prevElements[prevElements.length - 1].shape.key)
 	)
 		return;
-	prevElements.push(element);
+	prevElements.push({ shape, stagePos, stageScale });
 	roomToElementsMap.set(roomId, prevElements);
 
 	console.log("Elements in " + roomId + ": ", prevElements.length + 1);

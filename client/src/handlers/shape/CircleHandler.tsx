@@ -10,8 +10,9 @@ export default function CircleHandler() {
 	const [drawing, setDrawing] = useState(false);
 
 	const { getMousePos } = useStage();
-	const { elementsArrRef, addElementToStage } = useElements();
-	const { myNewElement, setMyNewElement } = useMyNewElement();
+	const { elementsArrRef } = useElements();
+	const { myNewElement, setMyNewElement, handleCreatedElement } =
+		useMyNewElement();
 
 	const { backgroundColor, strokeColor, strokeWidth, opacity, dashGap } =
 		useToolSettings();
@@ -61,9 +62,8 @@ export default function CircleHandler() {
 		);
 	};
 	const handleMouseUp = () => {
-		addElementToStage(myNewElement);
+		handleCreatedElement();
 		setDrawing(false);
-		setMyNewElement(null);
 		setStartingPosition({ x: 0, y: 0 });
 	};
 
