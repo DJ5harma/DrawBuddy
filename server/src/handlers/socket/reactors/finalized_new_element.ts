@@ -11,20 +11,21 @@ export default function finalized_new_element(
 		stageScale,
 	}: { shape: IShape; roomId: string; stagePos: IPoint; stageScale: number }
 ) {
+	if (!shape) return;
 	socket.broadcast
 		.to(roomId)
 		.emit("incoming_finalized_element", { shape, stagePos, stageScale });
-	// console.log("incoming finalizing element: ", element);
 
-	const prevElements = roomToElementsMap.get(roomId) || [];
-	if (
-		!shape ||
-		(prevElements.length &&
-			shape.key === prevElements[prevElements.length - 1].shape.key)
-	)
+	const prevElements = roomToElementsMap.get(roomId);
+
+	if (!prevElements || !prevElements.length) {
+		roomToElementsMap.set(roomId, [{ shape, stagePos, stageScale }]);
+		console.log("Elements in " + roomId + ":", 1);
 		return;
-	prevElements.push({ shape, stagePos, stageScale });
-	roomToElementsMap.set(roomId, prevElements);
+	}
+	if (shape.key === prevElements[prevElements.length - 1].shape.key) return;
 
-	console.log("Elements in " + roomId + ": ", prevElements.length + 1);
+	prevElements.push({ shape, stagePos, stageScale });
+
+	console.log("Elements in " + roomId + ":", prevElements.length + 1);
 }
