@@ -99,12 +99,6 @@ export default function RoomHandler() {
 		});
 		socket.on("incoming_finalized_element", (element: JSX.Element) => {
 			addElementToStage(deserializeKonvaElement(element));
-			if (
-				elementsArrRef.current.length &&
-				element.key ===
-					elementsArrRef.current[elementsArrRef.current.length - 1].key
-			)
-				return;
 		});
 		socket.on(
 			"incoming_element_in_making",

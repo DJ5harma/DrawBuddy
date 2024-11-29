@@ -10,3 +10,8 @@ export interface IElement {
 	props: Object;
 	name: string;
 }
+
+export interface IPoint {
+	x: number;
+	y: number;
+}

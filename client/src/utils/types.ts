@@ -35,3 +35,8 @@ export interface IPeers {
 		usercolor: string;
 	};
 }
+
+export interface IPoint {
+	x: number;
+	y: number;
+}

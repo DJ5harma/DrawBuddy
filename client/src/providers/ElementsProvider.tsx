@@ -15,6 +15,8 @@ import axios from "axios";
 import { RETRIVE_ROOM_ELEMENTS_API } from "../utils/apiRoutes";
 import toast from "react-hot-toast";
 
+const OFFLINE_SHAPES = "OFFLINE_SHAPES";
+
 const context = createContext<{
 	elementsArrRef: MutableRefObject<JSX.Element[]>;
 	addElementToStage: (element: JSX.Element | null) => void;
@@ -28,7 +30,7 @@ const context = createContext<{
 	setMainElements: () => {},
 	flickerForLocalCreation: false,
 	updateProject: () => {},
-	projectId: "offlineShapes",
+	projectId: OFFLINE_SHAPES,
 });
 
 export default function ElementsProvider({
@@ -36,9 +38,10 @@ export default function ElementsProvider({
 }: {
 	children: ReactNode;
 }) {
-	const [projectId, setProjectId] = useState("offlineShapes");
+	const [projectId, setProjectId] = useState(OFFLINE_SHAPES);
 	const elementsArrRef = useRef<JSX.Element[]>(
 		(() => {
+			if (projectId !== OFFLINE_SHAPES) return [];
 			return (
 				JSON.parse(localStorage.getItem(projectId) || "[]") as JSX.Element[]
 			).map((elem) => deserializeKonvaElement(elem));
@@ -71,13 +74,14 @@ export default function ElementsProvider({
 	};
 
 	useEffect(() => {
-		localStorage.setItem(
-			projectId,
-			JSON.stringify(
-				elementsArrRef.current.map((elem) => serializeKonvaElement(elem))
-			)
-		);
-	}, [flickerForLocalCreation]);
+		if (projectId === OFFLINE_SHAPES)
+			localStorage.setItem(
+				OFFLINE_SHAPES,
+				JSON.stringify(
+					elementsArrRef.current.map((elem) => serializeKonvaElement(elem))
+				)
+			);
+	}, [elementsArrRef.current.length]);
 
 	return (
 		<context.Provider

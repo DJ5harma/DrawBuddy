@@ -34,9 +34,8 @@ export default function CircleHandler() {
 	};
 
 	const handleMouseMove = (e: MouseEvent) => {
-		if (!drawing) {
-			return;
-		}
+		if (!drawing) return;
+
 		const { x, y } = getMousePos(e.clientX, e.clientY);
 		if (!startingPosition.x && !startingPosition.y) {
 			setStartingPosition({ x, y });
