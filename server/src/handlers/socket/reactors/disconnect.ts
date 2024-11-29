@@ -1,9 +1,9 @@
 import { Socket } from "socket.io";
 import { roomToUsersMap, socketCache, useridToRoomMap } from "../../../cache";
-import { close_socket_server } from "../switch";
+import close_socket_server from "../switch/close_socket_server";
 
 export default function disconnect(socket: Socket) {
-	console.log("clients: ", --socketCache.clients);
+	console.log("clients:", --socketCache.clients);
 
 	const roomId = useridToRoomMap.get(socket.id);
 

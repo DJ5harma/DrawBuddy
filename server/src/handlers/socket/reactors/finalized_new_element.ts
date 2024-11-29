@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
 import { roomToElementsMap } from "../../../cache";
-import { IPoint, IShape } from "../../../types";
+import { IPoint, IShape } from "../../../utils/types";
 
 export default function finalized_new_element(
 	socket: Socket,

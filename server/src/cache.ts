@@ -1,9 +1,11 @@
 import { Server } from "socket.io";
-import { IElement, IPeers } from "./types";
-import { CLIENT_URL } from "./constants";
+import { IElement, IPeers } from "./utils/types";
+import { CLIENT_URL } from "./utils/constants";
 
 export const roomToUsersMap = new Map<string, IPeers>();
+
 export const useridToRoomMap = new Map<string, string>();
+
 export const roomToElementsMap = new Map<string, IElement[]>();
 
 export const io = new Server({

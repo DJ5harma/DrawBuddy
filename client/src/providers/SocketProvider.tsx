@@ -7,7 +7,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { SOCKET_URL, START_SOCKET_SERVER_API } from "../utils/apiRoutes";
+import { SOCKET_URL, ENSURE_SOCKET_SERVER_API } from "../utils/apiRoutes";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -23,7 +23,7 @@ export default function SocketProvider({ children }: { children: ReactNode }) {
 	const [isConnected, setIsConnected] = useState(false);
 
 	useEffect(() => {
-		axios.get(START_SOCKET_SERVER_API).then(() => socketRef.current.connect());
+		axios.get(ENSURE_SOCKET_SERVER_API).then(() => socketRef.current.connect());
 
 		socketRef.current.on("connect", () => {
 			toast.success("Socket server connected!");

@@ -1,14 +1,12 @@
-import { io, roomToUsersMap, socketCache, useridToRoomMap } from "../../cache";
+import {
+	io,
+	roomToUsersMap,
+	socketCache,
+	useridToRoomMap,
+} from "../../../cache";
+import { SOCKET_CLOSE_TIMEOUT } from "../../../utils/constants";
 
-export function start_socket_server() {
-	if (!socketCache.closed) return;
-	io.listen(3000);
-	socketCache.closed = false;
-
-	console.log("Socket server running on 3000");
-}
-
-export function close_socket_server() {
+export default function close_socket_server() {
 	if (socketCache.clients > 0 || socketCache.startedToClose) return;
 	socketCache.startedToClose = true;
 
@@ -26,5 +24,5 @@ export function close_socket_server() {
 			console.log("Didn't close");
 			socketCache.startedToClose = false;
 		}
-	}, 20000);
+	}, SOCKET_CLOSE_TIMEOUT);
 }
