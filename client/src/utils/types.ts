@@ -17,7 +17,7 @@ export interface ITool {
 
 	icon: ReactNode;
 	handler: ReactNode | null;
-	cursor: "grab" | "default" | "text" | "progress" | "crosshair" | "wait";
+	cursor: "grab" | "default" | "text" | "crosshair";
 }
 export interface IToolSettings {
 	strokeColor: string;

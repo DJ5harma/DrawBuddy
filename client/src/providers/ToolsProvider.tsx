@@ -25,7 +25,7 @@ const toolArr: ITool[] = [
 	{
 		name: "Hand",
 		icon: <FaHand />,
-		handler: <></>,
+		handler: <></>, // implemented without any special handler
 		cursor: "grab",
 	},
 	{
@@ -85,8 +85,8 @@ const toolArr: ITool[] = [
 	{
 		name: "Eraser",
 		icon: <LuEraser />,
-		handler: <></>,
-		cursor: "wait",
+		handler: <></>, // implemented without any special handler
+		cursor: "default",
 	},
 ];
 
@@ -102,7 +102,7 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 	return (
 		<>
 			<div
-				className="cursor- w-screen absolute top-4 left-0 flex justify-center items-center z-50 flex-col gap-2"
+				className="w-screen absolute top-4 left-0 flex justify-center items-center z-50 flex-col gap-2"
 				style={{
 					transform: "scale(1)",
 				}}
@@ -123,7 +123,7 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 									? "bg-orange-900"
 									: "hover:bg-neutral-700"
 							}
-							key={tool.name}
+							key={tool.name + "tool"}
 						>
 							{tool.icon}
 						</button>
