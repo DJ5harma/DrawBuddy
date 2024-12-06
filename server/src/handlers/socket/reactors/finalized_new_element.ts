@@ -14,7 +14,9 @@ export default function finalized_new_element(
 
 	if (!prevElements || !prevElements.length) {
 		roomToElementsMap.set(roomId, [element]);
+
 		console.log("Elements in " + roomId + ":", 1);
+
 		return;
 	}
 

@@ -10,14 +10,12 @@ export interface IPoint {
 	y: number;
 }
 
-export interface IShape {
-	key: string;
-	props: Object;
-	name: string;
-}
-
 export interface IElement {
-	shape: IShape;
+	shape: {
+		key: string;
+		props: Object;
+		name: string;
+	};
 	stagePos: IPoint;
 	stageScale: number;
 }

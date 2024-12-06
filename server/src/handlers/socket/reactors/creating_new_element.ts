@@ -1,8 +1,9 @@
 import { Socket } from "socket.io";
+import { IElement } from "../../../utils/types";
 
 export default function creating_new_element(
 	socket: Socket,
-	{ element, roomId }: { element: unknown; roomId: string }
+	{ element, roomId }: { element: IElement; roomId: string }
 ) {
 	if (!roomId) return;
 
