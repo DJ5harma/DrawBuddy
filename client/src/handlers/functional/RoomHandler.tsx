@@ -31,6 +31,8 @@ export default function RoomHandler() {
 		setMainElements,
 		updateProject,
 		projectId,
+		removeElementFromStage,
+		latestDeletedKeyRef,
 	} = useElements();
 
 	const { myNewElement } = useMyNewElement();
@@ -55,6 +57,15 @@ export default function RoomHandler() {
 			roomId,
 		});
 	}, [myNewElement]);
+	useEffect(() => {
+		if (latestDeletedKeyRef.current) {
+			console.log("CHANGED");
+			socket.emit("removed_element", {
+				key: latestDeletedKeyRef.current,
+				roomId,
+			});
+		}
+	}, [latestDeletedKeyRef.current]);
 
 	useEffect(() => {
 		if (roomId && projectId !== roomId) {
@@ -105,6 +116,10 @@ export default function RoomHandler() {
 				});
 			}
 		);
+
+		socket.on("incoming_removed_element", ({ key }: { key: string }) => {
+			if (key) removeElementFromStage(key, true);
+		});
 
 		socket.on(
 			"incoming_element_in_making",

@@ -11,7 +11,7 @@ export default function finalized_new_element(
 		stageScale,
 	}: { shape: IShape; roomId: string; stagePos: IPoint; stageScale: number }
 ) {
-	if (!shape) return;
+	if (!shape || !roomId) return;
 	socket.broadcast
 		.to(roomId)
 		.emit("incoming_finalized_element", { shape, stagePos, stageScale });
@@ -27,5 +27,5 @@ export default function finalized_new_element(
 
 	prevElements.push({ shape, stagePos, stageScale });
 
-	console.log("Elements in " + roomId + ":", prevElements.length + 1);
+	console.log("Elements in " + roomId + ":", prevElements.length);
 }

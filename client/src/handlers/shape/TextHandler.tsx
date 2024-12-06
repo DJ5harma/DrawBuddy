@@ -11,7 +11,7 @@ export default function TextHandler() {
 	const [drawing, setDrawing] = useState(false);
 
 	const { getMousePos, stageScale } = useStage();
-	const { elementsArrRef } = useElements();
+	const { elementsArrRef, removeElementFromStage } = useElements();
 	const { myNewElement, setMyNewElement, handleCreatedElement } =
 		useMyNewElement();
 
@@ -49,9 +49,10 @@ export default function TextHandler() {
 		const text = myNewElement
 			? (myNewElement.props.text as string)
 			: INITIAL_TEXT;
+		const key = "Text" + elementsArrRef.current.length;
 		setMyNewElement(
 			<Text
-				key={"Text" + elementsArrRef.current.length}
+				key={key}
 				x={x}
 				y={y}
 				fill={strokeColor}
@@ -59,6 +60,7 @@ export default function TextHandler() {
 				fontFamily="monospace"
 				fontSize={25 / stageScale}
 				opacity={opacity}
+				onClick={() => removeElementFromStage(key)}
 			/>
 		);
 		setStartingPosition({ x, y });
@@ -85,9 +87,10 @@ export default function TextHandler() {
 			setDrawing(false);
 			return;
 		}
+		const key = "Text" + elementsArrRef.current.length;
 		setMyNewElement(
 			<Text
-				key={"Text" + elementsArrRef.current.length}
+				key={key}
 				x={startingPosition.x}
 				y={startingPosition.y}
 				fill={strokeColor}
@@ -95,6 +98,7 @@ export default function TextHandler() {
 				fontFamily="monospace"
 				fontSize={25 / stageScale}
 				opacity={opacity}
+				onClick={() => removeElementFromStage(key)}
 			/>
 		);
 	};

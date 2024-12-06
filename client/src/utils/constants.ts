@@ -20,5 +20,7 @@ export const SAMPLE_TOOL_SETTINGS = {
 	backgroundColor: BACKGROUND_COLORS[4],
 	strokeWidth: 5,
 	opacity: 1,
-	dashGap: 5,
+	dashGap: 0,
 };
+
+export const OFFLINE_SHAPES_KEY = "OFFLINE_SHAPES";

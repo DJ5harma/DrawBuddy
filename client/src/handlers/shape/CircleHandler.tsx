@@ -10,7 +10,7 @@ export default function CircleHandler() {
 	const [drawing, setDrawing] = useState(false);
 
 	const { getMousePos } = useStage();
-	const { elementsArrRef } = useElements();
+	const { elementsArrRef, removeElementFromStage } = useElements();
 	const { myNewElement, setMyNewElement, handleCreatedElement } =
 		useMyNewElement();
 
@@ -42,9 +42,10 @@ export default function CircleHandler() {
 			setStartingPosition({ x, y });
 			return;
 		}
+		const key = "Circle" + elementsArrRef.current.length;
 		setMyNewElement(
 			<Circle
-				key={"Circle" + elementsArrRef.current.length}
+				key={key}
 				x={startingPosition.x}
 				y={startingPosition.y}
 				radius={Math.sqrt(
@@ -58,6 +59,7 @@ export default function CircleHandler() {
 				opacity={opacity}
 				dashEnabled={dashGap > 0}
 				dash={[dashGap]}
+				onClick={() => removeElementFromStage(key)}
 			/>
 		);
 	};

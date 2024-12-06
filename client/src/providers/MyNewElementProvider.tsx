@@ -31,7 +31,7 @@ export default function MyNewElementProvider({
 
 	const { stagePos, stageScale } = useStage();
 
-	const { selectedTool } = useTools();
+	const { selectedToolRef } = useTools();
 
 	const handleCreatedElement = () => {
 		if (!myNewElement) return;
@@ -47,7 +47,7 @@ export default function MyNewElementProvider({
 				handleCreatedElement,
 			}}
 		>
-			{selectedTool.handler}
+			{selectedToolRef.current.handler}
 			{children}
 			{myNewElement}
 		</context.Provider>

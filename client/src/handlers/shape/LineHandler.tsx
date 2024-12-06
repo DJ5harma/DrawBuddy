@@ -18,7 +18,7 @@ export default function LineHandler() {
 	});
 
 	const { getMousePos } = useStage();
-	const { elementsArrRef } = useElements();
+	const { elementsArrRef, removeElementFromStage } = useElements();
 
 	const { myNewElement, setMyNewElement, handleCreatedElement } =
 		useMyNewElement();
@@ -60,9 +60,10 @@ export default function LineHandler() {
 		if (multipleLines.exist && !multipleLines.pointsArr.length)
 			return addPointsToMultipleLines(x, y);
 
+		const key = "Line" + elementsArrRef.current.length;
 		setMyNewElement(
 			<Line
-				key={"Line" + elementsArrRef.current.length}
+				key={key}
 				points={
 					multipleLines.exist
 						? [...multipleLines.pointsArr, x, y]
@@ -74,6 +75,7 @@ export default function LineHandler() {
 				opacity={opacity}
 				dashEnabled={dashGap > 0}
 				dash={[dashGap]}
+				onClick={() => removeElementFromStage(key)}
 			/>
 		);
 	};

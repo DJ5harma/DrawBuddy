@@ -10,7 +10,7 @@ export default function PencilHandler() {
 	const [drawing, setDrawing] = useState(false);
 	const { getMousePos } = useStage();
 
-	const { elementsArrRef } = useElements();
+	const { elementsArrRef, removeElementFromStage } = useElements();
 	const { myNewElement, setMyNewElement, handleCreatedElement } =
 		useMyNewElement();
 
@@ -35,9 +35,10 @@ export default function PencilHandler() {
 		if (!drawing) return;
 		const { x, y } = getMousePos(e.clientX, e.clientY);
 		setPointsArr([...pointsArr, x, y]);
+		const key = "Pencil" + elementsArrRef.current.length;
 		setMyNewElement(
 			<Line
-				key={"Pencil" + elementsArrRef.current.length}
+				key={key}
 				points={pointsArr}
 				strokeEnabled
 				strokeWidth={strokeWidth}
@@ -46,6 +47,7 @@ export default function PencilHandler() {
 				opacity={opacity}
 				dashEnabled={dashGap > 0}
 				dash={[dashGap]}
+				onClick={() => removeElementFromStage(key)}
 			/>
 		);
 	};

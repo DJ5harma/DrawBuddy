@@ -32,7 +32,7 @@ export default function ToolSettingsProvider({
 	const [opacity, setOpacity] = useState(toolSettings.opacity);
 	const [dashGap, setDashGap] = useState(toolSettings.dashGap);
 
-	const { selectedTool } = useTools();
+	const { selectedToolRef } = useTools();
 
 	useEffect(() => {
 		localStorage.setItem(
@@ -81,27 +81,28 @@ export default function ToolSettingsProvider({
 							onChange={(e) => setStrokeWidth(e.target.valueAsNumber)}
 						/>
 					</div>
-					{selectedTool.name !== "Pencil" && selectedTool.name !== "Line" && (
-						<div>
-							<p>Background</p>
-							<div className="flex gap-1">
-								{BACKGROUND_COLORS.map((color) => (
-									<button
-										key={color}
-										className={`px-4 h-6 rounded-lg ${
-											backgroundColor === color
-												? "border-2 border-dotted border-black"
-												: ""
-										}`}
-										style={color ? { backgroundColor: color } : {}}
-										onClick={() => setBackgroundColor(color)}
-									>
-										{!color && "T"}
-									</button>
-								))}
+					{selectedToolRef.current.name !== "Pencil" &&
+						selectedToolRef.current.name !== "Line" && (
+							<div>
+								<p>Background</p>
+								<div className="flex gap-1">
+									{BACKGROUND_COLORS.map((color) => (
+										<button
+											key={color}
+											className={`px-4 h-6 rounded-lg ${
+												backgroundColor === color
+													? "border-2 border-dotted border-black"
+													: ""
+											}`}
+											style={color ? { backgroundColor: color } : {}}
+											onClick={() => setBackgroundColor(color)}
+										>
+											{!color && "T"}
+										</button>
+									))}
+								</div>
 							</div>
-						</div>
-					)}
+						)}
 					<div>
 						<p>Opacity</p>
 						<input

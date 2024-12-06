@@ -1,4 +1,11 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+	createContext,
+	MutableRefObject,
+	ReactNode,
+	useContext,
+	useRef,
+	useState,
+} from "react";
 import { BiPencil } from "react-icons/bi";
 import { FaMousePointer } from "react-icons/fa";
 import { FaArrowRightLong, FaHand } from "react-icons/fa6";
@@ -19,71 +26,83 @@ const toolArr: ITool[] = [
 		name: "Hand",
 		icon: <FaHand />,
 		handler: <></>,
+		cursor: "grab",
 	},
 	{
 		name: "Pointer",
 		icon: <FaMousePointer />,
 		handler: <></>,
+		cursor: "default",
 	},
 	{
 		name: "Rectangle",
 		icon: <LuRectangleHorizontal />,
 		handler: <RectangleHandler />,
+		cursor: "crosshair",
 	},
 	{
 		name: "Diamond",
 		icon: <LuDiamond />,
 		handler: <></>,
+		cursor: "crosshair",
 	},
 	{
 		name: "Circle",
 		icon: <FiCircle />,
 		handler: <CircleHandler />,
+		cursor: "crosshair",
 	},
 	{
 		name: "Arrow",
 		icon: <FaArrowRightLong />,
 		handler: <></>,
+		cursor: "crosshair",
 	},
 	{
 		name: "Line",
 		icon: <MdOutlineHorizontalRule />,
 		handler: <LineHandler />,
+		cursor: "crosshair",
 	},
 	{
 		name: "Pencil",
 		icon: <BiPencil />,
 		handler: <PencilHandler />,
+		cursor: "crosshair",
 	},
 	{
 		name: "Text",
 		icon: <ImTextColor />,
 		handler: <TextHandler />,
+		cursor: "text",
 	},
 	{
 		name: "Gallery",
 		icon: <RiGalleryLine />,
 		handler: <></>,
+		cursor: "default",
 	},
 	{
 		name: "Eraser",
 		icon: <LuEraser />,
 		handler: <></>,
+		cursor: "wait",
 	},
 ];
 
 export default function ToolsProvider({ children }: { children: ReactNode }) {
-	const [selectedTool, setSelectedTool] = useState<ITool>(
+	const selectedToolRef = useRef<ITool>(
 		toolArr[
 			parseInt(localStorage.getItem("selectedToolIndex") || "2") %
 				toolArr.length
 		]
 	);
 
+	const [flickerForToolChange, setFlickerForToolChange] = useState(false);
 	return (
 		<>
 			<div
-				className="w-screen absolute top-4 left-0 flex justify-center items-center z-50"
+				className="cursor- w-screen absolute top-4 left-0 flex justify-center items-center z-50 flex-col gap-2"
 				style={{
 					transform: "scale(1)",
 				}}
@@ -95,11 +114,12 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 					{toolArr.map((tool, i) => (
 						<button
 							onClick={() => {
-								setSelectedTool(tool);
+								selectedToolRef.current = tool;
+								setFlickerForToolChange(!flickerForToolChange);
 								localStorage.setItem("selectedToolIndex", i.toString());
 							}}
 							className={
-								selectedTool.name === tool.name
+								selectedToolRef.current.name === tool.name
 									? "bg-orange-900"
 									: "hover:bg-neutral-700"
 							}
@@ -109,14 +129,24 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 						</button>
 					))}
 				</nav>
+				{selectedToolRef.current.name === "Eraser" && (
+					<p className="text-xl bg-black p-2 rounded-xl">
+						Click on elements to erase only which
+						<b> YOU </b> made
+					</p>
+				)}
 			</div>
-			<context.Provider value={{ selectedTool }}>{children}</context.Provider>
+			<context.Provider value={{ selectedToolRef }}>
+				<div className={`cursor-${selectedToolRef.current.cursor}`}>
+					{children}
+				</div>
+			</context.Provider>
 		</>
 	);
 }
 
-const context = createContext<{ selectedTool: ITool }>({
-	selectedTool: toolArr[2],
+const context = createContext<{ selectedToolRef: MutableRefObject<ITool> }>({
+	selectedToolRef: { current: toolArr[4] },
 });
 
 export const useTools = () => useContext(context);

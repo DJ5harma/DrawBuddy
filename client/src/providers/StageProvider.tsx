@@ -150,8 +150,8 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 							stagePos,
 						}}
 					>
-						<Group>{elementsArrRef.current.map(({ shape }) => shape)}</Group>
 						<Group>{children}</Group>
+						<Group>{elementsArrRef.current.map(({ shape }) => shape)}</Group>
 					</context.Provider>
 				</Layer>
 			</Stage>

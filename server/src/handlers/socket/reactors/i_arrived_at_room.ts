@@ -24,6 +24,8 @@ export default function i_arrived_at_room(
 		username: string;
 	}
 ) {
+	if (!roomId) return;
+
 	const userObj = { userid: socket.id, username, usercolor: randomColor() };
 
 	socket.broadcast.to(roomId).emit("new_user", userObj);

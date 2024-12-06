@@ -15,23 +15,27 @@ import axios from "axios";
 import { RETRIVE_ROOM_ELEMENTS_API } from "../utils/apiRoutes";
 import toast from "react-hot-toast";
 import { IElement } from "../utils/types";
-
-const OFFLINE_SHAPES = "OFFLINE_SHAPES";
+import { OFFLINE_SHAPES_KEY } from "../utils/constants";
+import { useTools } from "./ToolsProvider";
 
 const context = createContext<{
 	elementsArrRef: MutableRefObject<IElement[]>;
-	addElementToStage: (element: IElement) => void;
-	setMainElements: (elements: IElement[]) => void;
+	latestDeletedKeyRef: MutableRefObject<string | null>;
 	flickerForLocalCreation: boolean;
-	updateProject: (newId: string) => void;
 	projectId: string;
+	addElementToStage: (element: IElement) => void;
+	removeElementFromStage: (key: string, force?: boolean) => void;
+	setMainElements: (elements: IElement[]) => void;
+	updateProject: (newId: string) => void;
 }>({
 	elementsArrRef: { current: [] },
-	addElementToStage: () => {},
-	setMainElements: () => {},
+	latestDeletedKeyRef: { current: null },
 	flickerForLocalCreation: false,
+	projectId: OFFLINE_SHAPES_KEY,
+	addElementToStage: () => {},
+	removeElementFromStage: () => {},
+	setMainElements: () => {},
 	updateProject: () => {},
-	projectId: OFFLINE_SHAPES,
 });
 
 export default function ElementsProvider({
@@ -39,10 +43,12 @@ export default function ElementsProvider({
 }: {
 	children: ReactNode;
 }) {
-	const [projectId, setProjectId] = useState(OFFLINE_SHAPES);
+	const { selectedToolRef } = useTools();
+	const [projectId, setProjectId] = useState(OFFLINE_SHAPES_KEY);
+
 	const elementsArrRef = useRef<IElement[]>(
 		(() => {
-			if (projectId !== OFFLINE_SHAPES) return [];
+			if (projectId !== OFFLINE_SHAPES_KEY) return [];
 			return (
 				JSON.parse(localStorage.getItem(projectId) || "[]") as IElement[]
 			).map(({ shape, stagePos, stageScale }) => ({
@@ -53,11 +59,23 @@ export default function ElementsProvider({
 		})()
 	);
 
+	const latestDeletedKeyRef = useRef<string | null>(null);
+
 	const [flickerForLocalCreation, setFlickerForLocalCreation] = useState(false);
 
 	const addElementToStage = (element: IElement) => {
 		if (!element) return;
 		elementsArrRef.current.push(element);
+		setFlickerForLocalCreation((p) => !p);
+	};
+	const removeElementFromStage = (key: string, force?: boolean) => {
+		if (!force && (!key || selectedToolRef.current.name !== "Eraser")) return;
+
+		latestDeletedKeyRef.current = key;
+
+		elementsArrRef.current = elementsArrRef.current.filter(
+			({ shape }) => shape.key !== key
+		);
 		setFlickerForLocalCreation((p) => !p);
 	};
 	const setMainElements = (elements: IElement[]) => {
@@ -83,9 +101,9 @@ export default function ElementsProvider({
 	};
 
 	useEffect(() => {
-		if (projectId === OFFLINE_SHAPES) {
+		if (projectId === OFFLINE_SHAPES_KEY) {
 			localStorage.setItem(
-				OFFLINE_SHAPES,
+				OFFLINE_SHAPES_KEY,
 				JSON.stringify(
 					elementsArrRef.current.map(({ shape, stagePos }) => ({
 						shape: serializeKonvaElement(shape),
@@ -101,10 +119,12 @@ export default function ElementsProvider({
 			value={{
 				elementsArrRef,
 				addElementToStage,
+				removeElementFromStage,
 				setMainElements,
 				flickerForLocalCreation,
 				updateProject,
 				projectId,
+				latestDeletedKeyRef,
 			}}
 		>
 			{children}

@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useElements } from "../../providers/ElementsProvider";
 import { IPoint } from "../../utils/types";
+import toast from "react-hot-toast";
 
 export default function ManageStagePos({
 	stagePos,
@@ -38,17 +39,27 @@ export default function ManageStagePos({
 	}, [curr]);
 
 	const handleBack = () => {
-		let x = curr;
-		const thisPos = elementsArrRef.current[x].stagePos;
-		while (x >= 1) {
-			const prevPos = elementsArrRef.current[x - 1].stagePos;
-			if (thisPos.x !== prevPos.x || thisPos.y !== prevPos.y) {
-				setCurr(x - 1);
-				return;
+		try {
+			let x = curr;
+			const thisPos = elementsArrRef.current[x].stagePos;
+			while (x >= 1) {
+				const prevPos = elementsArrRef.current[x - 1].stagePos;
+				if (thisPos.x !== prevPos.x || thisPos.y !== prevPos.y) {
+					setCurr(x - 1);
+					return;
+				}
+				x--;
 			}
-			x--;
-		}
-		setCurr(curr - 1);
+			setCurr(curr - 1);
+		} catch (error) {}
+	};
+
+	const handleLast = () => {
+		try {
+			setStagePos(elementsArrRef.current[len - 1].stagePos);
+			setStageScale(elementsArrRef.current[len - 1].stageScale);
+			setCurr(len - 1);
+		} catch (error) {}
 	};
 	// const handleNext = () => {
 	// 	let x = curr;
@@ -99,15 +110,7 @@ export default function ManageStagePos({
 					<p>Teleport: </p>
 					{curr >= 1 && <button onClick={handleBack}>Back</button>}
 					{/* {curr < len - 1 && <button onClick={handleNext}>Next</button>} */}
-					<button
-						onClick={() => {
-							setStagePos(elementsArrRef.current[len - 1].stagePos);
-							setStageScale(elementsArrRef.current[len - 1].stageScale);
-							setCurr(len - 1);
-						}}
-					>
-						Last
-					</button>
+					<button onClick={handleLast}>Last</button>
 				</div>
 			) : null}
 		</div>

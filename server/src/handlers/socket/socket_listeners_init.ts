@@ -4,6 +4,7 @@ import creating_new_element from "./reactors/creating_new_element";
 import disconnect from "./reactors/disconnect";
 import finalized_new_element from "./reactors/finalized_new_element";
 import i_arrived_at_room from "./reactors/i_arrived_at_room";
+import removed_element from "./reactors/removed_element";
 
 export default function socket_listeners_init() {
 	io.on("connection", (socket) => {
@@ -20,6 +21,8 @@ export default function socket_listeners_init() {
 		);
 
 		socket.on("clear_all_elements", (data) => clear_all_elements(socket, data));
+
+		socket.on("removed_element", (data) => removed_element(socket, data));
 
 		socket.on("disconnect", () => disconnect(socket));
 	});

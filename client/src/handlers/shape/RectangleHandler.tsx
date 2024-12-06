@@ -10,7 +10,7 @@ export default function RectangleHandler() {
 	const [drawing, setDrawing] = useState(false);
 
 	const { getMousePos } = useStage();
-	const { elementsArrRef } = useElements();
+	const { elementsArrRef, removeElementFromStage } = useElements();
 
 	const { myNewElement, setMyNewElement, handleCreatedElement } =
 		useMyNewElement();
@@ -42,10 +42,10 @@ export default function RectangleHandler() {
 			setStartingPosition(getMousePos(e.clientX, e.clientY));
 			return;
 		}
-
+		const key = "Rect" + elementsArrRef.current.length;
 		setMyNewElement(
 			<Rect
-				key={"Rect" + elementsArrRef.current.length}
+				key={key}
 				x={startingPosition.x}
 				y={startingPosition.y}
 				width={x - startingPosition.x}
@@ -57,6 +57,7 @@ export default function RectangleHandler() {
 				opacity={opacity}
 				dashEnabled={dashGap > 0}
 				dash={[dashGap]}
+				onClick={() => removeElementFromStage(key)}
 			/>
 		);
 	};
@@ -65,6 +66,5 @@ export default function RectangleHandler() {
 		setDrawing(false);
 		setStartingPosition({ x: 0, y: 0 });
 	};
-
 	return null;
 }
