@@ -40,6 +40,7 @@ export default function ElementsProvider({
 	children: ReactNode;
 }) {
 	const { selectedToolRef } = useTools();
+
 	const [projectId, setProjectId] = useState(OFFLINE_SHAPES_KEY);
 
 	const elementsArrRef = useRef<IElement[]>(
@@ -58,6 +59,7 @@ export default function ElementsProvider({
 		elementsArrRef.current.push(element);
 		setFlickerForLocalCreation((p) => !p);
 	};
+
 	const removeElementFromStage = (key: string, force?: boolean) => {
 		if (!force && (!key || selectedToolRef.current.name !== "Eraser")) return;
 
@@ -68,10 +70,12 @@ export default function ElementsProvider({
 		);
 		setFlickerForLocalCreation((p) => !p);
 	};
+
 	const setMainElements = (elements: IElement[]) => {
 		elementsArrRef.current = elements || [];
 		setFlickerForLocalCreation((p) => !p);
 	};
+
 	const updateProject = async (newId: string) => {
 		toast.loading("Making room ready for you...");
 		const { data } = await axios.post(RETRIVE_ROOM_ELEMENTS_API, {

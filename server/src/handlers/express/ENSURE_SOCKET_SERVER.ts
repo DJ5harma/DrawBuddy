@@ -7,7 +7,9 @@ const router = Router();
 
 router.get("/ENSURE_SOCKET_SERVER", (_, res) => {
 	console.log("Socket Server opening requested");
+
 	const previouslyClosed = socketCache.closed;
+
 	start_socket_server();
 
 	res

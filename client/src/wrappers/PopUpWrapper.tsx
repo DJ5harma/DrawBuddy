@@ -17,8 +17,7 @@ export default function PopUpWrapper({
 		>
 			<div
 				className={
-					"bg-neutral-200 text-black flex flex-col gap-2 cursor-default p-4 w-fit h-fit" +
-					" [&>*]:px-4 [&>*]:py-3 [&>p]:cursor-pointer [&>button]:bg-white text-blue-900 bg-gray-300 font-semibold " +
+					"flex flex-col gap-2 cursor-default p-4 w-fit h-fit [&>*]:px-4 [&>*]:py-3 [&>p]:cursor-pointer [&>button]:bg-white text-blue-900 bg-gray-300 font-semibold " +
 					className
 				}
 				onClick={(e) => e.stopPropagation()}

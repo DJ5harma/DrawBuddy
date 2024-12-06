@@ -90,6 +90,10 @@ const toolArr: ITool[] = [
 	},
 ];
 
+const context = createContext<{ selectedToolRef: MutableRefObject<ITool> }>({
+	selectedToolRef: { current: toolArr[4] },
+});
+
 export default function ToolsProvider({ children }: { children: ReactNode }) {
 	const selectedToolRef = useRef<ITool>(
 		toolArr[
@@ -99,6 +103,7 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 	);
 
 	const [flickerForToolChange, setFlickerForToolChange] = useState(false);
+
 	return (
 		<>
 			<div
@@ -143,9 +148,5 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 		</>
 	);
 }
-
-const context = createContext<{ selectedToolRef: MutableRefObject<ITool> }>({
-	selectedToolRef: { current: toolArr[4] },
-});
 
 export const useTools = () => useContext(context);

@@ -29,11 +29,13 @@ export default function SocketProvider({ children }: { children: ReactNode }) {
 			toast.success("Socket server connected!");
 			setIsConnected(true);
 		});
+
 		return () => {
 			setIsConnected(false);
 			socketRef.current.disconnect();
 		};
 	}, []);
+
 	return (
 		<context.Provider value={{ socket: socketRef.current }}>
 			{isConnected && children}

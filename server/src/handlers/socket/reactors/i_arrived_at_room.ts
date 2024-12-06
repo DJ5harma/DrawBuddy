@@ -1,19 +1,6 @@
 import { Socket } from "socket.io";
 import { roomToUsersMap, useridToRoomMap } from "../../../cache";
 
-function randomColor() {
-	const randomColorVal = () => (Math.random() * 155 + 100).toFixed();
-	return (
-		"rgb(" +
-		randomColorVal() +
-		", " +
-		randomColorVal() +
-		", " +
-		randomColorVal() +
-		")"
-	);
-}
-
 export default function i_arrived_at_room(
 	socket: Socket,
 	{
@@ -24,7 +11,7 @@ export default function i_arrived_at_room(
 		username: string;
 	}
 ) {
-	if (!roomId) return;
+	if (!roomId || !username) return;
 
 	const userObj = { userid: socket.id, username, usercolor: randomColor() };
 
@@ -33,6 +20,7 @@ export default function i_arrived_at_room(
 	const prevUsers = roomToUsersMap.get(roomId) || {};
 
 	socket.emit("previous_users", prevUsers);
+
 	socket.join(roomId);
 
 	prevUsers[socket.id] = { username, usercolor: randomColor() };
@@ -40,4 +28,18 @@ export default function i_arrived_at_room(
 	roomToUsersMap.set(roomId, prevUsers);
 
 	useridToRoomMap.set(socket.id, roomId);
+}
+
+function randomColor() {
+	const randomColorVal = () => (Math.random() * 155 + 100).toFixed();
+
+	return (
+		"rgb(" +
+		randomColorVal() +
+		", " +
+		randomColorVal() +
+		", " +
+		randomColorVal() +
+		")"
+	);
 }

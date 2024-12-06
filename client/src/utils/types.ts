@@ -19,6 +19,7 @@ export interface ITool {
 	handler: ReactNode | null;
 	cursor: "grab" | "default" | "text" | "crosshair";
 }
+
 export interface IToolSettings {
 	strokeColor: string;
 	backgroundColor: string;
@@ -26,9 +27,11 @@ export interface IToolSettings {
 	opacity: number;
 	dashGap: number;
 }
+
 export interface IPeerMousePositions {
-	[userid: string]: { x: number; y: number };
+	[userid: string]: IPoint;
 }
+
 export interface IPeers {
 	[userid: string]: {
 		username: string;

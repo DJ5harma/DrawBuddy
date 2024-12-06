@@ -18,21 +18,27 @@ const toolSettings: IToolSettings = (() => {
 	if (!ts) return SAMPLE_TOOL_SETTINGS;
 	return JSON.parse(ts);
 })();
+
+const context = createContext<IToolSettings>(SAMPLE_TOOL_SETTINGS);
+
 export default function ToolSettingsProvider({
 	children,
 }: {
 	children: ReactNode;
 }) {
+	const { selectedToolRef } = useTools();
+
 	const [strokeColor, setStrokeColor] = useState(toolSettings.strokeColor);
+
 	const [backgroundColor, setBackgroundColor] = useState(
 		toolSettings.backgroundColor
 	);
 
 	const [strokeWidth, setStrokeWidth] = useState(toolSettings.strokeWidth);
-	const [opacity, setOpacity] = useState(toolSettings.opacity);
-	const [dashGap, setDashGap] = useState(toolSettings.dashGap);
 
-	const { selectedToolRef } = useTools();
+	const [opacity, setOpacity] = useState(toolSettings.opacity);
+
+	const [dashGap, setDashGap] = useState(toolSettings.dashGap);
 
 	useEffect(() => {
 		localStorage.setItem(
@@ -46,6 +52,7 @@ export default function ToolSettingsProvider({
 			})
 		);
 	}, [strokeColor, strokeWidth, backgroundColor, opacity, dashGap]);
+
 	return (
 		<>
 			<div className="fixed left-4 h-screen flex items-center select-none z-10">
@@ -129,6 +136,7 @@ export default function ToolSettingsProvider({
 					</div>
 				</div>
 			</div>
+
 			<context.Provider
 				value={{ strokeColor, backgroundColor, strokeWidth, opacity, dashGap }}
 			>
@@ -138,5 +146,4 @@ export default function ToolSettingsProvider({
 	);
 }
 
-const context = createContext<IToolSettings>(SAMPLE_TOOL_SETTINGS);
 export const useToolSettings = () => useContext(context);

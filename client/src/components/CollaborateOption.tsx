@@ -36,6 +36,7 @@ export default function CollaborateOption() {
 		if (window.location.pathname.startsWith("/room/"))
 			setRoomUrl(window.location.href);
 	}, []);
+
 	return (
 		<>
 			<button
@@ -45,6 +46,7 @@ export default function CollaborateOption() {
 			>
 				Collaborate
 			</button>
+
 			{show && (
 				<PopUpWrapper setShow={setShow}>
 					<div className="flex gap-4 [&>*]:py-2 bg-neutral-800">
@@ -55,9 +57,11 @@ export default function CollaborateOption() {
 							className="text-center flex-1 bg-neutral-100"
 						/>
 					</div>
+
 					<span className="bg-blue-700 text-white">
 						Invite your friends to this link:{" "}
 					</span>
+
 					<div
 						className="bg-green-300 text-green-950 p-2 rounded-xl flex gap-2 items-center cursor-pointer"
 						onClick={() => {
@@ -68,6 +72,7 @@ export default function CollaborateOption() {
 						<p>{roomUrl}</p>
 						<BiCopy />
 					</div>
+
 					<Link
 						className="text-center bg-white text-blue-700 hover:bg-blue-700 hover:text-white"
 						to={roomUrl}
@@ -80,8 +85,10 @@ export default function CollaborateOption() {
 					<span className="bg-blue-700 text-white">
 						Join your friend's room:{" "}
 					</span>
+
 					<div className="flex gap-4 [&>*]:py-2 w-full">
 						<p>Enter url: </p>
+
 						<input
 							className="px-3 flex-1"
 							value={enteredRoomUrl}
@@ -89,6 +96,7 @@ export default function CollaborateOption() {
 							placeholder="Ask your friend"
 						/>
 					</div>
+
 					<Link
 						className="text-center bg-white text-blue-700 hover:bg-blue-700 hover:text-white"
 						to={enteredRoomUrl}

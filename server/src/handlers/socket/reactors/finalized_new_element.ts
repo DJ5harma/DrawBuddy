@@ -7,6 +7,7 @@ export default function finalized_new_element(
 	{ roomId, element }: { roomId: string; element: IElement }
 ) {
 	if (!element || !roomId) return;
+
 	socket.broadcast.to(roomId).emit("incoming_finalized_element", { element });
 
 	const prevElements = roomToElementsMap.get(roomId);
@@ -16,6 +17,7 @@ export default function finalized_new_element(
 		console.log("Elements in " + roomId + ":", 1);
 		return;
 	}
+
 	if (element.shape.key === prevElements[prevElements.length - 1].shape.key)
 		return;
 

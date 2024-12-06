@@ -6,15 +6,18 @@ import { useToolSettings } from "../../providers/ToolSettingsProvider";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
 export default function PencilHandler() {
-	const [pointsArr, setPointsArr] = useState<number[]>([]);
-	const [drawing, setDrawing] = useState(false);
-	const { getMousePos } = useStage();
+	const { strokeColor, strokeWidth, opacity, dashGap } = useToolSettings();
 
 	const { elementsArrRef } = useElements();
+
+	const { getMousePos } = useStage();
+
 	const { myNewElement, setMyNewElement, handleCreatedElement } =
 		useMyNewElement();
 
-	const { strokeColor, strokeWidth, opacity, dashGap } = useToolSettings();
+	const [pointsArr, setPointsArr] = useState<number[]>([]);
+
+	const [drawing, setDrawing] = useState(false);
 
 	useEffect(() => {
 		document.addEventListener("mousedown", handleMouseDown);
@@ -31,6 +34,7 @@ export default function PencilHandler() {
 		if (e.button !== 0) return;
 		setDrawing(true);
 	};
+
 	const handleMouseMove = (e: MouseEvent) => {
 		if (!drawing) return;
 		const { x, y } = getMousePos(e.clientX, e.clientY);
@@ -50,6 +54,7 @@ export default function PencilHandler() {
 			/>
 		);
 	};
+
 	const handleMouseUp = () => {
 		setDrawing(false);
 		handleCreatedElement();

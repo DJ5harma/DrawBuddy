@@ -6,22 +6,24 @@ import { useToolSettings } from "../../providers/ToolSettingsProvider";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
 export default function CircleHandler() {
-	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
-	const [drawing, setDrawing] = useState(false);
+	const { backgroundColor, strokeColor, strokeWidth, opacity, dashGap } =
+		useToolSettings();
+
+	const { elementsArrRef } = useElements();
 
 	const { getMousePos } = useStage();
-	const { elementsArrRef } = useElements();
+
 	const { myNewElement, setMyNewElement, handleCreatedElement } =
 		useMyNewElement();
 
-	const { backgroundColor, strokeColor, strokeWidth, opacity, dashGap } =
-		useToolSettings();
+	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
+
+	const [drawing, setDrawing] = useState(false);
 
 	useEffect(() => {
 		document.addEventListener("mousedown", handleMouseDown);
 		document.addEventListener("mousemove", handleMouseMove);
 		document.addEventListener("mouseup", handleMouseUp);
-
 		return () => {
 			document.removeEventListener("mousedown", handleMouseDown);
 			document.removeEventListener("mousemove", handleMouseMove);
@@ -62,6 +64,7 @@ export default function CircleHandler() {
 			/>
 		);
 	};
+
 	const handleMouseUp = () => {
 		handleCreatedElement();
 		setDrawing(false);

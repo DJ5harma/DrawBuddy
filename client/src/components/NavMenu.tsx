@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 export default function NavMenu() {
 	const [show, setShow] = useState(false);
+
 	return (
 		<>
 			<button
@@ -14,6 +15,7 @@ export default function NavMenu() {
 			>
 				<BiMenu size={30} />
 			</button>
+
 			{show && (
 				<PopUpWrapper setShow={setShow} className="[&>*]:text-center">
 					<Link

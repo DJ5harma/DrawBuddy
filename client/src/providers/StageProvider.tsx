@@ -10,7 +10,6 @@ import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
 import { useElements } from "./ElementsProvider";
 import ManageStagePosition from "../handlers/functional/ManageStagePosition";
 import { IPoint } from "../utils/types";
-import { deserializeKonvaElement } from "../utils/konva/convertKonva";
 import { useTools } from "./ToolsProvider";
 
 const context = createContext<{
@@ -24,9 +23,9 @@ const context = createContext<{
 });
 
 export default function StageProvider({ children }: { children: ReactNode }) {
-	const { elementsArrRef, removeElementFromStage } = useElements();
-
 	const { selectedToolRef } = useTools();
+
+	const { elementsArrRef, removeElementFromStage } = useElements();
 
 	const [dimensions, setDimensions] = useState({
 		width: window.innerWidth,
@@ -37,12 +36,14 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		const storedScale = localStorage.getItem("stageScale");
 		return (storedScale ? JSON.parse(storedScale) : 1) as number;
 	});
+
 	const [stagePos, setStagePos] = useState<IPoint>(() => {
 		const storedPos = localStorage.getItem("stagePos");
 		return storedPos ? JSON.parse(storedPos) : { x: 0, y: 0 };
 	});
 
 	const [isPanning, setIsPanning] = useState(false);
+
 	const [panStartPos, setPanStartPos] = useState<IPoint>({
 		x: 0,
 		y: 0,
@@ -67,6 +68,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 	useEffect(() => {
 		localStorage.setItem("stagePos", JSON.stringify(stagePos));
 	}, [stagePos]);
+
 	useEffect(() => {
 		localStorage.setItem("stageScale", stageScale.toString());
 	}, [stageScale]);
@@ -82,10 +84,12 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 			setPanStartPos({ x: e.evt.clientX, y: e.evt.clientY });
 		}
 	};
+
 	const handleMouseUp = (e: MouseEvent) => {
 		if (e.button === 1 || selectedToolRef.current.name === "Hand")
 			setIsPanning(false);
 	};
+
 	const handleMouseMove = (
 		e: KonvaEventObject<MouseEvent, Node<NodeConfig>>
 	) => {
@@ -95,6 +99,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		setStagePos((p) => ({ x: p.x + dx, y: p.y + dy }));
 		setPanStartPos({ x: e.evt.clientX, y: e.evt.clientY });
 	};
+
 	useEffect(() => {
 		const handleWheel = (e: WheelEvent) => e.preventDefault();
 
@@ -156,8 +161,8 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 						<Group>{children}</Group>
 						<Group>
 							{elementsArrRef.current.map(({ shape }) => {
+								if (!shape || !shape.key) return null;
 								const { type, props, key } = shape;
-								if (!shape || !key) return null;
 								switch (type) {
 									case "Rect":
 										return (
@@ -192,15 +197,14 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 											/>
 										);
 									default:
-										return <></>;
+										return null;
 								}
-
-								deserializeKonvaElement(shape);
 							})}
 						</Group>
 					</context.Provider>
 				</Layer>
 			</Stage>
+
 			<ManageStagePosition
 				stagePos={stagePos}
 				setStagePos={setStagePos}
@@ -209,4 +213,5 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		</>
 	);
 }
+
 export const useStage = () => useContext(context);

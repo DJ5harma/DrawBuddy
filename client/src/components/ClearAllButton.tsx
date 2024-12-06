@@ -9,7 +9,8 @@ import { useState } from "react";
 
 export default function ClearAllButton() {
 	const { id: roomId } = useParams();
-	const { elementsArrRef, setMainElements } = useElements();
+
+	const { setMainElements } = useElements();
 
 	const { setMyNewElement } = useMyNewElement();
 
@@ -26,6 +27,7 @@ export default function ClearAllButton() {
 			>
 				<MdOutlineDelete size={25} />
 			</button>
+
 			{showConfirmation && (
 				<PopUpWrapper setShow={setShowConfirmation}>
 					<p>Do you really want to clear the canvas?</p>

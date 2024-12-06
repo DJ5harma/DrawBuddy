@@ -15,15 +15,6 @@ import { useStage } from "../../providers/StageProvider";
 
 export default function RoomHandler() {
 	const { id: roomId } = useParams();
-	const { socket } = useSocket();
-
-	const username = (() => {
-		const x = localStorage.getItem("username");
-		if (x) return x;
-		const newName = "InstantUser " + (Math.random() * 1000).toFixed();
-		localStorage.setItem("username", newName);
-		return newName;
-	})();
 
 	const {
 		elementsArrRef,
@@ -35,17 +26,29 @@ export default function RoomHandler() {
 		latestDeletedKeyRef,
 	} = useElements();
 
-	const { myNewElement } = useMyNewElement();
-	const [peers, setPeers] = useState<IPeers>({});
 	const { stageScale } = useStage();
 
+	const { myNewElement } = useMyNewElement();
+
+	const { socket } = useSocket();
+
+	const [peers, setPeers] = useState<IPeers>({});
+
+	const username = (() => {
+		const x = localStorage.getItem("username");
+		if (x) return x;
+		const newName = "InstantUser " + (Math.random() * 1000).toFixed();
+		localStorage.setItem("username", newName);
+		return newName;
+	})();
+
 	useEffect(() => {
-		if (elementsArrRef.current.length && !myNewElement) {
+		if (elementsArrRef.current.length && !myNewElement)
 			socket.emit("finalized_new_element", {
 				element: elementsArrRef.current[elementsArrRef.current.length - 1],
 				roomId,
 			});
-		}
+
 		socket.emit("creating_new_element", {
 			element: myNewElement
 				? serializeKonvaElement(myNewElement)
@@ -53,13 +56,13 @@ export default function RoomHandler() {
 			roomId,
 		});
 	}, [myNewElement]);
+
 	useEffect(() => {
-		if (latestDeletedKeyRef.current) {
+		if (latestDeletedKeyRef.current)
 			socket.emit("removed_element", {
 				key: latestDeletedKeyRef.current,
 				roomId,
 			});
-		}
 	}, [latestDeletedKeyRef.current]);
 
 	useEffect(() => {
@@ -92,6 +95,7 @@ export default function RoomHandler() {
 				toast(userObj.username + " joined!");
 			}
 		);
+
 		socket.on("user_left", (userid) => {
 			setPeers((p) => {
 				if (!p[userid]) return p;
@@ -133,6 +137,7 @@ export default function RoomHandler() {
 		socket.on("update_elements", (elements: IElement[]) =>
 			setMainElements(elements)
 		);
+
 		return () => {
 			socket.removeAllListeners();
 		};
@@ -140,12 +145,17 @@ export default function RoomHandler() {
 
 	return Object.keys(peers).map((userid) => {
 		const { username, tempElement, usercolor } = peers[userid];
+
 		if (!tempElement) return null;
+
 		const { x, y } = getShapeEnds(tempElement);
+
 		return (
 			<Group key={userid}>
 				{tempElement}
+
 				<Circle radius={10 / stageScale} fill={usercolor} x={x} y={y} />
+
 				<Text
 					text={username}
 					fill={"white"}

@@ -9,6 +9,7 @@ import RETRIVE_ROOM_ELEMENTS from "./handlers/express/RETRIVE_ROOM_ELEMENTS";
 const app = express();
 
 app.use(cors());
+
 app.use(express.json());
 
 app.listen(EXPRESS_PORT, () =>
@@ -18,5 +19,7 @@ app.listen(EXPRESS_PORT, () =>
 socket_listeners_init();
 
 app.use("/", ENSURE_SOCKET_SERVER);
+
 app.use("/", GENERATE_ROOM);
+
 app.use("/", RETRIVE_ROOM_ELEMENTS);

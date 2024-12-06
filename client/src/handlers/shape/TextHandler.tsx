@@ -6,16 +6,18 @@ import { useToolSettings } from "../../providers/ToolSettingsProvider";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
 export default function TextHandler() {
-	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
+	const { strokeColor, opacity } = useToolSettings();
 
-	const [drawing, setDrawing] = useState(false);
+	const { elementsArrRef } = useElements();
 
 	const { getMousePos, stageScale } = useStage();
-	const { elementsArrRef } = useElements();
+
 	const { myNewElement, setMyNewElement, handleCreatedElement } =
 		useMyNewElement();
 
-	const { strokeColor, opacity } = useToolSettings();
+	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
+
+	const [drawing, setDrawing] = useState(false);
 
 	const INITIAL_TEXT = "Type (Esc to stop)...";
 

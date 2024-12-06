@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useElements } from "../../providers/ElementsProvider";
 import { IPoint } from "../../utils/types";
-import toast from "react-hot-toast";
 
 export default function ManageStagePos({
 	stagePos,
@@ -12,10 +11,12 @@ export default function ManageStagePos({
 	setStagePos: Dispatch<SetStateAction<IPoint>>;
 	setStageScale: Dispatch<SetStateAction<number>>;
 }) {
-	const [inputPos, setInputPos] = useState({ x: 0, y: 0 });
 	const { elementsArrRef } = useElements();
 
+	const [inputPos, setInputPos] = useState({ x: 0, y: 0 });
+
 	const [len, setLen] = useState(0);
+
 	const [curr, setCurr] = useState(-1);
 
 	useEffect(() => {
@@ -61,19 +62,6 @@ export default function ManageStagePos({
 			setCurr(len - 1);
 		} catch (error) {}
 	};
-	// const handleNext = () => {
-	// 	let x = curr;
-	// 	const thisPos = elementsArrRef.current[x].stagePos;
-	// 	while (x <= len - 2) {
-	// 		const nextPos = elementsArrRef.current[x + 1].stagePos;
-	// 		if (thisPos.x !== nextPos.x || thisPos.y !== nextPos.y) {
-	// 			setCurr(x + 1);
-	// 			return;
-	// 		}
-	// 		x++;
-	// 	}
-	// 	setCurr(curr + 1);
-	// };
 
 	return (
 		<div
@@ -82,7 +70,9 @@ export default function ManageStagePos({
 		>
 			<div className="[&>input]:text-black [&>input]:px-1 [&>input]:w-16 [&>input]:text-center flex gap-2 font-semibold">
 				<p className="font-normal">Change: </p>
+
 				<p>x</p>
+
 				<input
 					value={inputPos.x.toFixed()}
 					onChange={(e) => {
@@ -93,7 +83,9 @@ export default function ManageStagePos({
 						}));
 					}}
 				/>
+
 				<p>y</p>
+
 				<input
 					value={inputPos.y.toFixed()}
 					onChange={(e) => {
@@ -105,6 +97,7 @@ export default function ManageStagePos({
 					}}
 				/>
 			</div>
+
 			{len ? (
 				<div className="[&>button]:bg-blue-700 [&>button]:p-2 flex gap-2 [&>button]:font-semibold items-center">
 					<p>Teleport: </p>

@@ -6,7 +6,17 @@ import { useToolSettings } from "../../providers/ToolSettingsProvider";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
 export default function LineHandler() {
+	const { strokeColor, strokeWidth, opacity, dashGap } = useToolSettings();
+
+	const { elementsArrRef } = useElements();
+
+	const { getMousePos } = useStage();
+
+	const { myNewElement, setMyNewElement, handleCreatedElement } =
+		useMyNewElement();
+
 	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
+
 	const [drawing, setDrawing] = useState(false);
 
 	const [multipleLines, setMultipleLines] = useState<{
@@ -16,14 +26,6 @@ export default function LineHandler() {
 		exist: false,
 		pointsArr: [],
 	});
-
-	const { getMousePos } = useStage();
-	const { elementsArrRef } = useElements();
-
-	const { myNewElement, setMyNewElement, handleCreatedElement } =
-		useMyNewElement();
-
-	const { strokeColor, strokeWidth, opacity, dashGap } = useToolSettings();
 
 	const addPointsToMultipleLines = (x: number, y: number) => {
 		setMultipleLines((p) => ({
@@ -44,6 +46,7 @@ export default function LineHandler() {
 			document.removeEventListener("keyup", handleKeyUp);
 		};
 	}, [drawing, startingPosition, myNewElement, multipleLines]);
+
 	const handleMouseDown = (e: MouseEvent) => {
 		if (e.button !== 0) return;
 		if (multipleLines.exist) return;
@@ -52,6 +55,7 @@ export default function LineHandler() {
 		setDrawing(true);
 		setStartingPosition({ x, y });
 	};
+
 	const handleMouseMove = (e: MouseEvent) => {
 		if (!drawing) return;
 
@@ -78,6 +82,7 @@ export default function LineHandler() {
 			/>
 		);
 	};
+
 	const handleMouseUp = (e: MouseEvent) => {
 		const { x, y } = getMousePos(e.clientX, e.clientY);
 
@@ -89,6 +94,7 @@ export default function LineHandler() {
 		handleCreatedElement();
 		setDrawing(false);
 	};
+
 	const handleKeyUp = (e: KeyboardEvent) => {
 		if (multipleLines.exist && e.key === "Escape") {
 			setMultipleLines({ exist: false, pointsArr: [] });
@@ -96,5 +102,6 @@ export default function LineHandler() {
 			setDrawing(false);
 		}
 	};
+
 	return null;
 }

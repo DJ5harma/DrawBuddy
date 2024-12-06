@@ -6,17 +6,19 @@ import { useToolSettings } from "../../providers/ToolSettingsProvider";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
 export default function RectangleHandler() {
-	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
-	const [drawing, setDrawing] = useState(false);
+	const { backgroundColor, strokeColor, strokeWidth, opacity, dashGap } =
+		useToolSettings();
+
+	const { elementsArrRef } = useElements();
 
 	const { getMousePos } = useStage();
-	const { elementsArrRef } = useElements();
 
 	const { myNewElement, setMyNewElement, handleCreatedElement } =
 		useMyNewElement();
 
-	const { backgroundColor, strokeColor, strokeWidth, opacity, dashGap } =
-		useToolSettings();
+	const [startingPosition, setStartingPosition] = useState({ x: 0, y: 0 });
+
+	const [drawing, setDrawing] = useState(false);
 
 	useEffect(() => {
 		document.addEventListener("mousedown", handleMouseDown);
@@ -60,10 +62,12 @@ export default function RectangleHandler() {
 			/>
 		);
 	};
+
 	const handleMouseUp = () => {
 		handleCreatedElement();
 		setDrawing(false);
 		setStartingPosition({ x: 0, y: 0 });
 	};
+
 	return null;
 }

@@ -21,6 +21,7 @@ export function deserializeKonvaElement(serial: JSX.Element): JSX.Element {
 			return <></>;
 	}
 }
+
 export function getShapeEnds(shape: JSX.Element): IPoint {
 	const { type, props } = shape;
 	switch (type) {
