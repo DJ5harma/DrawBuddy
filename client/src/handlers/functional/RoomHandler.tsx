@@ -37,17 +37,13 @@ export default function RoomHandler() {
 
 	const { myNewElement } = useMyNewElement();
 	const [peers, setPeers] = useState<IPeers>({});
-	const { stagePos, stageScale } = useStage();
+	const { stageScale } = useStage();
 
 	useEffect(() => {
 		if (elementsArrRef.current.length && !myNewElement) {
 			socket.emit("finalized_new_element", {
-				shape: serializeKonvaElement(
-					elementsArrRef.current[elementsArrRef.current.length - 1].shape
-				),
+				element: elementsArrRef.current[elementsArrRef.current.length - 1],
 				roomId,
-				stagePos,
-				stageScale,
 			});
 		}
 		socket.emit("creating_new_element", {
@@ -59,7 +55,6 @@ export default function RoomHandler() {
 	}, [myNewElement]);
 	useEffect(() => {
 		if (latestDeletedKeyRef.current) {
-			console.log("CHANGED");
 			socket.emit("removed_element", {
 				key: latestDeletedKeyRef.current,
 				roomId,
@@ -108,12 +103,8 @@ export default function RoomHandler() {
 
 		socket.on(
 			"incoming_finalized_element",
-			({ shape, stagePos, stageScale }: IElement) => {
-				addElementToStage({
-					shape: deserializeKonvaElement(shape),
-					stagePos,
-					stageScale,
-				});
+			({ element }: { element: IElement }) => {
+				if (element) addElementToStage(element);
 			}
 		);
 

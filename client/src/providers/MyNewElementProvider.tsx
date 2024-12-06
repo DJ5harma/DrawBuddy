@@ -9,6 +9,7 @@ import {
 import { useTools } from "./ToolsProvider";
 import { useStage } from "./StageProvider";
 import { useElements } from "./ElementsProvider";
+import { serializeKonvaElement } from "../utils/konva/convertKonva";
 
 const context = createContext<{
 	myNewElement: JSX.Element | null;
@@ -35,7 +36,11 @@ export default function MyNewElementProvider({
 
 	const handleCreatedElement = () => {
 		if (!myNewElement) return;
-		addElementToStage({ shape: myNewElement, stagePos, stageScale });
+		addElementToStage({
+			shape: serializeKonvaElement(myNewElement),
+			stagePos,
+			stageScale,
+		});
 		setMyNewElement(null);
 	};
 

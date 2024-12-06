@@ -1,4 +1,4 @@
-import { Group, Layer, Stage } from "react-konva";
+import { Circle, Group, Layer, Line, Rect, Stage, Text } from "react-konva";
 import {
 	createContext,
 	ReactNode,
@@ -10,6 +10,8 @@ import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
 import { useElements } from "./ElementsProvider";
 import ManageStagePosition from "../handlers/functional/ManageStagePosition";
 import { IPoint } from "../utils/types";
+import { deserializeKonvaElement } from "../utils/konva/convertKonva";
+import { useTools } from "./ToolsProvider";
 
 const context = createContext<{
 	getMousePos: (currX: number, currY: number) => IPoint;
@@ -22,7 +24,9 @@ const context = createContext<{
 });
 
 export default function StageProvider({ children }: { children: ReactNode }) {
-	const { elementsArrRef } = useElements();
+	const { elementsArrRef, removeElementFromStage } = useElements();
+
+	const { selectedToolRef } = useTools();
 
 	const [dimensions, setDimensions] = useState({
 		width: window.innerWidth,
@@ -73,15 +77,14 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 	const handleMouseDown = (
 		e: KonvaEventObject<MouseEvent, Node<NodeConfig>>
 	) => {
-		if (e.evt.button !== 1) return;
-		setIsPanning(true);
-		setPanStartPos({ x: e.evt.clientX, y: e.evt.clientY });
+		if (e.evt.button === 1 || selectedToolRef.current.name == "Hand") {
+			setIsPanning(true);
+			setPanStartPos({ x: e.evt.clientX, y: e.evt.clientY });
+		}
 	};
 	const handleMouseUp = (e: MouseEvent) => {
-		if (e.button === 1) {
+		if (e.button === 1 || selectedToolRef.current.name === "Hand")
 			setIsPanning(false);
-			console.log("rerendered");
-		}
 	};
 	const handleMouseMove = (
 		e: KonvaEventObject<MouseEvent, Node<NodeConfig>>
@@ -151,7 +154,50 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 						}}
 					>
 						<Group>{children}</Group>
-						<Group>{elementsArrRef.current.map(({ shape }) => shape)}</Group>
+						<Group>
+							{elementsArrRef.current.map(({ shape }) => {
+								const { type, props, key } = shape;
+								if (!shape || !key) return null;
+								switch (type) {
+									case "Rect":
+										return (
+											<Rect
+												key={key}
+												{...props}
+												onClick={() => removeElementFromStage(key)}
+											/>
+										);
+									case "Circle":
+										return (
+											<Circle
+												key={key}
+												{...props}
+												onClick={() => removeElementFromStage(key)}
+											/>
+										);
+									case "Line":
+										return (
+											<Line
+												key={key}
+												{...props}
+												onClick={() => removeElementFromStage(key)}
+											/>
+										);
+									case "Text":
+										return (
+											<Text
+												key={key}
+												{...props}
+												onClick={() => removeElementFromStage(key)}
+											/>
+										);
+									default:
+										return <></>;
+								}
+
+								deserializeKonvaElement(shape);
+							})}
+						</Group>
 					</context.Provider>
 				</Layer>
 			</Stage>
@@ -163,5 +209,4 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		</>
 	);
 }
-
 export const useStage = () => useContext(context);

@@ -131,8 +131,7 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 				</nav>
 				{selectedToolRef.current.name === "Eraser" && (
 					<p className="text-xl bg-black p-2 rounded-xl">
-						Click on elements to erase only which
-						<b> YOU </b> made
+						Click inside an element to erase
 					</p>
 				)}
 			</div>

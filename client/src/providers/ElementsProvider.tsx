@@ -7,10 +7,6 @@ import {
 	useRef,
 	useState,
 } from "react";
-import {
-	deserializeKonvaElement,
-	serializeKonvaElement,
-} from "../utils/konva/convertKonva";
 import axios from "axios";
 import { RETRIVE_ROOM_ELEMENTS_API } from "../utils/apiRoutes";
 import toast from "react-hot-toast";
@@ -49,13 +45,7 @@ export default function ElementsProvider({
 	const elementsArrRef = useRef<IElement[]>(
 		(() => {
 			if (projectId !== OFFLINE_SHAPES_KEY) return [];
-			return (
-				JSON.parse(localStorage.getItem(projectId) || "[]") as IElement[]
-			).map(({ shape, stagePos, stageScale }) => ({
-				shape: deserializeKonvaElement(shape),
-				stagePos,
-				stageScale,
-			}));
+			return JSON.parse(localStorage.getItem(projectId) || "[]") as IElement[];
 		})()
 	);
 
@@ -88,13 +78,7 @@ export default function ElementsProvider({
 			roomId: newId,
 		});
 		const elements = data.elements as IElement[];
-		setMainElements(
-			elements.map(({ shape, stagePos, stageScale }) => ({
-				shape: deserializeKonvaElement(shape),
-				stagePos,
-				stageScale,
-			}))
-		);
+		setMainElements(elements);
 		toast.dismiss();
 		toast.success("Room is ready");
 		setProjectId(newId);
@@ -104,12 +88,7 @@ export default function ElementsProvider({
 		if (projectId === OFFLINE_SHAPES_KEY) {
 			localStorage.setItem(
 				OFFLINE_SHAPES_KEY,
-				JSON.stringify(
-					elementsArrRef.current.map(({ shape, stagePos }) => ({
-						shape: serializeKonvaElement(shape),
-						stagePos,
-					}))
-				)
+				JSON.stringify(elementsArrRef.current)
 			);
 		}
 	}, [elementsArrRef.current.length]);

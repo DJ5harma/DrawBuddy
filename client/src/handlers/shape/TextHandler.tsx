@@ -11,7 +11,7 @@ export default function TextHandler() {
 	const [drawing, setDrawing] = useState(false);
 
 	const { getMousePos, stageScale } = useStage();
-	const { elementsArrRef, removeElementFromStage } = useElements();
+	const { elementsArrRef } = useElements();
 	const { myNewElement, setMyNewElement, handleCreatedElement } =
 		useMyNewElement();
 
@@ -60,7 +60,6 @@ export default function TextHandler() {
 				fontFamily="monospace"
 				fontSize={25 / stageScale}
 				opacity={opacity}
-				onClick={() => removeElementFromStage(key)}
 			/>
 		);
 		setStartingPosition({ x, y });
@@ -98,7 +97,6 @@ export default function TextHandler() {
 				fontFamily="monospace"
 				fontSize={25 / stageScale}
 				opacity={opacity}
-				onClick={() => removeElementFromStage(key)}
 			/>
 		);
 	};

@@ -10,7 +10,7 @@ export default function RectangleHandler() {
 	const [drawing, setDrawing] = useState(false);
 
 	const { getMousePos } = useStage();
-	const { elementsArrRef, removeElementFromStage } = useElements();
+	const { elementsArrRef } = useElements();
 
 	const { myNewElement, setMyNewElement, handleCreatedElement } =
 		useMyNewElement();
@@ -57,7 +57,6 @@ export default function RectangleHandler() {
 				opacity={opacity}
 				dashEnabled={dashGap > 0}
 				dash={[dashGap]}
-				onClick={() => removeElementFromStage(key)}
 			/>
 		);
 	};
