@@ -5,10 +5,12 @@ import SocketProvider from "./providers/SocketProvider";
 import StageProvider from "./providers/StageProvider";
 import ToolSettingsProvider from "./providers/ToolSettingsProvider";
 import ToolsProvider from "./providers/ToolsProvider";
-import RoomHandler from "./handlers/functional/RoomHandler";
 import CollaborateOption from "./components/CollaborateOption";
 import ClearAllButton from "./components/ClearAllButton";
 import MyNewElementProvider from "./providers/MyNewElementProvider";
+import ElementEmitters from "./room/ElementEmmiters";
+import RoomInit from "./room/RoomInit";
+import ElementListeners from "./room/ElementListeners";
 
 export default function App() {
 	return (
@@ -38,7 +40,9 @@ export default function App() {
 
 									<StageProvider>
 										<MyNewElementProvider>
-											<RoomHandler />
+											<RoomInit />
+											<ElementListeners />
+											<ElementEmitters />
 										</MyNewElementProvider>
 									</StageProvider>
 								</SocketProvider>

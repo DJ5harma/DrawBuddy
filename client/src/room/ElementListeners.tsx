@@ -1,19 +1,17 @@
-import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSocket } from "../../providers/SocketProvider";
-import { useElements } from "../../providers/ElementsProvider";
+import { useElements } from "../providers/ElementsProvider";
+import { useSocket } from "../providers/SocketProvider";
+import { useStage } from "../providers/StageProvider";
+import { useEffect, useState } from "react";
+import { IElement, IPeers } from "../utils/types";
+import toast from "react-hot-toast";
 import {
 	deserializeKonvaElement,
 	getShapeEnds,
-	serializeKonvaElement,
-} from "../../utils/konva/convertKonva";
-import toast from "react-hot-toast";
-import { IElement, IPeers } from "../../utils/types";
-import { useMyNewElement } from "../../providers/MyNewElementProvider";
+} from "../utils/konva/convertKonva";
 import { Circle, Group, Text } from "react-konva";
-import { useStage } from "../../providers/StageProvider";
 
-export default function RoomHandler() {
+export default function ElementListeners() {
 	const { id: roomId } = useParams();
 
 	const {
@@ -22,64 +20,19 @@ export default function RoomHandler() {
 		updateProject,
 		projectId,
 		removeElementFromStage,
-		latestDeletedKeyRef,
 	} = useElements();
-
-	const { stageScale } = useStage();
-
-	const { elementsRef } = useElements();
-
-	const { myNewElement } = useMyNewElement();
 
 	const { socket } = useSocket();
 
+	const { stageScale } = useStage();
+
 	const [peers, setPeers] = useState<IPeers>({});
-
-	const username = (() => {
-		const x = localStorage.getItem("username");
-		if (x) return x;
-		const newName = "InstantUser " + (Math.random() * 1000).toFixed();
-		localStorage.setItem("username", newName);
-		return newName;
-	})();
-
-	const makingElementKeyRef = useRef<string | null>(null);
-
-	useEffect(() => {
-		if (makingElementKeyRef.current) {
-			socket.emit("finalized_new_element", {
-				element: elementsRef.current.get(makingElementKeyRef.current),
-				roomId,
-			});
-		}
-
-		makingElementKeyRef.current = myNewElement ? myNewElement.key : null;
-		socket.emit("creating_new_element", {
-			element: myNewElement
-				? serializeKonvaElement(myNewElement)
-				: myNewElement,
-			roomId,
-		});
-	}, [myNewElement]);
-
-	useEffect(() => {
-		if (latestDeletedKeyRef.current)
-			socket.emit("removed_element", {
-				key: latestDeletedKeyRef.current,
-				roomId,
-			});
-	}, [latestDeletedKeyRef.current]);
 
 	useEffect(() => {
 		if (roomId && projectId !== roomId) {
 			updateProject(roomId);
 			return;
 		}
-
-		socket.emit("i_arrived_at_room", {
-			roomId,
-			username,
-		});
 
 		socket.on("previous_users", (prevUsers: IPeers) => {
 			setPeers(prevUsers);
