@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GENERATE_ROOM_API } from "../utils/apiRoutes";
 import axios from "axios";
-import PopUpWrapper from "../wrappers/PopUpWrapper";
+import PopUpWrapper from "./PopUpWrapper";
 import { BiCopy } from "react-icons/bi";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";

@@ -4,7 +4,7 @@ import { useSocket } from "../providers/SocketProvider";
 import { useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { useMyNewElement } from "../providers/MyNewElementProvider";
-import PopUpWrapper from "../wrappers/PopUpWrapper";
+import PopUpWrapper from "./PopUpWrapper";
 import { useState } from "react";
 
 export default function ClearAllButton() {

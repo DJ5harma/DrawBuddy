@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PopUpWrapper from "../wrappers/PopUpWrapper";
+import PopUpWrapper from "./PopUpWrapper";
 import { BiMenu } from "react-icons/bi";
 import { Link } from "react-router-dom";
 

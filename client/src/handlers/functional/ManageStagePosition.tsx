@@ -65,9 +65,17 @@ export default function ManageStagePos({
 
 	return (
 		<div
-			className="absolute top-4 right-4 flex flex-col items-end gap-4 select-none z-50"
+			className="absolute bottom-4 w-full items-center flex flex-col gap-4 select-none"
 			onMouseDown={(e) => e.stopPropagation()}
 		>
+			{len ? (
+				<div className="[&>button]:bg-blue-700 [&>button]:p-2 flex gap-2 [&>button]:font-semibold items-center">
+					<p>Teleport: </p>
+					{curr >= 1 && <button onClick={handleBack}>Back</button>}
+					{/* {curr < len - 1 && <button onClick={handleNext}>Next</button>} */}
+					<button onClick={handleLast}>Last</button>
+				</div>
+			) : null}
 			<div className="[&>input]:text-black [&>input]:px-1 [&>input]:w-16 [&>input]:text-center flex gap-2 font-semibold">
 				<p className="font-normal">Change: </p>
 
@@ -97,15 +105,6 @@ export default function ManageStagePos({
 					}}
 				/>
 			</div>
-
-			{len ? (
-				<div className="[&>button]:bg-blue-700 [&>button]:p-2 flex gap-2 [&>button]:font-semibold items-center">
-					<p>Teleport: </p>
-					{curr >= 1 && <button onClick={handleBack}>Back</button>}
-					{/* {curr < len - 1 && <button onClick={handleNext}>Next</button>} */}
-					<button onClick={handleLast}>Last</button>
-				</div>
-			) : null}
 		</div>
 	);
 }

@@ -96,14 +96,14 @@ export default function RoomHandler() {
 			}
 		);
 
-		socket.on("user_left", (userid) => {
+		socket.on("user_left", (userid) =>
 			setPeers((p) => {
 				if (!p[userid]) return p;
 				toast(p[userid].username + " left the room");
 				delete p[userid];
 				return p;
-			});
-		});
+			})
+		);
 
 		socket.on(
 			"incoming_finalized_element",
@@ -118,22 +118,16 @@ export default function RoomHandler() {
 
 		socket.on(
 			"incoming_element_in_making",
-			({
-				element,
-				userid,
-			}: {
-				element: JSX.Element | null;
-				userid: string;
-			}) => {
+			({ element, userid }: { element: JSX.Element | null; userid: string }) =>
 				setPeers((p) => ({
 					...p,
 					[userid]: {
 						...p[userid],
 						tempElement: element ? deserializeKonvaElement(element) : null,
 					},
-				}));
-			}
+				}))
 		);
+
 		socket.on("update_elements", (elements: IElement[]) =>
 			setMainElements(elements)
 		);

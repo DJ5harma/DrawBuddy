@@ -158,7 +158,6 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 							stagePos,
 						}}
 					>
-						<Group>{children}</Group>
 						<Group>
 							{elementsArrRef.current.map(({ shape }) => {
 								if (!shape || !shape.key) return null;
@@ -201,6 +200,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 								}
 							})}
 						</Group>
+						<Group>{children}</Group>
 					</context.Provider>
 				</Layer>
 			</Stage>
