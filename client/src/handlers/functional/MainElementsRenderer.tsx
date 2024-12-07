@@ -5,7 +5,7 @@ import { useStage } from "../../providers/StageProvider";
 import { useRef } from "react";
 import { useTools } from "../../providers/ToolsProvider";
 
-export default function ElementsRenderer() {
+export default function MainElementsRenderer() {
 	const { selectedToolRef } = useTools();
 
 	const { elementsRef, removeElementFromStage } = useElements();

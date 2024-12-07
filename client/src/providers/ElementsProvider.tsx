@@ -48,6 +48,7 @@ export default function ElementsProvider({
 	const elementsRef = useRef(new Map<string, IElement>());
 
 	const latestDeletedKeyRef = useRef<string | null>(null);
+
 	const latestAddedElementRef = useRef<IElement | null>(null);
 
 	const [flickerForLocalCreation, setFlickerForLocalCreation] = useState(false);
@@ -56,7 +57,9 @@ export default function ElementsProvider({
 		if (!element || !element.shape.key) return;
 
 		elementsRef.current.set(element.shape.key, element);
+
 		latestAddedElementRef.current = element;
+
 		setFlickerForLocalCreation((p) => !p);
 	};
 
@@ -65,21 +68,27 @@ export default function ElementsProvider({
 			return;
 
 		if (!peerRequest) latestDeletedKeyRef.current = key;
+
 		elementsRef.current.delete(key);
+
 		setFlickerForLocalCreation((p) => !p);
 	};
 
 	const setMainElements = (elements: [string, IElement][]) => {
 		const mp = new Map<string, IElement>();
+
 		elements.forEach((val) => {
 			mp.set(val[0], val[1]);
 		});
+
 		elementsRef.current = mp;
+
 		setFlickerForLocalCreation((p) => !p);
 	};
 
 	const updateProject = async (newId: string) => {
 		toast.loading("Making room ready for you...");
+
 		const { data } = await axios.post(RETRIVE_ROOM_ELEMENTS_API, {
 			roomId: newId,
 		});
@@ -87,7 +96,9 @@ export default function ElementsProvider({
 		setMainElements(data.elements);
 
 		toast.dismiss();
+
 		toast.success("Room is ready");
+
 		setProjectId(newId);
 	};
 

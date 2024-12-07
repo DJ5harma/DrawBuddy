@@ -12,7 +12,7 @@ import { IPoint } from "../utils/types";
 import { useTools } from "./ToolsProvider";
 import StageTeleporter from "../handlers/functional/StageTeleporter";
 import StagePositionModRAW from "../handlers/functional/StagePositionModRAW";
-import ElementsRenderer from "../handlers/functional/ElementsRenderer";
+import ElementsRenderer from "../handlers/functional/MainElementsRenderer";
 
 const context = createContext<{
 	getMousePos: (currX: number, currY: number) => IPoint;

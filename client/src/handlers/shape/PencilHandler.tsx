@@ -42,7 +42,7 @@ export default function PencilHandler() {
 		setMyNewElement(
 			<Line
 				key={Date.now()}
-				points={pointsArr}
+				points={[...pointsArr, x, y]}
 				strokeEnabled
 				strokeWidth={strokeWidth}
 				stroke={strokeColor}
