@@ -17,6 +17,7 @@ export interface ITool {
 	icon: ReactNode;
 	handler: ReactNode | null;
 	cursor: "grab" | "default" | "text" | "crosshair";
+	description?: string;
 }
 
 export interface IToolSettings {

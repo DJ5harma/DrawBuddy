@@ -76,7 +76,7 @@ export default function ToolSettingsProvider({
 						{STROKE_COLORS.map((color) => (
 							<button
 								key={color}
-								className={`px-4 h-6 rounded-lg ${
+								className={`px-3.5 h-6 rounded-lg ${
 									strokeColor === color
 										? "border-2 border-dotted border-black"
 										: ""
@@ -105,7 +105,7 @@ export default function ToolSettingsProvider({
 								{BACKGROUND_COLORS.map((color) => (
 									<button
 										key={color}
-										className={`px-4 h-6 rounded-lg ${
+										className={`px-3.5 h-6 rounded-lg ${
 											backgroundColor === color
 												? "border-2 border-dotted border-black"
 												: ""

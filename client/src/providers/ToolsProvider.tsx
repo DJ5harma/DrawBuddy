@@ -3,6 +3,7 @@ import {
 	MutableRefObject,
 	ReactNode,
 	useContext,
+	useEffect,
 	useRef,
 	useState,
 } from "react";
@@ -27,12 +28,14 @@ const toolArr: ITool[] = [
 		icon: <FaHand />,
 		handler: <></>, // implemented without any special handler
 		cursor: "grab",
+		description: "Drag your canvas",
 	},
 	{
 		name: "Pointer",
 		icon: <FaMousePointer />,
 		handler: <></>,
 		cursor: "default",
+		description: "Drag elements",
 	},
 	{
 		name: "Rectangle",
@@ -52,12 +55,12 @@ const toolArr: ITool[] = [
 		handler: <CircleHandler />,
 		cursor: "crosshair",
 	},
-	{
-		name: "Arrow",
-		icon: <FaArrowRightLong />,
-		handler: <></>,
-		cursor: "crosshair",
-	},
+	// {
+	// 	name: "Arrow",
+	// 	icon: <FaArrowRightLong />,
+	// 	handler: <></>,
+	// 	cursor: "crosshair",
+	// },
 	{
 		name: "Line",
 		icon: <MdOutlineHorizontalRule />,
@@ -75,6 +78,7 @@ const toolArr: ITool[] = [
 		icon: <ImTextColor />,
 		handler: <TextHandler />,
 		cursor: "text",
+		description: "Click anywhere to choose/change text position",
 	},
 	{
 		name: "Gallery",
@@ -87,6 +91,7 @@ const toolArr: ITool[] = [
 		icon: <LuEraser />,
 		handler: <></>, // implemented without any special handler
 		cursor: "default",
+		description: "Click inside elements to erase",
 	},
 ];
 
@@ -104,6 +109,31 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 
 	const [flickerForToolChange, setFlickerForToolChange] = useState(false);
 
+	const updateTool = (i: number) => {
+		if (selectedToolRef.current.name === toolArr[i].name) return;
+		selectedToolRef.current = toolArr[i];
+		setFlickerForToolChange(!flickerForToolChange);
+		localStorage.setItem("selectedToolIndex", i.toString());
+	};
+
+	useEffect(() => {
+		window.addEventListener("keydown", handleKeydown);
+		return () => {
+			window.removeEventListener("keydown", handleKeydown);
+		};
+	}, [selectedToolRef.current.name]);
+
+	const handleKeydown = (e: KeyboardEvent) => {
+		// if (!e.altKey) return;
+
+		const i = e.key.charCodeAt(0) - "0".charCodeAt(0);
+		let easyIndex = (i - 1) % toolArr.length;
+		if (easyIndex === -1) easyIndex = toolArr.length - 1;
+		console.log({ easyIndex });
+
+		if (i >= 0 && i <= 9) updateTool(easyIndex);
+	};
+
 	return (
 		<>
 			<div
@@ -113,30 +143,33 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 				}}
 			>
 				<nav
-					className="top-2 bg-neutral-800 flex p-1 [&>button]:p-3 gap-1"
+					className="top-2 bg-neutral-800 flex px-1 [&>button]:p-3 [&>button]:pb-2  gap-1"
 					onMouseDown={(e) => e.stopPropagation()}
 				>
-					{toolArr.map((tool, i) => (
-						<button
-							onClick={() => {
-								selectedToolRef.current = tool;
-								setFlickerForToolChange(!flickerForToolChange);
-								localStorage.setItem("selectedToolIndex", i.toString());
-							}}
-							className={
-								selectedToolRef.current.name === tool.name
-									? "bg-orange-900"
-									: "hover:bg-neutral-700"
-							}
-							key={tool.name + "tool"}
-						>
-							{tool.icon}
-						</button>
-					))}
+					{toolArr.map((tool, i) => {
+						const easyIndex = (i + 1) % toolArr.length;
+						return (
+							<button
+								onClick={() => updateTool(i)}
+								className={
+									"flex flex-col justify-between gap-0.5 " +
+									(selectedToolRef.current.name === tool.name
+										? "bg-orange-900"
+										: "hover:bg-neutral-700")
+								}
+								key={tool.name + "tool"}
+							>
+								<div>{tool.icon}</div>
+								<p className="" style={{ fontSize: 10 }}>
+									{easyIndex}
+								</p>
+							</button>
+						);
+					})}
 				</nav>
-				{selectedToolRef.current.name === "Eraser" && (
-					<p className="text-xl bg-black p-2 rounded-xl">
-						Click inside an element to erase
+				{selectedToolRef.current.description && (
+					<p className="bg-black py-2 px-4 rounded-xl">
+						{selectedToolRef.current.description}
 					</p>
 				)}
 			</div>

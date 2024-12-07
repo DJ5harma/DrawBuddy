@@ -169,6 +169,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 												key={key}
 												{...props}
 												onClick={() => removeElementFromStage(key)}
+												draggable={selectedToolRef.current.name === "Pointer"}
 											/>
 										);
 									case "Circle":
@@ -177,6 +178,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 												key={key}
 												{...props}
 												onClick={() => removeElementFromStage(key)}
+												draggable={selectedToolRef.current.name === "Pointer"}
 											/>
 										);
 									case "Line":
@@ -185,6 +187,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 												key={key}
 												{...props}
 												onClick={() => removeElementFromStage(key)}
+												draggable={selectedToolRef.current.name === "Pointer"}
 											/>
 										);
 									case "Text":
@@ -193,6 +196,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 												key={key}
 												{...props}
 												onClick={() => removeElementFromStage(key)}
+												draggable={selectedToolRef.current.name === "Pointer"}
 											/>
 										);
 									default:
