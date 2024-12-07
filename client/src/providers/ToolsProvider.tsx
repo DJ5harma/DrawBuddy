@@ -33,7 +33,7 @@ const toolArr: ITool[] = [
 	{
 		name: "Pointer",
 		icon: <FaMousePointer />,
-		handler: <></>,
+		handler: <></>, // implemented without any special handler
 		cursor: "default",
 		description: "Drag elements",
 	},
@@ -42,18 +42,21 @@ const toolArr: ITool[] = [
 		icon: <LuRectangleHorizontal />,
 		handler: <RectangleHandler />,
 		cursor: "crosshair",
+		description: "Rectangle",
 	},
 	{
 		name: "Diamond",
 		icon: <LuDiamond />,
-		handler: <></>,
+		handler: <></>, // not implemented yet
 		cursor: "crosshair",
+		description: "Not implemented yet, please choose another",
 	},
 	{
 		name: "Circle",
 		icon: <FiCircle />,
 		handler: <CircleHandler />,
 		cursor: "crosshair",
+		description: "Circle",
 	},
 	// {
 	// 	name: "Arrow",
@@ -66,12 +69,14 @@ const toolArr: ITool[] = [
 		icon: <MdOutlineHorizontalRule />,
 		handler: <LineHandler />,
 		cursor: "crosshair",
+		description: "Line",
 	},
 	{
 		name: "Pencil",
 		icon: <BiPencil />,
 		handler: <PencilHandler />,
 		cursor: "crosshair",
+		description: "Pencil",
 	},
 	{
 		name: "Text",
@@ -85,6 +90,7 @@ const toolArr: ITool[] = [
 		icon: <RiGalleryLine />,
 		handler: <></>,
 		cursor: "default",
+		description: "Not implemented yet, please choose another",
 	},
 	{
 		name: "Eraser",
