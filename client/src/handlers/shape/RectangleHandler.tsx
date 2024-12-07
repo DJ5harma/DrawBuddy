@@ -45,7 +45,7 @@ export default function RectangleHandler() {
 
 		setMyNewElement(
 			<Rect
-				key={Math.random()}
+				key={Date.now()}
 				x={startingPosition.x}
 				y={startingPosition.y}
 				width={x - startingPosition.x}

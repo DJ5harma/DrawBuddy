@@ -63,7 +63,7 @@ export default function LineHandler() {
 
 		setMyNewElement(
 			<Line
-				key={Math.random()}
+				key={Date.now()}
 				points={
 					multipleLines.exist
 						? [...multipleLines.pointsArr, x, y]

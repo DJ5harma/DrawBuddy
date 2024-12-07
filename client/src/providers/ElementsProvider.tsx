@@ -17,6 +17,7 @@ import { useTools } from "./ToolsProvider";
 const context = createContext<{
 	elementsRef: MutableRefObject<IElementsMap>;
 	latestDeletedKeyRef: MutableRefObject<string | null>;
+	latestAddedElementRef: MutableRefObject<IElement | null>;
 	flickerForLocalCreation: boolean;
 	projectId: string;
 	addElementToStage: (element: IElement) => void;
@@ -26,6 +27,7 @@ const context = createContext<{
 }>({
 	elementsRef: { current: new Map() },
 	latestDeletedKeyRef: { current: null },
+	latestAddedElementRef: { current: null },
 	flickerForLocalCreation: false,
 	projectId: OFFLINE_SHAPES_KEY,
 	addElementToStage: () => {},
@@ -46,6 +48,7 @@ export default function ElementsProvider({
 	const elementsRef = useRef(new Map<string, IElement>());
 
 	const latestDeletedKeyRef = useRef<string | null>(null);
+	const latestAddedElementRef = useRef<IElement | null>(null);
 
 	const [flickerForLocalCreation, setFlickerForLocalCreation] = useState(false);
 
@@ -53,6 +56,7 @@ export default function ElementsProvider({
 		if (!element || !element.shape.key) return;
 
 		elementsRef.current.set(element.shape.key, element);
+		latestAddedElementRef.current = element;
 		setFlickerForLocalCreation((p) => !p);
 	};
 
@@ -116,6 +120,7 @@ export default function ElementsProvider({
 				updateProject,
 				projectId,
 				latestDeletedKeyRef,
+				latestAddedElementRef,
 			}}
 		>
 			{children}

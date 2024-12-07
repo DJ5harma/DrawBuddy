@@ -1,7 +1,9 @@
 import { Circle, Group, Layer, Line, Rect, Stage, Text } from "react-konva";
 import {
 	createContext,
+	Dispatch,
 	ReactNode,
+	SetStateAction,
 	useContext,
 	useEffect,
 	useRef,
@@ -16,11 +18,15 @@ import { useTools } from "./ToolsProvider";
 const context = createContext<{
 	getMousePos: (currX: number, currY: number) => IPoint;
 	stageScale: number;
+	setStageScale: Dispatch<SetStateAction<number>>;
 	stagePos: IPoint;
+	setStagePos: Dispatch<SetStateAction<IPoint>>;
 }>({
 	getMousePos: () => ({ x: 0, y: 0 }),
 	stageScale: 1,
+	setStageScale: () => {},
 	stagePos: { x: 0, y: 0 },
+	setStagePos: () => {},
 });
 
 export default function StageProvider({ children }: { children: ReactNode }) {
@@ -244,6 +250,8 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 							getMousePos,
 							stageScale,
 							stagePos,
+							setStagePos,
+							setStageScale,
 						}}
 					>
 						<Group>
@@ -254,11 +262,17 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 				</Layer>
 			</Stage>
 
-			<ManageStagePosition
-				stagePos={stagePos}
-				setStagePos={setStagePos}
-				setStageScale={setStageScale}
-			/>
+			<context.Provider
+				value={{
+					getMousePos,
+					stageScale,
+					stagePos,
+					setStagePos,
+					setStageScale,
+				}}
+			>
+				<ManageStagePosition />
+			</context.Provider>
 		</>
 	);
 }

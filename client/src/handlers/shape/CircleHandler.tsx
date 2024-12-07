@@ -45,7 +45,7 @@ export default function CircleHandler() {
 
 		setMyNewElement(
 			<Circle
-				key={Math.random()}
+				key={Date.now()}
 				x={startingPosition.x}
 				y={startingPosition.y}
 				radius={Math.sqrt(

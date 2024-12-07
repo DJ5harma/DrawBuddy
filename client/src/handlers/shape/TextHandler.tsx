@@ -51,7 +51,7 @@ export default function TextHandler() {
 
 		setMyNewElement(
 			<Text
-				key={Math.random()}
+				key={Date.now()}
 				x={x}
 				y={y}
 				fill={strokeColor}
@@ -88,7 +88,7 @@ export default function TextHandler() {
 
 		setMyNewElement(
 			<Text
-				key={Math.random()}
+				key={Date.now()}
 				x={startingPosition.x}
 				y={startingPosition.y}
 				fill={strokeColor}

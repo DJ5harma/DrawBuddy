@@ -41,7 +41,7 @@ export default function PencilHandler() {
 
 		setMyNewElement(
 			<Line
-				key={Math.random()}
+				key={Date.now()}
 				points={pointsArr}
 				strokeEnabled
 				strokeWidth={strokeWidth}
