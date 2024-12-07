@@ -4,6 +4,7 @@ import {
 	ReactNode,
 	useContext,
 	useEffect,
+	useRef,
 	useState,
 } from "react";
 import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
@@ -25,7 +26,7 @@ const context = createContext<{
 export default function StageProvider({ children }: { children: ReactNode }) {
 	const { selectedToolRef } = useTools();
 
-	const { elementsArrRef, removeElementFromStage } = useElements();
+	const { elementsRef, removeElementFromStage } = useElements();
 
 	const [dimensions, setDimensions] = useState({
 		width: window.innerWidth,
@@ -135,6 +136,93 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 		});
 	};
 
+	const ElementsRenderer = () => {
+		const dragRef = useRef({
+			isDragging: false,
+			startPos: stagePos,
+			endPos: stagePos,
+		});
+
+		return [...elementsRef.current.values()].map(({ shape }) => {
+			if (!shape || !shape.key) return null;
+			const { key } = shape;
+
+			const { type, props } = shape;
+
+			const draggable = selectedToolRef.current.name === "Pointer";
+
+			const handleDragStart = (
+				e: KonvaEventObject<DragEvent, Node<NodeConfig>>
+			) => {
+				dragRef.current.isDragging = true;
+				dragRef.current.startPos = { x: e.evt.clientX, y: e.evt.clientY };
+				console.log(dragRef.current);
+			};
+			const handleDragEnd = (
+				e: KonvaEventObject<DragEvent, Node<NodeConfig>>
+			) => {
+				dragRef.current.isDragging = false;
+				dragRef.current.endPos = { x: e.evt.clientX, y: e.evt.clientY };
+				console.log(dragRef.current);
+
+				const posDiff = {
+					x: dragRef.current.endPos.x - dragRef.current.startPos.x,
+					y: dragRef.current.endPos.y - dragRef.current.startPos.y,
+				};
+
+				console.log(posDiff);
+			};
+			switch (type) {
+				case "Rect":
+					return (
+						<Rect
+							key={key}
+							{...props}
+							onClick={() => removeElementFromStage(key)}
+							draggable={draggable}
+							onDragStart={handleDragStart}
+							onDragEnd={handleDragEnd}
+						/>
+					);
+				case "Circle":
+					return (
+						<Circle
+							key={key}
+							{...props}
+							onClick={() => removeElementFromStage(key)}
+							draggable={draggable}
+							onDragStart={handleDragStart}
+							onDragEnd={handleDragEnd}
+						/>
+					);
+				case "Line":
+					return (
+						<Line
+							key={key}
+							{...props}
+							onClick={() => removeElementFromStage(key)}
+							draggable={draggable}
+							onDragStart={handleDragStart}
+							onDragEnd={handleDragEnd}
+						/>
+					);
+				case "Text":
+					return (
+						<Text
+							key={key}
+							{...props}
+							onClick={() => removeElementFromStage(key)}
+							draggable={draggable}
+							onDragStart={handleDragStart}
+							onDragEnd={handleDragEnd}
+						/>
+					);
+				default:
+					return null;
+			}
+		});
+	};
+
 	return (
 		<>
 			<Stage
@@ -159,50 +247,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 						}}
 					>
 						<Group>
-							{elementsArrRef.current.map(({ shape }) => {
-								if (!shape || !shape.key) return null;
-								const { type, props, key } = shape;
-								switch (type) {
-									case "Rect":
-										return (
-											<Rect
-												key={key}
-												{...props}
-												onClick={() => removeElementFromStage(key)}
-												draggable={selectedToolRef.current.name === "Pointer"}
-											/>
-										);
-									case "Circle":
-										return (
-											<Circle
-												key={key}
-												{...props}
-												onClick={() => removeElementFromStage(key)}
-												draggable={selectedToolRef.current.name === "Pointer"}
-											/>
-										);
-									case "Line":
-										return (
-											<Line
-												key={key}
-												{...props}
-												onClick={() => removeElementFromStage(key)}
-												draggable={selectedToolRef.current.name === "Pointer"}
-											/>
-										);
-									case "Text":
-										return (
-											<Text
-												key={key}
-												{...props}
-												onClick={() => removeElementFromStage(key)}
-												draggable={selectedToolRef.current.name === "Pointer"}
-											/>
-										);
-									default:
-										return null;
-								}
-							})}
+							<ElementsRenderer />
 						</Group>
 						<Group>{children}</Group>
 					</context.Provider>

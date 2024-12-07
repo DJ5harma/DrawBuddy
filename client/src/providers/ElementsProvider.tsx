@@ -10,21 +10,21 @@ import {
 import axios from "axios";
 import { RETRIVE_ROOM_ELEMENTS_API } from "../utils/apiRoutes";
 import toast from "react-hot-toast";
-import { IElement } from "../utils/types";
+import { IElement, IElementsMap } from "../utils/types";
 import { OFFLINE_SHAPES_KEY } from "../utils/constants";
 import { useTools } from "./ToolsProvider";
 
 const context = createContext<{
-	elementsArrRef: MutableRefObject<IElement[]>;
+	elementsRef: MutableRefObject<IElementsMap>;
 	latestDeletedKeyRef: MutableRefObject<string | null>;
 	flickerForLocalCreation: boolean;
 	projectId: string;
 	addElementToStage: (element: IElement) => void;
 	removeElementFromStage: (key: string, force?: boolean) => void;
-	setMainElements: (elements: IElement[]) => void;
+	setMainElements: (elements: [string, IElement][]) => void;
 	updateProject: (newId: string) => void;
 }>({
-	elementsArrRef: { current: [] },
+	elementsRef: { current: new Map() },
 	latestDeletedKeyRef: { current: null },
 	flickerForLocalCreation: false,
 	projectId: OFFLINE_SHAPES_KEY,
@@ -43,36 +43,34 @@ export default function ElementsProvider({
 
 	const [projectId, setProjectId] = useState(OFFLINE_SHAPES_KEY);
 
-	const elementsArrRef = useRef<IElement[]>(
-		(() => {
-			if (projectId !== OFFLINE_SHAPES_KEY) return [];
-			return JSON.parse(localStorage.getItem(projectId) || "[]") as IElement[];
-		})()
-	);
+	const elementsRef = useRef(new Map<string, IElement>());
 
 	const latestDeletedKeyRef = useRef<string | null>(null);
 
 	const [flickerForLocalCreation, setFlickerForLocalCreation] = useState(false);
 
 	const addElementToStage = (element: IElement) => {
-		if (!element) return;
-		elementsArrRef.current.push(element);
+		if (!element || !element.shape.key) return;
+
+		elementsRef.current.set(element.shape.key, element);
 		setFlickerForLocalCreation((p) => !p);
 	};
 
-	const removeElementFromStage = (key: string, force?: boolean) => {
-		if (!force && (!key || selectedToolRef.current.name !== "Eraser")) return;
+	const removeElementFromStage = (key: string, peerRequest?: boolean) => {
+		if (!peerRequest && (!key || selectedToolRef.current.name !== "Eraser"))
+			return;
 
-		latestDeletedKeyRef.current = key;
-
-		elementsArrRef.current = elementsArrRef.current.filter(
-			({ shape }) => shape.key !== key
-		);
+		if (!peerRequest) latestDeletedKeyRef.current = key;
+		elementsRef.current.delete(key);
 		setFlickerForLocalCreation((p) => !p);
 	};
 
-	const setMainElements = (elements: IElement[]) => {
-		elementsArrRef.current = elements || [];
+	const setMainElements = (elements: [string, IElement][]) => {
+		const mp = new Map<string, IElement>();
+		elements.forEach((val) => {
+			mp.set(val[0], val[1]);
+		});
+		elementsRef.current = mp;
 		setFlickerForLocalCreation((p) => !p);
 	};
 
@@ -81,26 +79,36 @@ export default function ElementsProvider({
 		const { data } = await axios.post(RETRIVE_ROOM_ELEMENTS_API, {
 			roomId: newId,
 		});
-		const elements = data.elements as IElement[];
-		setMainElements(elements);
+
+		setMainElements(data.elements);
+
 		toast.dismiss();
 		toast.success("Room is ready");
 		setProjectId(newId);
 	};
 
 	useEffect(() => {
-		if (projectId === OFFLINE_SHAPES_KEY) {
+		if (projectId === OFFLINE_SHAPES_KEY)
+			setMainElements(
+				JSON.parse(localStorage.getItem(projectId) || "[]") as [
+					string,
+					IElement
+				][]
+			);
+	}, []);
+
+	useEffect(() => {
+		if (projectId === OFFLINE_SHAPES_KEY)
 			localStorage.setItem(
 				OFFLINE_SHAPES_KEY,
-				JSON.stringify(elementsArrRef.current)
+				JSON.stringify([...elementsRef.current.entries()])
 			);
-		}
-	}, [elementsArrRef.current.length]);
+	}, [elementsRef.current.size]);
 
 	return (
 		<context.Provider
 			value={{
-				elementsArrRef,
+				elementsRef,
 				addElementToStage,
 				removeElementFromStage,
 				setMainElements,

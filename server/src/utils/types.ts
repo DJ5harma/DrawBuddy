@@ -19,3 +19,5 @@ export interface IElement {
 	stagePos: IPoint;
 	stageScale: number;
 }
+
+export type IElementsMap = Map<string, IElement>;

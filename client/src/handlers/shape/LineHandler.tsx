@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { Line } from "react-konva";
 import { useStage } from "../../providers/StageProvider";
-import { useElements } from "../../providers/ElementsProvider";
 import { useToolSettings } from "../../providers/ToolSettingsProvider";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
 export default function LineHandler() {
 	const { strokeColor, strokeWidth, opacity, dashGap } = useToolSettings();
-
-	const { elementsArrRef } = useElements();
 
 	const { getMousePos } = useStage();
 
@@ -64,10 +61,9 @@ export default function LineHandler() {
 		if (multipleLines.exist && !multipleLines.pointsArr.length)
 			return addPointsToMultipleLines(x, y);
 
-		const key = "Line" + elementsArrRef.current.length;
 		setMyNewElement(
 			<Line
-				key={key}
+				key={Math.random()}
 				points={
 					multipleLines.exist
 						? [...multipleLines.pointsArr, x, y]

@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { Line } from "react-konva";
 import { useStage } from "../../providers/StageProvider";
-import { useElements } from "../../providers/ElementsProvider";
 import { useToolSettings } from "../../providers/ToolSettingsProvider";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
 export default function PencilHandler() {
 	const { strokeColor, strokeWidth, opacity, dashGap } = useToolSettings();
-
-	const { elementsArrRef } = useElements();
 
 	const { getMousePos } = useStage();
 
@@ -37,12 +34,14 @@ export default function PencilHandler() {
 
 	const handleMouseMove = (e: MouseEvent) => {
 		if (!drawing) return;
+
 		const { x, y } = getMousePos(e.clientX, e.clientY);
+
 		setPointsArr([...pointsArr, x, y]);
-		const key = "Pencil" + elementsArrRef.current.length;
+
 		setMyNewElement(
 			<Line
-				key={key}
+				key={Math.random()}
 				points={pointsArr}
 				strokeEnabled
 				strokeWidth={strokeWidth}

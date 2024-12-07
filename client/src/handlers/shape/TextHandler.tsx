@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { Text } from "react-konva";
 import { useStage } from "../../providers/StageProvider";
-import { useElements } from "../../providers/ElementsProvider";
 import { useToolSettings } from "../../providers/ToolSettingsProvider";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
 export default function TextHandler() {
 	const { strokeColor, opacity } = useToolSettings();
-
-	const { elementsArrRef } = useElements();
 
 	const { getMousePos, stageScale } = useStage();
 
@@ -51,10 +48,10 @@ export default function TextHandler() {
 		const text = myNewElement
 			? (myNewElement.props.text as string)
 			: INITIAL_TEXT;
-		const key = "Text" + elementsArrRef.current.length;
+
 		setMyNewElement(
 			<Text
-				key={key}
+				key={Math.random()}
 				x={x}
 				y={y}
 				fill={strokeColor}
@@ -88,10 +85,10 @@ export default function TextHandler() {
 			setDrawing(false);
 			return;
 		}
-		const key = "Text" + elementsArrRef.current.length;
+
 		setMyNewElement(
 			<Text
-				key={key}
+				key={Math.random()}
 				x={startingPosition.x}
 				y={startingPosition.y}
 				fill={strokeColor}

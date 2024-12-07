@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import { Rect } from "react-konva";
 import { useStage } from "../../providers/StageProvider";
-import { useElements } from "../../providers/ElementsProvider";
 import { useToolSettings } from "../../providers/ToolSettingsProvider";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
 export default function RectangleHandler() {
 	const { backgroundColor, strokeColor, strokeWidth, opacity, dashGap } =
 		useToolSettings();
-
-	const { elementsArrRef } = useElements();
 
 	const { getMousePos } = useStage();
 
@@ -40,14 +37,15 @@ export default function RectangleHandler() {
 		if (!drawing) return;
 
 		const { x, y } = getMousePos(e.clientX, e.clientY);
+
 		if (!startingPosition.x && !startingPosition.y) {
 			setStartingPosition(getMousePos(e.clientX, e.clientY));
 			return;
 		}
-		const key = "Rect" + elementsArrRef.current.length;
+
 		setMyNewElement(
 			<Rect
-				key={key}
+				key={Math.random()}
 				x={startingPosition.x}
 				y={startingPosition.y}
 				width={x - startingPosition.x}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../providers/SocketProvider";
 import { useElements } from "../../providers/ElementsProvider";
@@ -17,7 +17,6 @@ export default function RoomHandler() {
 	const { id: roomId } = useParams();
 
 	const {
-		elementsArrRef,
 		addElementToStage,
 		setMainElements,
 		updateProject,
@@ -27,6 +26,8 @@ export default function RoomHandler() {
 	} = useElements();
 
 	const { stageScale } = useStage();
+
+	const { elementsRef } = useElements();
 
 	const { myNewElement } = useMyNewElement();
 
@@ -42,13 +43,17 @@ export default function RoomHandler() {
 		return newName;
 	})();
 
+	const makingElementKeyRef = useRef<string | null>(null);
+
 	useEffect(() => {
-		if (elementsArrRef.current.length && !myNewElement)
+		if (makingElementKeyRef.current) {
 			socket.emit("finalized_new_element", {
-				element: elementsArrRef.current[elementsArrRef.current.length - 1],
+				element: elementsRef.current.get(makingElementKeyRef.current),
 				roomId,
 			});
+		}
 
+		makingElementKeyRef.current = myNewElement ? myNewElement.key : null;
 		socket.emit("creating_new_element", {
 			element: myNewElement
 				? serializeKonvaElement(myNewElement)
@@ -128,7 +133,7 @@ export default function RoomHandler() {
 				}))
 		);
 
-		socket.on("update_elements", (elements: IElement[]) =>
+		socket.on("update_elements", (elements: [string, IElement][]) =>
 			setMainElements(elements)
 		);
 

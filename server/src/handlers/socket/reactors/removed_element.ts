@@ -9,12 +9,11 @@ export default function removed_element(
 
 	socket.broadcast.to(roomId).emit("incoming_removed_element", { key });
 
-	const prevElements = roomToElementsMap.get(roomId) || [];
+	const prevElemMap = roomToElementsMap.get(roomId);
 
-	roomToElementsMap.set(
-		roomId,
-		prevElements.filter(({ shape }) => shape.key !== key)
-	);
+	if (!prevElemMap) return;
 
-	console.log("Elements in " + roomId + ":", prevElements.length);
+	prevElemMap.delete(key);
+
+	console.log("Elements in " + roomId + ":", prevElemMap.size);
 }

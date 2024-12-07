@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import { Circle } from "react-konva";
 import { useStage } from "../../providers/StageProvider";
-import { useElements } from "../../providers/ElementsProvider";
 import { useToolSettings } from "../../providers/ToolSettingsProvider";
 import { useMyNewElement } from "../../providers/MyNewElementProvider";
 
 export default function CircleHandler() {
 	const { backgroundColor, strokeColor, strokeWidth, opacity, dashGap } =
 		useToolSettings();
-
-	const { elementsArrRef } = useElements();
 
 	const { getMousePos } = useStage();
 
@@ -40,14 +37,15 @@ export default function CircleHandler() {
 		if (!drawing) return;
 
 		const { x, y } = getMousePos(e.clientX, e.clientY);
+
 		if (!startingPosition.x && !startingPosition.y) {
 			setStartingPosition({ x, y });
 			return;
 		}
-		const key = "Circle" + elementsArrRef.current.length;
+
 		setMyNewElement(
 			<Circle
-				key={key}
+				key={Math.random()}
 				x={startingPosition.x}
 				y={startingPosition.y}
 				radius={Math.sqrt(

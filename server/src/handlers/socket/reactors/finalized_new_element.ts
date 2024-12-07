@@ -10,20 +10,9 @@ export default function finalized_new_element(
 
 	socket.broadcast.to(roomId).emit("incoming_finalized_element", { element });
 
-	const prevElements = roomToElementsMap.get(roomId);
+	const prevElemMap = roomToElementsMap.get(roomId);
+	if (!prevElemMap) return;
+	prevElemMap.set(element.shape.key, element);
 
-	if (!prevElements || !prevElements.length) {
-		roomToElementsMap.set(roomId, [element]);
-
-		console.log("Elements in " + roomId + ":", 1);
-
-		return;
-	}
-
-	if (element.shape.key === prevElements[prevElements.length - 1].shape.key)
-		return;
-
-	prevElements.push(element);
-
-	console.log("Elements in " + roomId + ":", prevElements.length);
+	console.log("Elements in " + roomId + ":", prevElemMap.size);
 }

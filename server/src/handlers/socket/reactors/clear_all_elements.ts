@@ -7,7 +7,7 @@ export default function clear_all_elements(
 ) {
 	if (!roomId) return;
 
-	roomToElementsMap.delete(roomId);
+	roomToElementsMap.set(roomId, new Map());
 
 	socket.broadcast.to(roomId).emit("update_elements", []);
 }

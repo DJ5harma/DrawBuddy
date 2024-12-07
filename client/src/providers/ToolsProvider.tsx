@@ -152,7 +152,7 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 							<button
 								onClick={() => updateTool(i)}
 								className={
-									"flex flex-col justify-between gap-0.5 " +
+									"flex flex-col justify-between items-center gap-0.5 " +
 									(selectedToolRef.current.name === tool.name
 										? "bg-orange-900"
 										: "hover:bg-neutral-700")
