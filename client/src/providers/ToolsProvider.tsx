@@ -129,7 +129,6 @@ export default function ToolsProvider({ children }: { children: ReactNode }) {
 		const i = e.key.charCodeAt(0) - "0".charCodeAt(0);
 		let easyIndex = (i - 1) % toolArr.length;
 		if (easyIndex === -1) easyIndex = toolArr.length - 1;
-		console.log({ easyIndex });
 
 		if (i >= 0 && i <= 9) updateTool(easyIndex);
 	};

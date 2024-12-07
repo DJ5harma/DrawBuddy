@@ -1,27 +1,24 @@
 import {
 	createContext,
 	Dispatch,
-	MutableRefObject,
 	ReactNode,
 	SetStateAction,
 	useContext,
-	useRef,
+	useEffect,
 	useState,
 } from "react";
 import { useTools } from "./ToolsProvider";
 import { useStage } from "./StageProvider";
 import { useElements } from "./ElementsProvider";
 import { serializeKonvaElement } from "../utils/konva/convertKonva";
-import { IElement } from "../utils/types";
+import { useSocket } from "./SocketProvider";
 
 const context = createContext<{
 	myNewElement: JSX.Element | null;
 	setMyNewElement: Dispatch<SetStateAction<JSX.Element | null>>;
-	preparedMyNewElementRef: MutableRefObject<IElement | null>;
 	handleCreatedElement: () => void;
 }>({
 	myNewElement: null,
-	preparedMyNewElementRef: { current: null },
 	setMyNewElement: () => {},
 	handleCreatedElement: () => {},
 });
@@ -31,36 +28,45 @@ export default function MyNewElementProvider({
 }: {
 	children?: ReactNode;
 }) {
+	const { socket } = useSocket();
+
 	const { selectedToolRef } = useTools();
 
-	const { addElementToStage } = useElements();
+	const { addElementToStage, roomId } = useElements();
 
 	const { stagePos, stageScale } = useStage();
 
 	const [myNewElement, setMyNewElement] = useState<JSX.Element | null>(null);
 
-	const preparedMyNewElementRef = useRef<IElement | null>(null);
-
 	const handleCreatedElement = () => {
 		if (!myNewElement) return;
 
-		preparedMyNewElementRef.current = {
-			shape: serializeKonvaElement(myNewElement),
-			stagePos,
-			stageScale,
-		};
-
-		addElementToStage(preparedMyNewElementRef.current);
+		addElementToStage(
+			{
+				shape: serializeKonvaElement(myNewElement),
+				stagePos,
+				stageScale,
+			},
+			false
+		);
 
 		setMyNewElement(null);
 	};
+
+	useEffect(() => {
+		socket.emit("creating_new_element", {
+			element: myNewElement
+				? serializeKonvaElement(myNewElement)
+				: myNewElement,
+			roomId,
+		});
+	}, [myNewElement]);
 
 	return (
 		<context.Provider
 			value={{
 				myNewElement,
 				setMyNewElement,
-				preparedMyNewElementRef,
 				handleCreatedElement,
 			}}
 		>

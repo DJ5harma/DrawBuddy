@@ -1,7 +1,9 @@
 import {
 	createContext,
+	Dispatch,
 	MutableRefObject,
 	ReactNode,
+	SetStateAction,
 	useContext,
 	useEffect,
 	useRef,
@@ -13,27 +15,26 @@ import toast from "react-hot-toast";
 import { IElement, IElementsMap } from "../utils/types";
 import { OFFLINE_SHAPES_KEY } from "../utils/constants";
 import { useTools } from "./ToolsProvider";
+import { useSocket } from "./SocketProvider";
 
 const context = createContext<{
 	elementsRef: MutableRefObject<IElementsMap>;
-	latestDeletedKeyRef: MutableRefObject<string | null>;
 	latestAddedElementRef: MutableRefObject<IElement | null>;
 	flickerForLocalCreation: boolean;
-	projectId: string;
-	addElementToStage: (element: IElement) => void;
-	removeElementFromStage: (key: string, force?: boolean) => void;
+	addElementToStage: (element: IElement, fromPeer: boolean) => void;
+	removeElementFromStage: (key: string, fromPeer: boolean) => void;
 	setMainElements: (elements: [string, IElement][]) => void;
-	updateProject: (newId: string) => void;
+	roomId: string;
+	setRoomId: Dispatch<SetStateAction<string>>;
 }>({
 	elementsRef: { current: new Map() },
-	latestDeletedKeyRef: { current: null },
 	latestAddedElementRef: { current: null },
 	flickerForLocalCreation: false,
-	projectId: OFFLINE_SHAPES_KEY,
 	addElementToStage: () => {},
 	removeElementFromStage: () => {},
 	setMainElements: () => {},
-	updateProject: () => {},
+	roomId: OFFLINE_SHAPES_KEY,
+	setRoomId: () => {},
 });
 
 export default function ElementsProvider({
@@ -41,33 +42,41 @@ export default function ElementsProvider({
 }: {
 	children: ReactNode;
 }) {
+	const { socket } = useSocket();
+
 	const { selectedToolRef } = useTools();
 
-	const [projectId, setProjectId] = useState(OFFLINE_SHAPES_KEY);
+	const [roomId, setRoomId] = useState(OFFLINE_SHAPES_KEY);
 
 	const elementsRef = useRef(new Map<string, IElement>());
-
-	const latestDeletedKeyRef = useRef<string | null>(null);
 
 	const latestAddedElementRef = useRef<IElement | null>(null);
 
 	const [flickerForLocalCreation, setFlickerForLocalCreation] = useState(false);
 
-	const addElementToStage = (element: IElement) => {
+	const addElementToStage = (element: IElement, fromPeer: boolean) => {
 		if (!element || !element.shape.key) return;
 
 		elementsRef.current.set(element.shape.key, element);
 
-		latestAddedElementRef.current = element;
+		if (!fromPeer)
+			socket.emit("finalized_new_element", {
+				element,
+				roomId,
+			});
 
 		setFlickerForLocalCreation((p) => !p);
 	};
 
-	const removeElementFromStage = (key: string, peerRequest?: boolean) => {
-		if (!peerRequest && (!key || selectedToolRef.current.name !== "Eraser"))
+	const removeElementFromStage = (key: string, fromPeer: boolean) => {
+		if (!key || (!fromPeer && selectedToolRef.current.name !== "Eraser"))
 			return;
 
-		if (!peerRequest) latestDeletedKeyRef.current = key;
+		if (!fromPeer)
+			socket.emit("removed_element", {
+				key,
+				roomId,
+			});
 
 		elementsRef.current.delete(key);
 
@@ -86,34 +95,30 @@ export default function ElementsProvider({
 		setFlickerForLocalCreation((p) => !p);
 	};
 
-	const updateProject = async (newId: string) => {
-		toast.loading("Making room ready for you...");
-
-		const { data } = await axios.post(RETRIVE_ROOM_ELEMENTS_API, {
-			roomId: newId,
-		});
-
-		setMainElements(data.elements);
-
-		toast.dismiss();
-
-		toast.success("Room is ready");
-
-		setProjectId(newId);
-	};
+	useEffect(() => {
+		if (roomId !== OFFLINE_SHAPES_KEY) {
+			toast.loading("Making room ready for you...");
+			axios
+				.post(RETRIVE_ROOM_ELEMENTS_API, {
+					roomId,
+				})
+				.then(({ data }) => {
+					setMainElements(data.elements);
+					toast.dismiss();
+					toast.success("Room is ready");
+				});
+		}
+	}, [roomId]);
 
 	useEffect(() => {
-		if (projectId === OFFLINE_SHAPES_KEY)
+		if (roomId === OFFLINE_SHAPES_KEY)
 			setMainElements(
-				JSON.parse(localStorage.getItem(projectId) || "[]") as [
-					string,
-					IElement
-				][]
+				JSON.parse(localStorage.getItem(roomId) || "[]") as [string, IElement][]
 			);
 	}, []);
 
 	useEffect(() => {
-		if (projectId === OFFLINE_SHAPES_KEY)
+		if (roomId === OFFLINE_SHAPES_KEY)
 			localStorage.setItem(
 				OFFLINE_SHAPES_KEY,
 				JSON.stringify([...elementsRef.current.entries()])
@@ -128,10 +133,9 @@ export default function ElementsProvider({
 				removeElementFromStage,
 				setMainElements,
 				flickerForLocalCreation,
-				updateProject,
-				projectId,
-				latestDeletedKeyRef,
 				latestAddedElementRef,
+				roomId,
+				setRoomId,
 			}}
 		>
 			{children}

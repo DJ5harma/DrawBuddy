@@ -1,4 +1,4 @@
-import { Group, Layer, Stage } from "react-konva";
+import { Layer, Stage } from "react-konva";
 import {
 	createContext,
 	Dispatch,
@@ -12,7 +12,6 @@ import { IPoint } from "../utils/types";
 import { useTools } from "./ToolsProvider";
 import StageTeleporter from "../handlers/functional/StageTeleporter";
 import StagePositionModRAW from "../handlers/functional/StagePositionModRAW";
-import ElementsRenderer from "../handlers/functional/MainElementsRenderer";
 
 const context = createContext<{
 	getMousePos: (currX: number, currY: number) => IPoint;
@@ -164,11 +163,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 							setStageScale,
 						}}
 					>
-						<Group>
-							<ElementsRenderer />
-						</Group>
-
-						<Group>{children}</Group>
+						{children}
 					</context.Provider>
 				</Layer>
 			</Stage>

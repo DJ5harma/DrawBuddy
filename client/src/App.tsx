@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import NavMenu from "./components/NavMenu";
 import ElementsProvider from "./providers/ElementsProvider";
 import SocketProvider from "./providers/SocketProvider";
 import StageProvider from "./providers/StageProvider";
@@ -8,49 +7,43 @@ import ToolsProvider from "./providers/ToolsProvider";
 import CollaborateOption from "./components/CollaborateOption";
 import ClearAllButton from "./components/ClearAllButton";
 import MyNewElementProvider from "./providers/MyNewElementProvider";
-import ElementEmitters from "./room/ElementEmmiters";
 import RoomInit from "./room/RoomInit";
 import ElementListeners from "./room/ElementListeners";
+import MainElementsRenderer from "./handlers/functional/MainElementsRenderer";
+import { Group } from "react-konva";
 
 export default function App() {
 	return (
-		<ToolsProvider>
-			<ToolSettingsProvider>
-				<ElementsProvider>
-					<NavMenu />
-					<Routes>
-						<Route
-							index
-							element={
-								<>
-									<CollaborateOption />
-									<ClearAllButton />
+		<SocketProvider>
+			<ToolsProvider>
+				<ToolSettingsProvider>
+					<ElementsProvider>
+						<ClearAllButton />
+						<CollaborateOption />
+						<StageProvider>
+							<Group>
+								<MainElementsRenderer />
+							</Group>
+							<Group>
+								<MyNewElementProvider />
+							</Group>
+							<Routes>
+								<Route index element={<></>} />
 
-									<StageProvider>
-										<MyNewElementProvider />
-									</StageProvider>
-								</>
-							}
-						/>
-						<Route
-							path="room/:id"
-							element={
-								<SocketProvider>
-									<ClearAllButton />
-
-									<StageProvider>
-										<MyNewElementProvider>
+								<Route
+									path="room/:id"
+									element={
+										<Group>
 											<RoomInit />
 											<ElementListeners />
-											<ElementEmitters />
-										</MyNewElementProvider>
-									</StageProvider>
-								</SocketProvider>
-							}
-						/>
-					</Routes>
-				</ElementsProvider>
-			</ToolSettingsProvider>
-		</ToolsProvider>
+										</Group>
+									}
+								/>
+							</Routes>
+						</StageProvider>
+					</ElementsProvider>
+				</ToolSettingsProvider>
+			</ToolsProvider>
+		</SocketProvider>
 	);
 }

@@ -2,13 +2,14 @@ import { useParams } from "react-router-dom";
 import { useElements } from "../providers/ElementsProvider";
 import { useSocket } from "../providers/SocketProvider";
 import { useEffect } from "react";
+import { OFFLINE_SHAPES_KEY } from "../utils/constants";
 
 export default function RoomInit() {
 	const { id: roomId } = useParams();
 
-	const { projectId } = useElements();
+	const { setRoomId } = useElements();
 
-	const { socket } = useSocket();
+	const { socket, switchSocket } = useSocket();
 
 	const username = (() => {
 		const x = localStorage.getItem("username");
@@ -19,11 +20,14 @@ export default function RoomInit() {
 	})();
 
 	useEffect(() => {
-		socket.emit("i_arrived_at_room", {
-			roomId,
-			username,
+		switchSocket(true).then(() => {
+			socket.emit("i_arrived_at_room", {
+				roomId,
+				username,
+			});
+			setRoomId(roomId || OFFLINE_SHAPES_KEY);
 		});
-	}, [projectId]);
+	}, []);
 
 	return null;
 }

@@ -1,53 +1,83 @@
-import { KonvaEventObject, Node, NodeConfig } from "konva/lib/Node";
 import { Circle, Line, Rect, Text } from "react-konva";
 import { useElements } from "../../providers/ElementsProvider";
 import { useStage } from "../../providers/StageProvider";
-import { useRef } from "react";
 import { useTools } from "../../providers/ToolsProvider";
+import { useSocket } from "../../providers/SocketProvider";
+import { useEffect, useRef } from "react";
 
 export default function MainElementsRenderer() {
+	const { socket } = useSocket();
+
 	const { selectedToolRef } = useTools();
 
-	const { elementsRef, removeElementFromStage } = useElements();
+	const { elementsRef, removeElementFromStage, roomId } = useElements();
 
-	const { stagePos } = useStage();
+	const { getMousePos } = useStage();
 
-	const dragRef = useRef({
-		isDragging: false,
-		startPos: stagePos,
-		endPos: stagePos,
-	});
+	const posRef = useRef({ x: 0, y: 0 });
 
-	return [...elementsRef.current.values()].map(({ shape }) => {
+	useEffect(() => {
+		document.addEventListener("mousemove", handleMouseMove);
+		return () => {
+			document.removeEventListener("mousemove", handleMouseMove);
+		};
+	}, []);
+
+	const handleMouseMove = (e: MouseEvent) => {
+		posRef.current = getMousePos(e.clientX, e.clientY);
+	};
+
+	return [...elementsRef.current.values()].map((element) => {
+		const { shape } = element;
 		if (!shape || !shape.key) return null;
 
 		const { key } = shape;
 
 		const { type, props } = shape;
 
-		const handleDragStart = (
-			e: KonvaEventObject<DragEvent, Node<NodeConfig>>
-		) => {
-			dragRef.current.isDragging = true;
-			dragRef.current.startPos = { x: e.evt.clientX, y: e.evt.clientY };
-			console.log(dragRef.current);
+		const handleDragStart = () => {
+			socket.emit("removed_element", {
+				key,
+				roomId,
+			});
+			socket.emit("creating_new_element", {
+				element: shape,
+				roomId,
+			});
 		};
 
-		const handleDragEnd = (
-			e: KonvaEventObject<DragEvent, Node<NodeConfig>>
-		) => {
-			dragRef.current.isDragging = false;
+		const handleDragMove = () => {
+			socket.emit("creating_new_element", {
+				element: {
+					...shape,
+					props: {
+						...shape.props,
+						...posRef.current,
+					},
+				},
+				roomId,
+			});
+			// console.log(posRef.current, shape.props.x, shape.props.y);
+		};
 
-			dragRef.current.endPos = { x: e.evt.clientX, y: e.evt.clientY };
-
-			console.log(dragRef.current);
-
-			const posDiff = {
-				x: dragRef.current.endPos.x - dragRef.current.startPos.x,
-				y: dragRef.current.endPos.y - dragRef.current.startPos.y,
-			};
-
-			console.log(posDiff);
+		const handleDragEnd = () => {
+			socket.emit("finalized_new_element", {
+				element: {
+					...element,
+					shape: {
+						...shape,
+						props: {
+							...shape.props,
+							...posRef.current,
+						},
+					},
+				},
+				roomId,
+			});
+			socket.emit("creating_new_element", {
+				element: null,
+				roomId,
+			});
 		};
 
 		const draggable = selectedToolRef.current.name === "Pointer";
@@ -58,9 +88,10 @@ export default function MainElementsRenderer() {
 					<Rect
 						key={key}
 						{...props}
-						onClick={() => removeElementFromStage(key)}
+						onClick={() => removeElementFromStage(key, false)}
 						draggable={draggable}
 						onDragStart={handleDragStart}
+						onDragMove={handleDragMove}
 						onDragEnd={handleDragEnd}
 					/>
 				);
@@ -69,9 +100,10 @@ export default function MainElementsRenderer() {
 					<Circle
 						key={key}
 						{...props}
-						onClick={() => removeElementFromStage(key)}
+						onClick={() => removeElementFromStage(key, false)}
 						draggable={draggable}
 						onDragStart={handleDragStart}
+						onDragMove={handleDragMove}
 						onDragEnd={handleDragEnd}
 					/>
 				);
@@ -80,9 +112,10 @@ export default function MainElementsRenderer() {
 					<Line
 						key={key}
 						{...props}
-						onClick={() => removeElementFromStage(key)}
+						onClick={() => removeElementFromStage(key, false)}
 						draggable={draggable}
 						onDragStart={handleDragStart}
+						onDragMove={handleDragMove}
 						onDragEnd={handleDragEnd}
 					/>
 				);
@@ -91,9 +124,10 @@ export default function MainElementsRenderer() {
 					<Text
 						key={key}
 						{...props}
-						onClick={() => removeElementFromStage(key)}
+						onClick={() => removeElementFromStage(key, false)}
 						draggable={draggable}
 						onDragStart={handleDragStart}
+						onDragMove={handleDragMove}
 						onDragEnd={handleDragEnd}
 					/>
 				);

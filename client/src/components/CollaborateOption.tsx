@@ -5,8 +5,11 @@ import PopUpWrapper from "./PopUpWrapper";
 import { BiCopy } from "react-icons/bi";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { useElements } from "../providers/ElementsProvider";
+import { OFFLINE_SHAPES_KEY } from "../utils/constants";
 
 export default function CollaborateOption() {
+	const { roomId } = useElements();
 	const [roomUrl, setRoomUrl] = useState("");
 
 	const [enteredRoomUrl, setEnteredRoomUrl] = useState("");
@@ -40,11 +43,11 @@ export default function CollaborateOption() {
 	return (
 		<>
 			<button
-				className="bg-blue-700 text-white absolute left-4 bottom-4 p-3 z-50"
+				className="bg-blue-700 text-white absolute left-4 bottom-4 p-2 z-50 text-sm"
 				onClick={handleCollaborate}
 				onMouseDown={(e) => e.stopPropagation()}
 			>
-				Collaborate
+				{roomId === OFFLINE_SHAPES_KEY ? "Collaborate" : "Change Room"}
 			</button>
 
 			{show && (
@@ -76,6 +79,7 @@ export default function CollaborateOption() {
 					<Link
 						className="text-center bg-white text-blue-700 hover:bg-blue-700 hover:text-white"
 						to={roomUrl}
+						onClick={() => setShow(false)}
 					>
 						Host Session
 					</Link>
@@ -100,6 +104,7 @@ export default function CollaborateOption() {
 					<Link
 						className="text-center bg-white text-blue-700 hover:bg-blue-700 hover:text-white"
 						to={enteredRoomUrl}
+						onClick={() => setShow(false)}
 					>
 						Join Session
 					</Link>

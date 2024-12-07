@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import { useElements } from "../providers/ElementsProvider";
 import { useSocket } from "../providers/SocketProvider";
 import { useStage } from "../providers/StageProvider";
@@ -12,15 +11,8 @@ import {
 import { Circle, Group, Text } from "react-konva";
 
 export default function ElementListeners() {
-	const { id: roomId } = useParams();
-
-	const {
-		addElementToStage,
-		setMainElements,
-		updateProject,
-		projectId,
-		removeElementFromStage,
-	} = useElements();
+	const { addElementToStage, setMainElements, removeElementFromStage, roomId } =
+		useElements();
 
 	const { socket } = useSocket();
 
@@ -29,11 +21,6 @@ export default function ElementListeners() {
 	const [peers, setPeers] = useState<IPeers>({});
 
 	useEffect(() => {
-		if (roomId && projectId !== roomId) {
-			updateProject(roomId);
-			return;
-		}
-
 		socket.on("previous_users", (prevUsers: IPeers) => {
 			setPeers(prevUsers);
 			toast(`Joined in a room with ${Object.keys(prevUsers).length} other(s)`);
@@ -66,7 +53,7 @@ export default function ElementListeners() {
 		socket.on(
 			"incoming_finalized_element",
 			({ element }: { element: IElement }) => {
-				if (element) addElementToStage(element);
+				if (element) addElementToStage(element, true);
 			}
 		);
 
@@ -93,7 +80,7 @@ export default function ElementListeners() {
 		return () => {
 			socket.removeAllListeners();
 		};
-	}, [projectId]);
+	}, [roomId]);
 
 	return Object.keys(peers).map((userid) => {
 		const { username, tempElement, usercolor } = peers[userid];

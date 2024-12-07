@@ -1,20 +1,16 @@
 import { MdOutlineDelete } from "react-icons/md";
 import { useElements } from "../providers/ElementsProvider";
 import { useSocket } from "../providers/SocketProvider";
-import { useParams } from "react-router-dom";
-import { Socket } from "socket.io-client";
 import { useMyNewElement } from "../providers/MyNewElementProvider";
 import PopUpWrapper from "./PopUpWrapper";
 import { useState } from "react";
 
 export default function ClearAllButton() {
-	const { id: roomId } = useParams();
-
-	const { setMainElements } = useElements();
+	const { setMainElements, roomId } = useElements();
 
 	const { setMyNewElement } = useMyNewElement();
 
-	const { socket } = useSocket() as { socket: Socket | null };
+	const { socket } = useSocket();
 
 	const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -45,7 +41,7 @@ export default function ClearAllButton() {
 							onClick={() => {
 								setMainElements([]);
 								setMyNewElement(null);
-								if (socket) socket.emit("clear_all_elements", { roomId });
+								socket.emit("clear_all_elements", { roomId });
 								setShowConfirmation(false);
 							}}
 							className="bg-red-700 text-white"

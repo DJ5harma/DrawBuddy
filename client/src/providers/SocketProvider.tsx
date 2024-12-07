@@ -11,8 +11,12 @@ import { SOCKET_URL, ENSURE_SOCKET_SERVER_API } from "../utils/apiRoutes";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const context = createContext<{ socket: Socket | null }>({
+const context = createContext<{
+	socket: Socket | null;
+	switchSocket: (ON: boolean) => Promise<void>;
+}>({
 	socket: null,
+	switchSocket: () => new Promise((res) => res),
 });
 
 export default function SocketProvider({ children }: { children: ReactNode }) {
@@ -22,25 +26,36 @@ export default function SocketProvider({ children }: { children: ReactNode }) {
 
 	const [isConnected, setIsConnected] = useState(false);
 
-	useEffect(() => {
-		axios.get(ENSURE_SOCKET_SERVER_API).then(() => socketRef.current.connect());
+	const switchSocket = async (ON: boolean) => {
+		if (ON === true && !isConnected) {
+			await axios.get(ENSURE_SOCKET_SERVER_API);
+			socketRef.current.connect();
+		}
+		if (ON === false && isConnected) {
+			socketRef.current.disconnect();
+		}
+	};
 
+	useEffect(() => {
 		socketRef.current.on("connect", () => {
 			toast.success("Socket server connected!");
 			setIsConnected(true);
 		});
 
 		return () => {
-			setIsConnected(false);
 			socketRef.current.disconnect();
 		};
 	}, []);
 
 	return (
-		<context.Provider value={{ socket: socketRef.current }}>
-			{isConnected && children}
+		<context.Provider value={{ socket: socketRef.current, switchSocket }}>
+			{children}
 		</context.Provider>
 	);
 }
 
-export const useSocket = () => useContext(context) as { socket: Socket };
+export const useSocket = () =>
+	useContext(context) as {
+		socket: Socket;
+		switchSocket: (ON: boolean) => Promise<void>;
+	};
