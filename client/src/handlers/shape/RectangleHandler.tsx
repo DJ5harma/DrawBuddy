@@ -58,7 +58,7 @@ export default function RectangleHandler() {
 				fill={backgroundColor}
 				opacity={opacity}
 				dashEnabled={dashGap > 0}
-				dash={[dashGap]}
+				dash={[dashGap + strokeWidth]}
 			/>
 		);
 	};

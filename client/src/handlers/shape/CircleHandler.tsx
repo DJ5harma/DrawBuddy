@@ -60,7 +60,7 @@ export default function CircleHandler() {
 				fill={backgroundColor}
 				opacity={opacity}
 				dashEnabled={dashGap > 0}
-				dash={[dashGap]}
+				dash={[dashGap + strokeWidth]}
 			/>
 		);
 	};

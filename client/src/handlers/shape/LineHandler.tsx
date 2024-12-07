@@ -78,7 +78,7 @@ export default function LineHandler() {
 				stroke={strokeColor}
 				opacity={opacity}
 				dashEnabled={dashGap > 0}
-				dash={[dashGap]}
+				dash={[dashGap + strokeWidth]}
 			/>
 		);
 	};

@@ -12,8 +12,7 @@ export interface ITool {
 		| "Pencil"
 		| "Text"
 		| "Gallery"
-		| "Eraser"
-		| "ClearAll";
+		| "Eraser";
 
 	icon: ReactNode;
 	handler: ReactNode | null;

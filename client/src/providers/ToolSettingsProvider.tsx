@@ -53,8 +53,18 @@ export default function ToolSettingsProvider({
 		);
 	}, [strokeColor, strokeWidth, backgroundColor, opacity, dashGap]);
 
-	return (
-		<>
+	const Pallete = () => {
+		switch (selectedToolRef.current.name) {
+			case "Eraser":
+				return null;
+			case "Hand":
+				return null;
+			case "Gallery":
+				return null;
+			case "Pointer":
+				return null;
+		}
+		return (
 			<div
 				className="absolute p-4 text-sm flex flex-col gap-4 [&>div]:gap-2 [&>div]:flex [&>div]:flex-col bg-neutral-800 my-auto w-fit z-10"
 				style={{ top: "10vh" }}
@@ -127,14 +137,19 @@ export default function ToolSettingsProvider({
 						className="cursor-pointer"
 						type="range"
 						min={0}
-						max={30}
+						max={100}
 						step={1}
 						value={dashGap}
 						onChange={(e) => setDashGap(e.target.valueAsNumber)}
 					/>
 				</div>
 			</div>
+		);
+	};
 
+	return (
+		<>
+			<Pallete />
 			<context.Provider
 				value={{ strokeColor, backgroundColor, strokeWidth, opacity, dashGap }}
 			>

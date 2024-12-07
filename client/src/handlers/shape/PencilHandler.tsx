@@ -50,7 +50,7 @@ export default function PencilHandler() {
 				lineCap="round"
 				opacity={opacity}
 				dashEnabled={dashGap > 0}
-				dash={[dashGap]}
+				dash={[dashGap + strokeWidth]}
 			/>
 		);
 	};
