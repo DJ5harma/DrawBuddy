@@ -102,7 +102,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 			<Stage
 				width={dimensions.width}
 				height={dimensions.height}
-				className="bg-neutral-900"
+				className="bg-neutral-900 rounded-none"
 				scaleX={stageScale}
 				scaleY={stageScale}
 				x={stagePos.x}
@@ -178,7 +178,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 				}}
 			>
 				<div
-					className="absolute bottom-4 w-full items-center flex flex-col gap-4 select-none"
+					className="absolute bottom-4 left-1/3 w-fit bg-neutral-950 items-center flex flex-col gap-4 select-none p-2"
 					onMouseDown={(e) => e.stopPropagation()}
 				>
 					<StageTeleporter />

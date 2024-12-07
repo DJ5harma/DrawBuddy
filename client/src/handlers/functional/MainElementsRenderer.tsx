@@ -70,8 +70,13 @@ export default function MainElementsRenderer() {
 
 				const { key, type, props } = shape;
 
-				const handleDragStart = () => {
-					if (selectedToolRef.current.name !== "Pointer" || !key) return;
+				const handleDragStart = (e: { evt: MouseEvent }) => {
+					if (
+						selectedToolRef.current.name !== "Pointer" ||
+						!key ||
+						e.evt.button === 1
+					)
+						return;
 					setDraggingShape(shape);
 				};
 
