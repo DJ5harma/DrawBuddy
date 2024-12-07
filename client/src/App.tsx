@@ -19,14 +19,18 @@ export default function App() {
 				<ToolSettingsProvider>
 					<ElementsProvider>
 						<ClearAllButton />
+
 						<CollaborateOption />
+
 						<StageProvider>
 							<Group>
 								<MainElementsRenderer />
 							</Group>
+
 							<Group>
 								<MyNewElementProvider />
 							</Group>
+
 							<Routes>
 								<Route index element={<></>} />
 
@@ -35,6 +39,7 @@ export default function App() {
 									element={
 										<Group>
 											<RoomInit />
+
 											<ElementListeners />
 										</Group>
 									}

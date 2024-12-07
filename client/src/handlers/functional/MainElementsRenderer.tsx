@@ -29,31 +29,29 @@ export default function MainElementsRenderer() {
 
 	const handleDragMove = (e: MouseEvent) => {
 		if (!draggingShape) return;
-		const { x, y } = getMousePos(e.clientX, e.clientY);
 
-		const shape = {
+		const shape: JSX.Element = {
 			...draggingShape,
-			props: { ...draggingShape.props, x, y },
+			props: { ...draggingShape.props, ...getMousePos(e.clientX, e.clientY) },
 		};
-
-		setDraggingShape(shape);
 
 		socket.emit("creating_new_element", {
 			element: shape,
 			roomId,
 		});
+
+		setDraggingShape(shape);
 	};
+
 	const handleDragEnd = (e: MouseEvent) => {
 		if (!draggingShape) return;
 
-		const { x, y } = getMousePos(e.clientX, e.clientY);
-
-		const newShape = {
+		const shape = {
 			...draggingShape,
-			props: { ...draggingShape.props, x, y },
+			props: { ...draggingShape.props, ...getMousePos(e.clientX, e.clientY) },
 		};
 
-		addElementToStage({ shape: newShape, stagePos, stageScale }, false);
+		addElementToStage({ shape, stagePos, stageScale }, false);
 
 		socket.emit("creating_new_element", {
 			element: null,
@@ -67,23 +65,25 @@ export default function MainElementsRenderer() {
 		<>
 			{[...elementsRef.current.values()].map((element) => {
 				const { shape } = element;
+
 				if (!shape || !shape.key) return null;
 
-				const { key } = shape;
-
-				const { type, props } = shape;
+				const { key, type, props } = shape;
 
 				const handleDragStart = () => {
 					if (selectedToolRef.current.name !== "Pointer" || !key) return;
 					setDraggingShape(shape);
 				};
+
+				const handleClick = () => removeElementFromStage(key, false);
+
 				switch (type) {
 					case "Rect":
 						return (
 							<Rect
 								key={key}
 								{...props}
-								onClick={() => removeElementFromStage(key, false)}
+								onClick={handleClick}
 								onMouseDown={handleDragStart}
 							/>
 						);
@@ -92,7 +92,7 @@ export default function MainElementsRenderer() {
 							<Circle
 								key={key}
 								{...props}
-								onClick={() => removeElementFromStage(key, false)}
+								onClick={handleClick}
 								onMouseDown={handleDragStart}
 							/>
 						);
@@ -101,7 +101,7 @@ export default function MainElementsRenderer() {
 							<Line
 								key={key}
 								{...props}
-								onClick={() => removeElementFromStage(key, false)}
+								onClick={handleClick}
 								onMouseDown={handleDragStart}
 							/>
 						);
@@ -110,7 +110,7 @@ export default function MainElementsRenderer() {
 							<Text
 								key={key}
 								{...props}
-								onClick={() => removeElementFromStage(key, false)}
+								onClick={handleClick}
 								onMouseDown={handleDragStart}
 							/>
 						);
