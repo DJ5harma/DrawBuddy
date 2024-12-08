@@ -1,61 +1,158 @@
-# DrawBuddy:
+# DrawBuddy
 
-An advanced realtime design collaboration platform
+An advanced real-time design collaboration platform designed for teams and individuals to create, edit, and share designs seamlessly. With a focus on efficiency, scalability, and usability, **DrawBuddy** provides a cutting-edge collaborative canvas for all your design needs.
 
-- A real-time feature-rich canvas for multiple users to draw upon and see other's live drawings instantly.
+---
 
-- Custom in-memory caching and hashing for drawn elements on the server for fast data retrieval (without helpers like Redis).
+## Overview
 
-- Fine Ul practices ensured to render the complex frontend with fewer state-render cycles, implying more efficiency.
+**DrawBuddy** reimagines collaborative design with its feature-rich, real-time canvas, allowing multiple users to draw, edit, and interact simultaneously. Leveraging efficient caching mechanisms and optimized rendering practices, it ensures a seamless user experience for real-time collaboration while minimizing system resource consumption.
 
-- Serialization and deserialization at ends exercised for transfer and re-composition of Elemental Nodes via socket bridge.
+---
 
-- Power saving of the host machine by switching on/off of the web-socket server based on connected listeners.
+## Key Features
 
-Tools: Konva.js, React.js [Context API], Node.js, Express.js, Socket.io, HashMaps, Browser native storage, Typescript, Tailwind.
+### 1. **Real-Time Collaboration**
 
-GitHub link: https://github.com/DJ5harma/DrawBuddy.
+- Multiple users can draw on a shared canvas and see each other's actions in real-time.
+- All actions such as drawing, dragging, erasing, and resizing are instantly synchronized across users.
 
-# Features:
+### 2. **Rich Drawing Tools**
 
-- Create elements like Rectangle, Circle, Line, Pencil, Text.
+- Create diverse elements like:
+  - **Shapes:** Rectangle, Circle, and Line
+  - **Freehand Drawing:** Pencil tool
+  - **Text:** Add and customize text on the canvas
+- Customize properties:
+  - Background color, stroke (color, dashes, width), and opacity.
 
-- Specify their background color, stroke [color, dashes, width], opacity etc.
+### 3. **Canvas Functionality**
 
-- The canvas is draggable and infinite.
+- Infinite canvas with drag-and-move capabilities.
+- Advanced eraser tool to delete specific elements.
+- A "Dustbin" feature to clear the entire canvas after user confirmation.
+- Teleportation capabilities:
+  - Jump to specific coordinates or the latest drawn element.
+  - Navigate through previous elements step-by-step.
 
-- Delete them by clicking inside them using the Eraser tool, or delete them all at once (after a warning) using the Dustbin.
+### 4. **Efficient State Management**
 
-- Drag and Move them using Pointer tool.
+- Optimized rendering with fewer state cycles for smoother interactions on the frontend.
+- Serialization and deserialization of drawing elements for efficient data transfer.
 
-- All the users in the room can watch all the elements made and being made by peers.
+### 5. **Server-Side Enhancements**
 
-- Users can perform all the operations (drag, erase, etc.) on other users' elememts.
+- Custom in-memory caching and hashing for fast data retrieval without relying on external tools like Redis.
+- On-demand WebSocket server activation to save host machine resources when no users are connected.
 
-- Users coming to a room late fetch all the elements made from the server (elements are cached in serial form).
+### 6. **Offline Mode**
 
-- Lost users can teleport to a stage position directly by entering coordinates or even better, instantly teleport to the latest element made. And from there, they can go back to the element made before that and so on... by click of a button.
+- Non-collaborative mode enables users to work offline by default when not in a room.
 
-- The Non-collaborative mode (offline-mode) is also available by default if the user isn't in a room.
+### 7. **Late Joiner Support**
 
-- The offline-mode elements are cached inside the localStorage of the browser instead of the server.
+- New users joining a room can fetch all previously drawn elements directly from the server.
+- Elements are cached in serialized form for fast retrieval.
 
-# To run the project locally:
+---
 
-- git clone this repo.
+## Tools and Technologies
 
-- Make sure to have Node.js & pnpm installed.
+- **Frontend:** [Konva.js](https://konvajs.org/), React.js (Context API), Tailwind CSS, TypeScript.
+- **Backend:** Node.js, Express.js, Socket.io.
+- **Data Handling:** HashMaps, Browser Native Storage.
 
-Firstly, install the dependencies:
+---
 
-(you may use "npm" instead of "pnpm", but I'd recommend "pnpm")
+## How It Works
 
-- Go to the server directory and run "pnpm install" in your terminal.
-- Go to the client directory and run "pnpm install" in your terminal.
+### Collaborative Canvas
 
-Secondly, run the servers in development mode:
+- Every user's actions are broadcasted via WebSocket to all connected peers in the same room.
+- Users can interact with both their own elements and those created by others.
 
-- Go to the server directory and run "pnpm run dev" in your terminal.
-- Go to the client directory and run "pnpm run dev" in your terminal.
+### Server-Side Optimizations
 
-(Make sure you have the ports 3000 and 3001 not occupied, otherwise you'd have to manually change them inside "server/src/utils/constants.ts").
+- Drawn elements are hashed and cached on the server, ensuring efficient storage and retrieval.
+- The WebSocket server intelligently toggles based on active connections, reducing unnecessary load on the host machine.
+
+### Serialization & Deserialization
+
+- Elemental nodes (representing shapes, text, and drawings) are serialized for transfer and recomposed at the client-side for rendering.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+Ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/en/)
+- [pnpm](https://pnpm.io/) (preferred, though npm works too)
+
+### Installation
+
+1. **Clone the Repository**
+   git clone https://github.com/DJ5harma/DrawBuddy.git
+   cd DrawBuddy
+
+2. **Install Dependencies Navigate to the server and client directories separately to install their dependencies:**
+
+   # For the server
+
+   cd server
+   pnpm install
+
+   # For the client
+
+   cd ../client
+   pnpm install
+
+3. **Run Servers in Development Mode Start both the server and client:**
+
+   # Start the server
+
+   cd server
+   pnpm run dev
+
+   # Start the client
+
+   cd ../client
+   pnpm run dev
+
+4. **Access the Application**
+
+   Open your browser and navigate to http://localhost:3000 for the client.
+   The backend server runs on http://localhost:3001.
+   Note: If ports 3000 or 3001 are occupied, update them in server/src/utils/constants.ts and the client configuration accordingly.
+
+### Key Features in Detail
+
+    Drawing Tools
+    Create Rectangles, Circles, Lines, Freehand Drawings, and Text.
+    Customize appearance:
+    Background and stroke colors.
+    Dash patterns for strokes.
+    Adjustable opacity for transparent designs.
+    Advanced Navigation
+    Jump directly to any part of the infinite canvas by entering coordinates.
+    Instantly teleport to the most recent element added or retrace through previous elements.
+    Power-Saving Mode
+    The WebSocket server intelligently shuts down when no users are connected, conserving system resources on the host machine.
+    Collaborative Features
+
+    All users in a room can:
+    See each other’s drawings as they’re being created.
+    Interact with elements created by others (move, erase, resize, etc.).
+    Offline Mode
+
+    No internet? No problem! DrawBuddy allows users to work in offline mode without requiring room-based collaboration (only works if you install it as a web app using your browser).
+
+    Future Enhancements (Planned)
+    Add support for more complex shapes and drawing tools.
+    Enable user-specific permissions to restrict element interactions.
+    Implement multi-room functionality for larger collaborative sessions.
+    Add cloud storage integration for saving and loading projects.
+    Contributing
+    We welcome contributions from the community! If you'd like to improve DrawBuddy, follow these steps:

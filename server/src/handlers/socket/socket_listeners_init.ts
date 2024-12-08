@@ -9,19 +9,14 @@ import removed_element from "./reactors/removed_element";
 export default function socket_listeners_init() {
 	io.on("connection", (socket) => {
 		console.log("clients:", ++socketCache.clients);
-
 		socket.on("i_arrived_at_room", (data) => i_arrived_at_room(socket, data));
-
 		socket.on("creating_new_element", (data) =>
 			creating_new_element(socket, data)
 		);
-
 		socket.on("finalized_new_element", (data) =>
 			finalized_new_element(socket, data)
 		);
-
 		socket.on("clear_all_elements", (data) => clear_all_elements(socket, data));
-
 		socket.on("removed_element", (data) => removed_element(socket, data));
 
 		socket.on("disconnect", () => disconnect(socket));

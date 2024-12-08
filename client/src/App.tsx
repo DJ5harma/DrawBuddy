@@ -19,21 +19,16 @@ export default function App() {
 				<ToolSettingsProvider>
 					<ElementsProvider>
 						<ClearAllButton />
-
 						<CollaborateOption />
-
 						<StageProvider>
 							<Group>
 								<MainElementsRenderer />
 							</Group>
-
 							<Group>
 								<MyNewElementProvider />
 							</Group>
-
 							<Routes>
 								<Route index element={<></>} />
-
 								<Route
 									path="room/:id"
 									element={
