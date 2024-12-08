@@ -99,24 +99,24 @@ Ensure you have the following installed:
 
 2. **Install Dependencies Navigate to the server and client directories separately to install their dependencies:**
 
-   # For the server
+   **_For the server_**
 
    cd server
    pnpm install
 
-   # For the client
+   **_For the client_**
 
    cd ../client
    pnpm install
 
 3. **Run Servers in Development Mode Start both the server and client:**
 
-   # Start the server
+   **_Start the server_**
 
    cd server
    pnpm run dev
 
-   # Start the client
+   **_Start the client_**
 
    cd ../client
    pnpm run dev
@@ -129,30 +129,36 @@ Ensure you have the following installed:
 
 ### Key Features in Detail
 
-    Drawing Tools
+    - Drawing Tools:
+
     Create Rectangles, Circles, Lines, Freehand Drawings, and Text.
+
     Customize appearance:
+
     Background and stroke colors.
+
     Dash patterns for strokes.
+
     Adjustable opacity for transparent designs.
-    Advanced Navigation
+
+    - Advanced Navigation:
     Jump directly to any part of the infinite canvas by entering coordinates.
+
     Instantly teleport to the most recent element added or retrace through previous elements.
-    Power-Saving Mode
+
+    - Power-Saving Mode
     The WebSocket server intelligently shuts down when no users are connected, conserving system resources on the host machine.
     Collaborative Features
 
-    All users in a room can:
+    - All users in a room can:
     See each other’s drawings as they’re being created.
     Interact with elements created by others (move, erase, resize, etc.).
     Offline Mode
 
-    No internet? No problem! DrawBuddy allows users to work in offline mode without requiring room-based collaboration (only works if you install it as a web app using your browser).
+    - No internet? No problem! DrawBuddy allows users to work in offline mode without requiring room-based collaboration (only works if you install it as a web app using your browser).
 
-    Future Enhancements (Planned)
+    - Future Enhancements (Planned)
     Add support for more complex shapes and drawing tools.
     Enable user-specific permissions to restrict element interactions.
     Implement multi-room functionality for larger collaborative sessions.
     Add cloud storage integration for saving and loading projects.
-    Contributing
-    We welcome contributions from the community! If you'd like to improve DrawBuddy, follow these steps:
