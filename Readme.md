@@ -39,3 +39,23 @@ GitHub link: https://github.com/DJ5harma/DrawBuddy.
 - The Non-collaborative mode (offline-mode) is also available by default if the user isn't in a room.
 
 - The offline-mode elements are cached inside the localStorage of the browser instead of the server.
+
+# To run the project locally:
+
+- git clone this repo.
+
+- Make sure to have Node.js & pnpm installed.
+
+Firstly, install the dependencies:
+
+(you may use "npm" instead of "pnpm", but I'd recommend "pnpm")
+
+- Go to the server directory and run "pnpm install" in your terminal.
+- Go to the client directory and run "pnpm install" in your terminal.
+
+Secondly, run the servers in development mode:
+
+- Go to the server directory and run "pnpm run dev" in your terminal.
+- Go to the client directory and run "pnpm run dev" in your terminal.
+
+(Make sure you have the ports 3000 and 3001 not occupied, otherwise you'd have to manually change them inside "server/src/utils/constants.ts").

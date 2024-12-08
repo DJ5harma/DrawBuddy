@@ -1,6 +1,5 @@
 import { Server } from "socket.io";
-import { IElement, IElementsMap, IPeers } from "./utils/types";
-import { CLIENT_URL } from "./utils/constants";
+import { IElementsMap, IPeers } from "./utils/types";
 
 export const roomToUsersMap = new Map<string, IPeers>();
 
@@ -9,7 +8,7 @@ export const useridToRoomMap = new Map<string, string>();
 export const roomToElementsMap = new Map<string, IElementsMap>();
 
 export const io = new Server({
-	cors: { origin: CLIENT_URL },
+	cors: { origin: "*" },
 	pingInterval: 25000,
 	pingTimeout: 10000,
 });
