@@ -180,6 +180,7 @@ export default function StageProvider({ children }: { children: ReactNode }) {
 				<div
 					className="absolute bottom-4 left-1/3 w-fit bg-neutral-950 items-center flex flex-col gap-4 select-none p-2"
 					onMouseDown={(e) => e.stopPropagation()}
+					style={{ width: 400, left: "calc(50% - 200px)" }}
 				>
 					<StageTeleporter />
 					<StagePositionModRAW />

@@ -83,7 +83,7 @@ const toolArr: ITool[] = [
 		icon: <ImTextColor />,
 		handler: <TextHandler />,
 		cursor: "text",
-		description: "Click anywhere to choose/change text position",
+		description: "Click anywhere to change text position or ESC to finalize",
 	},
 	{
 		name: "Gallery",

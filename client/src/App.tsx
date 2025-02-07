@@ -11,39 +11,43 @@ import RoomInit from "./room/RoomInit";
 import ElementListeners from "./room/ElementListeners";
 import MainElementsRenderer from "./handlers/functional/MainElementsRenderer";
 import { Group } from "react-konva";
+import NavMenu from "./components/NavMenu";
 
 export default function App() {
 	return (
-		<SocketProvider>
-			<ToolsProvider>
-				<ToolSettingsProvider>
-					<ElementsProvider>
-						<ClearAllButton />
-						<CollaborateOption />
-						<StageProvider>
-							<Group>
-								<MainElementsRenderer />
-							</Group>
-							<Group>
-								<MyNewElementProvider />
-							</Group>
-							<Routes>
-								<Route index element={<></>} />
-								<Route
-									path="room/:id"
-									element={
-										<Group>
-											<RoomInit />
+		<div className="select-none">
+			<SocketProvider>
+				<ToolsProvider>
+					<ToolSettingsProvider>
+						<ElementsProvider>
+							<NavMenu />
+							<ClearAllButton />
+							<CollaborateOption />
+							<StageProvider>
+								<Group>
+									<MainElementsRenderer />
+								</Group>
+								<Group>
+									<MyNewElementProvider />
+								</Group>
+								<Routes>
+									<Route index element={<></>} />
+									<Route
+										path="room/:id"
+										element={
+											<Group>
+												<RoomInit />
 
-											<ElementListeners />
-										</Group>
-									}
-								/>
-							</Routes>
-						</StageProvider>
-					</ElementsProvider>
-				</ToolSettingsProvider>
-			</ToolsProvider>
-		</SocketProvider>
+												<ElementListeners />
+											</Group>
+										}
+									/>
+								</Routes>
+							</StageProvider>
+						</ElementsProvider>
+					</ToolSettingsProvider>
+				</ToolsProvider>
+			</SocketProvider>
+		</div>
 	);
 }

@@ -3,7 +3,6 @@ import "./index.css";
 import App from "./App.tsx";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
-import NavMenu from "./components/NavMenu.tsx";
 
 createRoot(document.getElementById("root")!).render(
 	<>
@@ -17,7 +16,6 @@ createRoot(document.getElementById("root")!).render(
 				v7_relativeSplatPath: true,
 			}}
 		>
-			<NavMenu />
 			<App />
 		</BrowserRouter>
 	</>

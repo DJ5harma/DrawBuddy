@@ -66,8 +66,8 @@ export default function ToolSettingsProvider({
 		}
 		return (
 			<div
-				className="absolute p-4 text-sm flex flex-col gap-4 [&>div]:gap-2 [&>div]:flex [&>div]:flex-col bg-neutral-800 my-auto w-fit z-10"
-				style={{ top: "10vh" }}
+				className="w-fit border absolute p-4 text-sm flex flex-col gap-4 [&>div]:gap-2 [&>div]:flex [&>div]:flex-col bg-neutral-800 z-10"
+				style={{ top: "30%", left: "1%" }}
 				onMouseDown={(e) => e.stopPropagation()}
 			>
 				<div>
@@ -148,14 +148,14 @@ export default function ToolSettingsProvider({
 	};
 
 	return (
-		<>
+		<div className="relative w-full h-full">
 			<Pallete />
 			<context.Provider
 				value={{ strokeColor, backgroundColor, strokeWidth, opacity, dashGap }}
 			>
 				{children}
 			</context.Provider>
-		</>
+		</div>
 	);
 }
 
