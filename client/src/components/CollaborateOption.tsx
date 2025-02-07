@@ -23,11 +23,15 @@ export default function CollaborateOption() {
 
 	const handleCollaborate = async () => {
 		toast.loading("Generating a unique room URL...");
-		const { data } = await axios.get(GENERATE_ROOM_API);
-		toast.dismiss();
-		toast.success("Generated a unique room URL");
-		setRoomUrl(window.location.href + "room/" + data.roomId);
-		setShow(true);
+		try {
+			const { data } = await axios.get(GENERATE_ROOM_API);
+			toast.success("Generated a unique room URL");
+			setRoomUrl(window.location.href + "room/" + data.roomId);
+			setShow(true);
+		} catch (error) {
+			toast.dismiss();
+			toast.error("It seems like the backend server is OFF...");
+		}
 	};
 
 	useEffect(() => {
