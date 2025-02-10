@@ -1,7 +1,7 @@
 import { ctx } from "../../main";
 import { Shape } from "./Shape";
 
-export default class Freehand extends Shape {
+export default class Pencil extends Shape {
 	points: vec2[];
 	stroke;
 
@@ -24,7 +24,7 @@ export default class Freehand extends Shape {
 	}
 
 	render_me_whole(): void {
-		console.log("rendering whole Freehand");
+		console.log("rendering whole Pencil");
 		// return;
 
 		const pts = this.points;
@@ -44,11 +44,11 @@ export default class Freehand extends Shape {
 	}
 
 	get_copy() {
-		const copy = new Freehand({ stroke: this.stroke });
+		const copy = new Pencil({ stroke: this.stroke });
 		copy.make_like(this);
 		return copy;
 	}
-	make_like(f: Freehand) {
+	make_like(f: Pencil) {
 		this.points = [...f.points];
 		// this.src = [...r.src];
 		// this.dims = [...r.dims];

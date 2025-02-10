@@ -1,13 +1,13 @@
 import { ctx } from "../../../main";
 import CanvasManager from "../../CanvasManager/CanvasManager";
-import Freehand from "../../Shape/Freehand";
+import Pencil from "../../Shape/Pencil";
 import ShapeMaker from "../ShapeMaker";
 
 let draw = false;
 
-const curr = new Freehand({});
+const curr = new Pencil({});
 
-export default class FreehandMaker extends ShapeMaker {
+export default class PencilMaker extends ShapeMaker {
 	protected mousedown(e: MouseEvent): void {
 		curr.prepare_for_render();
 		ctx.beginPath();

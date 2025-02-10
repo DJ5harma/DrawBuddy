@@ -30,6 +30,7 @@ export default class Rectangle extends Shape {
 	}
 
 	render_me_whole(): void {
+		this.prepare_for_render();
 		let [x, y] = this.src;
 		let [w, l] = this.dims;
 
