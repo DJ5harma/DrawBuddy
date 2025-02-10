@@ -1,4 +1,4 @@
-import init_canvas from "./Canvas/init_canvas";
+import init from "./canvas_system/init";
 import "./style.css";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = /*html*/ `
@@ -7,8 +7,8 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = /*html*/ `
   </div>
 `;
 
-const canvas = document.querySelector<HTMLCanvasElement>("#canvas")!;
+export const canvas = document.querySelector<HTMLCanvasElement>("#canvas")!;
 
 export const ctx = canvas.getContext("2d")!;
 
-init_canvas(canvas);
+init();
