@@ -10,7 +10,7 @@ export default class ShapeMakerManager {
 	private static curr_maker: ShapeMaker;
 
 	static init() {
-		this.curr_maker = this.makers[1];
+		this.curr_maker = this.makers[0];
 		this.curr_maker.start();
 		console.log("ShapeMakerManager init");
 	}

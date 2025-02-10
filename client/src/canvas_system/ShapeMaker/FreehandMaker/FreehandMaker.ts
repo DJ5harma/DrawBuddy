@@ -33,7 +33,7 @@ export default class FreehandMaker extends ShapeMaker {
 		ctx.lineTo(e.clientX, e.clientY);
 		draw = false;
 		ctx.closePath();
-		CanvasManager.store_shape(curr.get_copy());
+		CanvasManager.store_shape(curr);
 	}
 
 	public start(): void {

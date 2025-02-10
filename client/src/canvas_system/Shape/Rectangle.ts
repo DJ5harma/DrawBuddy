@@ -4,26 +4,57 @@ import { Shape } from "./Shape";
 export default class Rectangle extends Shape {
 	src;
 	dims;
-	constructor(x: number, y: number, w: number, h: number) {
+	stroke;
+
+	constructor({
+		src,
+		dims,
+		stroke,
+	}: {
+		src: vec2;
+		dims: vec2;
+		stroke?: {
+			width?: number;
+			color?: string;
+		};
+	}) {
 		super();
-		this.src = [x, y];
-		this.dims = [w, h];
+		this.src = src;
+		this.dims = dims;
+		this.stroke = { width: 5, color: "white", ...stroke };
 	}
+
+	prepare_for_render(): void {
+		ctx.strokeStyle = this.stroke.color;
+		ctx.lineWidth = this.stroke.width;
+	}
+
 	render_me_whole(): void {
-		ctx.strokeRect(
-			this.src[0],
-			this.src[1],
-			Math.abs(this.dims[0]),
-			Math.abs(this.dims[1])
-		);
+		let [x, y] = this.src;
+		let [w, l] = this.dims;
+
+		if (w < 0) {
+			w = -w;
+			x -= w;
+		}
+		if (l < 0) {
+			l = -l;
+			y -= l;
+		}
+		ctx.strokeRect(x, y, w, l);
 	}
 	unrender_me_whole(): void {}
 
 	get_copy() {
-		return new Rectangle(this.src[0], this.src[1], this.dims[0], this.dims[1]);
+		return new Rectangle({
+			src: [...this.src],
+			dims: [...this.dims],
+			stroke: { ...this.stroke },
+		});
 	}
 	make_like(r: Rectangle) {
-		this.src = [...r.src];
-		this.dims = [...r.dims];
+		this.src = [...r.src] as vec2;
+		this.dims = [...r.dims] as vec2;
+		this.stroke = { ...r.stroke };
 	}
 }

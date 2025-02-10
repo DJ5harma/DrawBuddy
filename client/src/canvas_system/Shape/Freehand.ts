@@ -3,10 +3,7 @@ import { Shape } from "./Shape";
 
 export default class Freehand extends Shape {
 	points: vec2[];
-	stroke: {
-		width: number;
-		color: string;
-	};
+	stroke;
 
 	constructor({
 		stroke,

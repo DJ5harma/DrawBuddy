@@ -10,8 +10,6 @@ export default class CanvasManager {
 		console.log("CanvasManager init");
 
 		document.addEventListener("keydown", (e) => {
-			console.log(e.key);
-
 			if (e.ctrlKey && e.key.toUpperCase() === "Z") this.undo();
 			if (e.ctrlKey && e.key.toUpperCase() === "Y") this.redo();
 		});
@@ -23,27 +21,20 @@ export default class CanvasManager {
 
 		this.undo_stack.push(last_shape);
 
-		console.log(this.arr);
-		console.log("deleted index", this.arr.length);
-		console.log(this.arr);
-
-		CanvasManager.clear_canvas();
-
-		this.arr.forEach((shape) => {
-			shape.render_me_whole();
-		});
+		this.clear_canvas_only_unrender().render_stored_shapes();
 	}
 
 	static redo() {
 		const last_undid_shape = this.undo_stack.pop();
+
 		if (!last_undid_shape) return;
 
 		this.store_shape(last_undid_shape).render_shape(last_undid_shape);
 	}
 
 	static store_shape(Shape: Shape) {
-		this.arr.push(Shape);
-		console.log(this.arr);
+		this.arr.push(Shape.getCopy());
+		// console.log(this.arr);
 
 		return this;
 	}
@@ -62,16 +53,15 @@ export default class CanvasManager {
 		this.arr = this.arr.filter((_, i) => i != key);
 		return this;
 	}
-	static unrender_shape(shape: Shape) {
+
+	static clear_canvas_only_unrender() {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		return this;
 	}
-	// static unrender_shape(key: number) {
-	// 	this.arr = this.arr.filter((_, i) => i != key);
-	// 	return this;
-	// }
-
-	static clear_canvas() {
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+	static clear_canvas_fully() {
+		this.clear_canvas_only_unrender();
+		this.arr = [];
+		this.undo_stack = [];
 		return this;
 	}
 
