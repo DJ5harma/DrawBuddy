@@ -1,4 +1,3 @@
-import { ctx } from "../../main";
 import { Shape } from "./Shape";
 
 export default class Rectangle extends Shape {
@@ -11,26 +10,26 @@ export default class Rectangle extends Shape {
 		dims,
 		stroke,
 	}: {
-		src: vec2;
-		dims: vec2;
+		src?: vec2;
+		dims?: vec2;
 		stroke?: {
 			width?: number;
 			color?: string;
 		};
 	}) {
 		super();
-		this.src = src;
-		this.dims = dims;
+		this.src = src || [-1, -1];
+		this.dims = dims || [0, 0];
 		this.stroke = { width: 5, color: "white", ...stroke };
 	}
 
-	prepare_for_render(): void {
+	prepare_for_render(ctx: CanvasRenderingContext2D): void {
 		ctx.strokeStyle = this.stroke.color;
 		ctx.lineWidth = this.stroke.width;
 	}
 
-	render_me_whole(): void {
-		this.prepare_for_render();
+	render_me_whole(ctx: CanvasRenderingContext2D): void {
+		this.prepare_for_render(ctx);
 		let [x, y] = this.src;
 		let [w, l] = this.dims;
 
@@ -44,14 +43,11 @@ export default class Rectangle extends Shape {
 		}
 		ctx.strokeRect(x, y, w, l);
 	}
-	unrender_me_whole(): void {}
 
 	get_copy() {
-		return new Rectangle({
-			src: [...this.src],
-			dims: [...this.dims],
-			stroke: { ...this.stroke },
-		});
+		const copy = new Rectangle({});
+		copy.make_like(this);
+		return copy;
 	}
 	make_like(r: Rectangle) {
 		this.src = [...r.src] as vec2;

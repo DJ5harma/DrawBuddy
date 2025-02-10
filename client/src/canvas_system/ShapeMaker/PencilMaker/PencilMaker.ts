@@ -1,19 +1,23 @@
 import { ctx } from "../../../main";
-import CanvasManager from "../../CanvasManager/CanvasManager";
+import CanvasManager from "../../CanvasManagers/CanvasManager";
 import Pencil from "../../Shape/Pencil";
 import ShapeMaker from "../ShapeMaker";
 
 let draw = false;
 
-const curr = new Pencil({});
+let curr = new Pencil({});
 
 export default class PencilMaker extends ShapeMaker {
 	protected mousedown(e: MouseEvent): void {
-		curr.prepare_for_render();
-		ctx.beginPath();
-		ctx.moveTo(e.clientX, e.clientY);
-		curr.points = [[e.clientX, e.clientY]];
 		draw = true;
+
+		curr.points = [];
+		curr.prepare_for_render();
+
+		ctx.moveTo(e.clientX, e.clientY);
+		ctx.beginPath();
+
+		curr.points = [[e.clientX, e.clientY]];
 	}
 
 	protected mousemove(e: MouseEvent): void {

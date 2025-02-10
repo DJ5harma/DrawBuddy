@@ -24,14 +24,11 @@ export default class Pencil extends Shape {
 	}
 
 	render_me_whole(): void {
-		console.log("rendering whole Pencil");
-		// return;
-
+		// console.log("rendering whole Pencil");
 		const pts = this.points;
 		if (pts.length < 2) return;
 
 		this.prepare_for_render();
-
 		ctx.beginPath();
 		ctx.moveTo(pts[0][0], pts[0][1]);
 
@@ -44,7 +41,7 @@ export default class Pencil extends Shape {
 	}
 
 	get_copy() {
-		const copy = new Pencil({ stroke: this.stroke });
+		const copy = new Pencil({});
 		copy.make_like(this);
 		return copy;
 	}

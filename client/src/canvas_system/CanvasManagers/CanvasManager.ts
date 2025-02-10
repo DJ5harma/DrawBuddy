@@ -1,6 +1,7 @@
 import { canvas, ctx } from "../../main";
 import { Shape } from "../Shape/Shape";
 
+// only knows about real ctx
 export default class CanvasManager {
 	private static arr: Shape[] = [];
 
@@ -21,7 +22,7 @@ export default class CanvasManager {
 
 		this.undo_stack.push(last_shape);
 
-		this.clear_canvas_only_unrender().render_stored_shapes();
+		this.clear_canvas_only_unrender().render_stored_shapes_all();
 	}
 
 	static redo() {
@@ -33,18 +34,18 @@ export default class CanvasManager {
 	}
 
 	static store_shape(Shape: Shape) {
-		this.arr.push(Shape.getCopy());
+		this.arr.push(Shape);
 		// console.log(this.arr);
 
 		return this;
 	}
 
 	static render_shape(Shape: Shape) {
-		Shape.render_me_whole();
+		Shape.render_me_whole(ctx);
 		return this;
 	}
 
-	static render_stored_shapes() {
+	static render_stored_shapes_all() {
 		this.arr.forEach((Shape) => this.render_shape(Shape));
 		return this;
 	}
@@ -65,12 +66,12 @@ export default class CanvasManager {
 		return this;
 	}
 
-	static get_shapes_inside_rect(
-		x1: number,
-		y1: number,
-		x2: number,
-		y2: number
-	) {
-		return [];
-	}
+	// static get_shapes_inside_rect(
+	// 	x1: number,
+	// 	y1: number,
+	// 	x2: number,
+	// 	y2: number
+	// ) {
+	// 	return [];
+	// }
 }

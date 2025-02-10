@@ -1,4 +1,4 @@
-import PencilMaker from "../ShapeMaker/PencilMaker/Pencil";
+import PencilMaker from "../ShapeMaker/PencilMaker/PencilMaker";
 import RectangleMaker from "../ShapeMaker/RectangleMaker/RectangleMaker";
 import ShapeMaker from "../ShapeMaker/ShapeMaker";
 
@@ -18,11 +18,8 @@ export default class ShapeMakerManager {
 	}
 
 	static switch_maker(tool_name: Tools) {
-		const new_maker = this.makersMap.get(tool_name)!;
-		if (new_maker === this.curr_maker) return;
-
 		this.curr_maker.stop();
-		this.curr_maker = new_maker;
+		this.curr_maker = this.makersMap.get(tool_name)!;
 		this.curr_maker.start();
 	}
 }
