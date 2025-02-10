@@ -49,6 +49,9 @@ export default class Rectangle extends Shape {
 		copy.make_like(this);
 		return copy;
 	}
+
+	calculate_rects(): void {}
+
 	make_like(r: Rectangle) {
 		this.src = [...r.src] as vec2;
 		this.dims = [...r.dims] as vec2;

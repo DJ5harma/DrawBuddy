@@ -22,4 +22,8 @@ export default class ShapeMakerManager {
 		this.curr_maker = this.makersMap.get(tool_name)!;
 		this.curr_maker.start();
 	}
+
+	static pause_maker() {
+		this.curr_maker.stop();
+	}
 }

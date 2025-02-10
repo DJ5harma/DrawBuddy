@@ -1,5 +1,5 @@
 import { temp_canvas, temp_ctx } from "../../main";
-import { Shape } from "../Shape/Shape";
+import { Shape } from "../Shapes/Shape";
 
 // only knows about temp_ctx
 export default class TempCanvasManager {

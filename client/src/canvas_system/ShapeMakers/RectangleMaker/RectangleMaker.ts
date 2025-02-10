@@ -1,8 +1,8 @@
-import Rectangle from "../../Shape/Rectangle";
+import Rectangle from "../../Shapes/Rectangle";
 import ShapeMaker from "../ShapeMaker";
-import CanvasManager from "../../CanvasManagers/CanvasManager";
+import CanvasManager from "../../Managers/CanvasManager";
 import { temp_ctx } from "../../../main";
-import TempCanvasManager from "../../CanvasManagers/TempCanvasManager";
+import TempCanvasManager from "../../Managers/TempCanvasManager";
 
 let draw = false;
 

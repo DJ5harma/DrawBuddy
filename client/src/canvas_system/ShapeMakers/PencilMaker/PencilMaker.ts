@@ -1,6 +1,6 @@
 import { ctx } from "../../../main";
-import CanvasManager from "../../CanvasManagers/CanvasManager";
-import Pencil from "../../Shape/Pencil";
+import CanvasManager from "../../Managers/CanvasManager";
+import Pencil from "../../Shapes/Pencil";
 import ShapeMaker from "../ShapeMaker";
 
 let draw = false;

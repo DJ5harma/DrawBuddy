@@ -1,4 +1,4 @@
-import ShapeMakerManager from "../../canvas_system/ShapeMakerManager/ShapeMakerManager";
+import ShapeMakerManager from "../../canvas_system/Managers/ShapeMakerManager";
 
 export default class ToolSelector {
 	static tool_names: Tools[];

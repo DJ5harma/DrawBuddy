@@ -1,6 +1,7 @@
 import { canvas, temp_canvas } from "../main";
-import ShapeMakerManager from "./ShapeMakerManager/ShapeMakerManager";
-import CanvasManager from "./CanvasManagers/CanvasManager";
+import ShapeMakerManager from "./Managers/ShapeMakerManager";
+import CanvasManager from "./Managers/CanvasManager";
+import UndoManager from "./Managers/UndoManager";
 
 function design_canvas() {
 	[canvas, temp_canvas].forEach((canvas) => {
@@ -21,6 +22,7 @@ export default function init_canvas_system() {
 
 	ShapeMakerManager.init();
 	CanvasManager.init();
+	UndoManager.init();
 	let mutex_unlocked = true;
 
 	window.addEventListener("resize", () => {
