@@ -1,4 +1,3 @@
-import { canvas } from "../main";
 import FreehandMaker from "./ShapeMaker/FreehandMaker/FreehandMaker";
 import RectangleMaker from "./ShapeMaker/RectangleMaker/RectangleMaker";
 import ShapeMaker from "./ShapeMaker/ShapeMaker";
@@ -9,10 +8,16 @@ export default class ShapeMakerManager {
 
 	constructor() {
 		this.curr_maker = this.makers[0];
+		this.curr_maker.start();
+	}
 
-		window.addEventListener("resize", () => {
-			canvas.width = window.innerWidth;
-			canvas.height = window.innerHeight;
-		});
+	switch_maker(key: number) {
+		if (key > this.makers.length) {
+			console.error("switch_maker error 1");
+			return;
+		}
+		this.curr_maker.stop();
+		this.curr_maker = this.makers[key];
+		this.curr_maker.start();
 	}
 }
