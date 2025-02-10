@@ -11,6 +11,7 @@ export default class RectangleMaker extends ShapeMaker {
 	protected mousedown(e: MouseEvent): void {
 		draw = true;
 		curr = new Rectangle({ src: [e.clientX, e.clientY], dims: [0, 0] });
+		curr.prepare_for_render();
 
 		ctx.beginPath();
 		ctx.moveTo(e.clientX, e.clientY);
