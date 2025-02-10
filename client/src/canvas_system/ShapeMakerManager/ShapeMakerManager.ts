@@ -1,6 +1,6 @@
-import PencilMaker from "../ShapeMaker/PencilMaker/PencilMaker";
-import RectangleMaker from "../ShapeMaker/RectangleMaker/RectangleMaker";
-import ShapeMaker from "../ShapeMaker/ShapeMaker";
+import PencilMaker from "../ShapeMakers/PencilMaker/PencilMaker";
+import RectangleMaker from "../ShapeMakers/RectangleMaker/RectangleMaker";
+import ShapeMaker from "../ShapeMakers/ShapeMaker";
 
 export default class ShapeMakerManager {
 	private static makersMap = new Map<Tools, ShapeMaker>();
