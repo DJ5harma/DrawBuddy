@@ -8,14 +8,20 @@ export default class CanvasManager {
 		console.log("CanvasManager init");
 
 		document.addEventListener("keydown", (e) => {
-			if (e.ctrlKey && this.arr.length) {
-				this.arr.pop();
-				CanvasManager.clear_canvas();
-				this.arr.forEach((shape) => {
-					shape.render_me_whole();
-				});
-				console.log("deleted index", this.arr.length);
-			}
+			if (e.ctrlKey && this.arr.length) this.undo();
+		});
+	}
+
+	static undo() {
+		this.arr.pop();
+		console.log(this.arr);
+		console.log("deleted index", this.arr.length);
+		console.log(this.arr);
+
+		CanvasManager.clear_canvas();
+
+		this.arr.forEach((shape) => {
+			shape.render_me_whole();
 		});
 	}
 

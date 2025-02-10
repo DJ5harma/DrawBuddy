@@ -9,9 +9,10 @@ const curr = new Freehand({});
 
 export default class FreehandMaker extends ShapeMaker {
 	protected mousedown(e: MouseEvent): void {
-		curr.configure_ctx();
+		curr.prepare_for_render();
 		ctx.beginPath();
 		ctx.moveTo(e.clientX, e.clientY);
+		curr.points = [[e.clientX, e.clientY]];
 		draw = true;
 	}
 
@@ -28,10 +29,11 @@ export default class FreehandMaker extends ShapeMaker {
 		ctx.moveTo(x, y);
 	}
 
-	protected mouseup(_: MouseEvent): void {
+	protected mouseup(e: MouseEvent): void {
+		ctx.lineTo(e.clientX, e.clientY);
 		draw = false;
 		ctx.closePath();
-		CanvasManager.store_shape(curr);
+		CanvasManager.store_shape(curr.get_copy());
 	}
 
 	public start(): void {
