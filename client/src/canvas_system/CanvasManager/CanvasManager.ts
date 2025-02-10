@@ -1,17 +1,32 @@
 import { canvas, ctx } from "../../main";
 import { Shape } from "../Shape/Shape";
 
-export default class ShapeManager {
+export default class CanvasManager {
 	private static arr: Shape[] = [];
 
-	static init() {}
+	static init() {
+		console.log("CanvasManager init");
+
+		document.addEventListener("keydown", (e) => {
+			if (e.ctrlKey && this.arr.length) {
+				this.arr.pop();
+				CanvasManager.clear_canvas();
+				this.arr.forEach((shape) => {
+					shape.render_me_whole();
+				});
+				console.log("deleted index", this.arr.length);
+			}
+		});
+	}
 
 	static store_shape(Shape: Shape) {
 		this.arr.push(Shape);
+		console.log(this.arr);
+
 		return this;
 	}
 	static render_shape(Shape: Shape) {
-		Shape.render_me();
+		Shape.render_me_whole();
 		return this;
 	}
 
@@ -24,12 +39,15 @@ export default class ShapeManager {
 		this.arr = this.arr.filter((_, i) => i != key);
 		return this;
 	}
-	static unrender_shape(key: number) {
-		this.arr = this.arr.filter((_, i) => i != key);
+	static unrender_shape(shape: Shape) {
 		return this;
 	}
+	// static unrender_shape(key: number) {
+	// 	this.arr = this.arr.filter((_, i) => i != key);
+	// 	return this;
+	// }
 
-	static unrender_all_shapes() {
+	static clear_canvas() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		return this;
 	}

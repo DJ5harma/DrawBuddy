@@ -1,39 +1,40 @@
-import { ctx } from "../../../main";
-import { Rectangle } from "../../Shape/Rectangle/Rectangle";
-import Store from "../../ShapeManager/ShapeManager";
+import Rectangle from "../../Shape/Rectangle";
+import Store from "../../CanvasManager/CanvasManager";
 import ShapeMaker from "../ShapeMaker";
+import CanvasManager from "../../CanvasManager/CanvasManager";
 
-let prev = [0, 0, 0, 0];
 let draw = false;
 
-let rectangle = new Rectangle(0, 0, 0, 0);
+let curr = new Rectangle(0, 0, 0, 0);
+let prev = new Rectangle(0, 0, 0, 0);
 
 export default class RectangleMaker extends ShapeMaker {
 	protected mousedown(e: MouseEvent): void {
 		draw = true;
-		rectangle = new Rectangle(e.clientX, e.clientY, 0, 0);
-		prev = [...rectangle.src, 0, 0];
+		curr = new Rectangle(e.clientX, e.clientY, 0, 0);
+		prev.dims = [0, 0];
+		prev.src = [...curr.src];
 	}
 
 	protected mousemove(e: MouseEvent): void {
 		if (!draw) return;
 
-		ctx.clearRect(prev[0] - 1, prev[1] - 1, prev[2] + 2, prev[3] + 2);
+		prev.make_like(curr);
+		CanvasManager.unrender_shape(prev);
 
-		const width = e.clientX - rectangle.src[0];
-		const height = e.clientY - rectangle.src[1];
+		const width = e.clientX - curr.src[0];
+		const height = e.clientY - curr.src[1];
 
-		const x = width < 0 ? e.clientX : rectangle.src[0];
-		const y = height < 0 ? e.clientY : rectangle.src[1];
+		const x = width < 0 ? e.clientX : curr.src[0];
+		const y = height < 0 ? e.clientY : curr.src[1];
 
-		prev = [x, y, Math.abs(width), Math.abs(height)];
-
-		ctx.strokeRect(x, y, Math.abs(width), Math.abs(height));
+		curr.dims = [Math.abs(width), Math.abs(height)];
+		CanvasManager.render_shape(curr);
 	}
 
 	protected mouseup(_: MouseEvent): void {
 		draw = false;
-		Store.store_and_render_shape(rectangle);
+		Store.store_shape(curr).render_shape(curr);
 	}
 
 	public start(): void {

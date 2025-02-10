@@ -1,6 +1,6 @@
 import { canvas } from "../main";
 import ShapeMakerManager from "./ShapeMakerManager/ShapeMakerManager";
-import ShapeManager from "./ShapeManager/ShapeManager";
+import CanvasManager from "./CanvasManager/CanvasManager";
 
 export default function init_canvas_system() {
 	canvas.style.position = "fixed";
@@ -10,8 +10,8 @@ export default function init_canvas_system() {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 
-	ShapeManager.init();
 	ShapeMakerManager.init();
+	CanvasManager.init();
 
 	window.addEventListener("resize", () => {
 		canvas.width = window.innerWidth;
