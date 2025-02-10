@@ -1,10 +1,10 @@
 export default abstract class ShapeMaker {
-	mousedown(_: MouseEvent) {}
+	protected mousedown(_: MouseEvent) {}
 
-	mousemove(_: MouseEvent) {}
+	protected mousemove(_: MouseEvent) {}
 
-	mouseup(_: MouseEvent) {}
+	protected mouseup(_: MouseEvent) {}
 
-	start() {}
-	stop() {}
+	public start() {}
+	public stop() {}
 }
