@@ -4,16 +4,25 @@ import { Shape } from "../Shape/Shape";
 export default class CanvasManager {
 	private static arr: Shape[] = [];
 
+	private static undo_stack: Shape[] = [];
+
 	static init() {
 		console.log("CanvasManager init");
 
 		document.addEventListener("keydown", (e) => {
-			if (e.ctrlKey && this.arr.length) this.undo();
+			console.log(e.key);
+
+			if (e.ctrlKey && e.key.toUpperCase() === "Z") this.undo();
+			if (e.ctrlKey && e.key.toUpperCase() === "Y") this.redo();
 		});
 	}
 
 	static undo() {
-		this.arr.pop();
+		const last_shape = this.arr.pop();
+		if (!last_shape) return;
+
+		this.undo_stack.push(last_shape);
+
 		console.log(this.arr);
 		console.log("deleted index", this.arr.length);
 		console.log(this.arr);
@@ -25,12 +34,20 @@ export default class CanvasManager {
 		});
 	}
 
+	static redo() {
+		const last_undid_shape = this.undo_stack.pop();
+		if (!last_undid_shape) return;
+
+		this.store_shape(last_undid_shape).render_shape(last_undid_shape);
+	}
+
 	static store_shape(Shape: Shape) {
 		this.arr.push(Shape);
 		console.log(this.arr);
 
 		return this;
 	}
+
 	static render_shape(Shape: Shape) {
 		Shape.render_me_whole();
 		return this;
