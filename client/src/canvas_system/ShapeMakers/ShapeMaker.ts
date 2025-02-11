@@ -5,6 +5,7 @@ export default abstract class ShapeMaker {
 
 	protected mouseup(_: MouseEvent) {}
 
+	public set_config(_config: { stroke: Stroke }) {}
 	public start() {}
 	public stop() {}
 }

@@ -12,10 +12,7 @@ export default class Rectangle extends Shape {
 	}: {
 		src?: vec2;
 		dims?: vec2;
-		stroke?: {
-			width?: number;
-			color?: string;
-		};
+		stroke?: Stroke;
 	}) {
 		super();
 		this.src = src || [-1, -1];
@@ -50,11 +47,20 @@ export default class Rectangle extends Shape {
 		return copy;
 	}
 
-	calculate_rects(): void {}
-
 	make_like(r: Rectangle) {
 		this.src = [...r.src] as vec2;
 		this.dims = [...r.dims] as vec2;
 		this.stroke = { ...r.stroke };
+	}
+
+	is_inside_rect(_rect: { src: vec2; dims: vec2 }): boolean {
+		const { src, dims } = _rect;
+
+		return (
+			src[0] < this.src[0] &&
+			src[1] < this.src[1] &&
+			src[0] + dims[0] > this.src[0] + this.dims[0] &&
+			src[1] + dims[1] > this.src[1] + this.dims[1]
+		);
 	}
 }

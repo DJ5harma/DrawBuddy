@@ -50,4 +50,30 @@ export default class Pencil extends Shape {
 		// this.src = [...r.src];
 		// this.dims = [...r.dims];
 	}
+
+	is_inside_rect(_rect: { src: vec2; dims: vec2 }): boolean {
+		const pts = this.points;
+
+		if (!pts.length) return false;
+
+		const { src, dims } = _rect;
+
+		let [min_x, min_y] = pts[0];
+		let [max_x, max_y] = pts[0];
+
+		pts.forEach(([x, y]) => {
+			min_x = Math.min(min_x, x);
+			min_y = Math.min(min_y, y);
+
+			max_x = Math.max(max_x, x);
+			max_y = Math.max(max_y, y);
+		});
+
+		return (
+			src[0] < min_x &&
+			src[1] < min_y &&
+			src[0] + dims[0] > max_x &&
+			src[1] + dims[1] > max_y
+		);
+	}
 }

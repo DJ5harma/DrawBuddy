@@ -9,6 +9,10 @@ export default class CanvasManager {
 		console.log("CanvasManager init");
 	}
 
+	static get_shapes() {
+		return this.arr;
+	}
+
 	static store_shape(Shape: Shape) {
 		this.arr.push(Shape);
 		// console.log(this.arr);

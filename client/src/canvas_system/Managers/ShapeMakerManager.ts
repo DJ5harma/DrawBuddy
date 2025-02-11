@@ -20,6 +20,7 @@ export default class ShapeMakerManager {
 	static switch_maker(tool_name: Tools) {
 		this.curr_maker.stop();
 		this.curr_maker = this.makersMap.get(tool_name)!;
+		this.curr_maker.set_config({ stroke: { color: "yellow" } });
 		this.curr_maker.start();
 	}
 

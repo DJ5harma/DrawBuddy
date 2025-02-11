@@ -11,13 +11,12 @@ let curr = new Rectangle({ src: [0, 0], dims: [0, 0] });
 export default class RectangleMaker extends ShapeMaker {
 	protected mousedown(e: MouseEvent): void {
 		draw = true;
-		curr = new Rectangle({ src: [e.clientX, e.clientY], dims: [0, 0] });
+		curr.src = [e.clientX, e.clientY];
+		curr.dims = [0, 0];
 
 		curr.prepare_for_render(temp_ctx);
 		temp_ctx.beginPath();
 		temp_ctx.moveTo(e.clientX, e.clientY);
-
-		draw = true;
 	}
 
 	protected mousemove(e: MouseEvent): void {
@@ -26,13 +25,17 @@ export default class RectangleMaker extends ShapeMaker {
 
 		curr.dims = [x - curr.src[0], y - curr.src[1]];
 
-		curr.render_me_whole(temp_ctx);
 		TempCanvasManager.clear_canvas_only_unrender().render_shape(curr);
 	}
 
 	protected mouseup(_: MouseEvent): void {
 		draw = false;
 		CanvasManager.store_shape(curr).render_shape(curr);
+	}
+
+	public set_config(_config: { stroke: Stroke }): void {
+		const { stroke } = _config;
+		curr.stroke = { ...curr.stroke, ...stroke };
 	}
 
 	public start(): void {

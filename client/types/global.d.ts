@@ -8,6 +8,8 @@ declare global {
 	type Tools = "RECTANGLE" | "PENCIL";
 	var Tools = Tools;
 
+	type Stroke = { width?: number; color?: string };
+	var Stroke = Stroke;
 	// interface Rectangle {
 	// 	name: "RECTANGLE";
 	// 	src: vec2;
