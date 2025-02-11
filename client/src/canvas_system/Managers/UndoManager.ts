@@ -5,7 +5,7 @@ export class UndoManager {
 	private static undo_stack: Shape[] = [];
 
 	static init() {
-		console.log("UndoManager init");
+		console.log(this.name);
 
 		document.addEventListener("keydown", (e) => {
 			if (e.ctrlKey && e.key.toUpperCase() === "Z") this.undo();

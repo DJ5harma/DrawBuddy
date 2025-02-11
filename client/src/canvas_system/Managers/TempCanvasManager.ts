@@ -4,7 +4,7 @@ import { Shape } from "../Shapes/Shape";
 // only knows about temp_ctx
 export class TempCanvasManager {
 	static init() {
-		console.log("TempCanvasManager init");
+		console.log(this.name);
 	}
 
 	static render_shape(Shape: Shape) {

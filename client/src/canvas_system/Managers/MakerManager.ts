@@ -8,13 +8,14 @@ export class MakerManager {
 	private static curr_maker: Maker;
 
 	static init() {
+		console.log(this.name);
+
 		this.makersMap.set("PENCIL", new PencilMaker());
 		this.makersMap.set("RECTANGLE", new RectangleMaker());
 
 		this.curr_maker = this.makersMap.get("PENCIL")!;
 
 		this.curr_maker.start();
-		console.log("MakerManager init");
 	}
 
 	static switch_maker(tool_name: Tools) {

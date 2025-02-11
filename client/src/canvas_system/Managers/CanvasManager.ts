@@ -6,7 +6,7 @@ export class CanvasManager {
 	private static arr: Shape[] = [];
 
 	static init() {
-		console.log("CanvasManager init");
+		console.log(this.name);
 	}
 
 	static get_shapes() {
