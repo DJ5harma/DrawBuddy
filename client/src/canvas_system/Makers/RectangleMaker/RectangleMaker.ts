@@ -1,14 +1,14 @@
-import Rectangle from "../../Shapes/Rectangle";
-import ShapeMaker from "../ShapeMaker";
-import CanvasManager from "../../Managers/CanvasManager";
+import { Rectangle } from "../../Shapes/Rectangle";
+import { Maker } from "../Maker";
+import { CanvasManager } from "../../Managers/CanvasManager";
 import { temp_ctx } from "../../../main";
-import TempCanvasManager from "../../Managers/TempCanvasManager";
+import { TempCanvasManager } from "../../Managers/TempCanvasManager";
 
 let draw = false;
 
 let curr = new Rectangle({ src: [0, 0], dims: [0, 0] });
 
-export default class RectangleMaker extends ShapeMaker {
+export class RectangleMaker extends Maker {
 	protected mousedown(e: MouseEvent): void {
 		draw = true;
 		curr.src = [e.clientX, e.clientY];

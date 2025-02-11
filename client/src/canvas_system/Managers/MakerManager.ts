@@ -1,11 +1,11 @@
-import PencilMaker from "../ShapeMakers/PencilMaker/PencilMaker";
-import RectangleMaker from "../ShapeMakers/RectangleMaker/RectangleMaker";
-import ShapeMaker from "../ShapeMakers/ShapeMaker";
+import { PencilMaker } from "../Makers/PencilMaker/PencilMaker";
+import { RectangleMaker } from "../Makers/RectangleMaker/RectangleMaker";
+import { Maker } from "../Makers/Maker";
 
-export default class ShapeMakerManager {
-	private static makersMap = new Map<Tools, ShapeMaker>();
+export class MakerManager {
+	private static makersMap = new Map<Tools, Maker>();
 
-	private static curr_maker: ShapeMaker;
+	private static curr_maker: Maker;
 
 	static init() {
 		this.makersMap.set("PENCIL", new PencilMaker());
@@ -14,7 +14,7 @@ export default class ShapeMakerManager {
 		this.curr_maker = this.makersMap.get("PENCIL")!;
 
 		this.curr_maker.start();
-		console.log("ShapeMakerManager init");
+		console.log("MakerManager init");
 	}
 
 	static switch_maker(tool_name: Tools) {

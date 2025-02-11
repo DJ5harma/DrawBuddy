@@ -1,7 +1,7 @@
 import { ctx } from "../../main";
 import { Shape } from "./Shape";
 
-export default class Pencil extends Shape {
+export class Pencil extends Shape {
 	points: vec2[];
 	stroke;
 
@@ -47,8 +47,6 @@ export default class Pencil extends Shape {
 	}
 	make_like(f: Pencil) {
 		this.points = [...f.points];
-		// this.src = [...r.src];
-		// this.dims = [...r.dims];
 	}
 
 	is_inside_rect(_rect: { src: vec2; dims: vec2 }): boolean {

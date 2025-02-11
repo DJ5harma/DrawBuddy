@@ -1,6 +1,6 @@
 import { Shape } from "./Shape";
 
-export default class Rectangle extends Shape {
+export class Rectangle extends Shape {
 	src;
 	dims;
 	stroke;

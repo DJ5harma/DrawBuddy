@@ -1,7 +1,7 @@
-import SelectionManager from "../../canvas_system/Managers/SelectionManager";
-import ShapeMakerManager from "../../canvas_system/Managers/ShapeMakerManager";
+import { SelectionManager } from "../../../canvas_system/Managers/SelectionManager";
+import { MakerManager } from "../../../canvas_system/Managers/MakerManager";
 
-export default class ToolSelector {
+export class ToolSelector {
 	static tool_names: Tools[];
 	static tool_selector: HTMLDivElement;
 
@@ -32,7 +32,7 @@ export default class ToolSelector {
 
 		elem.addEventListener("click", (_) => {
 			console.log(tool_name, "clicked");
-			ShapeMakerManager.pause_maker();
+			MakerManager.pause_maker();
 			SelectionManager.start_selection_lifecycle();
 		});
 	}
@@ -75,7 +75,7 @@ export default class ToolSelector {
 			elem.addEventListener("click", (_) => {
 				console.log(name, "clicked");
 				SelectionManager.stop_selection();
-				ShapeMakerManager.switch_maker(name);
+				MakerManager.switch_maker(name);
 			});
 		});
 	}

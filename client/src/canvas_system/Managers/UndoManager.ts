@@ -1,7 +1,7 @@
-import CanvasManager from "./CanvasManager";
+import { CanvasManager } from "./CanvasManager";
 import { Shape } from "../Shapes/Shape";
 
-export default class UndoManager {
+export class UndoManager {
 	private static undo_stack: Shape[] = [];
 
 	static init() {

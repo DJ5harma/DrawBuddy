@@ -1,4 +1,4 @@
-export default abstract class ShapeMaker {
+export abstract class Maker {
 	protected mousedown(_: MouseEvent) {}
 
 	protected mousemove(_: MouseEvent) {}

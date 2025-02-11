@@ -1,13 +1,13 @@
 import { ctx } from "../../../main";
-import CanvasManager from "../../Managers/CanvasManager";
-import Pencil from "../../Shapes/Pencil";
-import ShapeMaker from "../ShapeMaker";
+import { CanvasManager } from "../../Managers/CanvasManager";
+import { Pencil } from "../../Shapes/Pencil";
+import { Maker } from "../Maker";
 
 let draw = false;
 
 let curr = new Pencil({});
 
-export default class PencilMaker extends ShapeMaker {
+export class PencilMaker extends Maker {
 	protected mousedown(e: MouseEvent): void {
 		draw = true;
 
