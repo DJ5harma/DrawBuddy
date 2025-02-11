@@ -74,6 +74,7 @@ export default class ToolSelector {
 
 			elem.addEventListener("click", (_) => {
 				console.log(name, "clicked");
+				SelectionManager.stop_selection();
 				ShapeMakerManager.switch_maker(name);
 			});
 		});

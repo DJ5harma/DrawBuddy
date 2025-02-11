@@ -14,8 +14,10 @@ let curr = new Rectangle({
 	},
 });
 
-export class SelectionRectangleMaker extends ShapeMaker {
+class SelectionRectangleMaker extends ShapeMaker {
 	protected mousedown(e: MouseEvent): void {
+		if (!SelectionManager.selecting) return;
+
 		draw = true;
 		curr.src = [e.clientX, e.clientY];
 		curr.dims = [0, 0];
@@ -35,7 +37,6 @@ export class SelectionRectangleMaker extends ShapeMaker {
 	}
 
 	protected mouseup(_: MouseEvent): void {
-		SelectionManager.selecting = false;
 		draw = false;
 
 		const shapes = CanvasManager.get_shapes();
@@ -60,7 +61,7 @@ export class SelectionRectangleMaker extends ShapeMaker {
 		document.removeEventListener("mousemove", this.mousemove);
 		document.removeEventListener("mouseup", this.mouseup);
 
-		SelectionManager.selecting = false;
+		TempCanvasManager.clear_canvas_only_unrender();
 	}
 
 	public start(): void {
@@ -68,7 +69,6 @@ export class SelectionRectangleMaker extends ShapeMaker {
 		document.addEventListener("mousemove", this.mousemove);
 		document.addEventListener("mouseup", this.mouseup);
 	}
-	public stop(): void {}
 }
 
 export default class SelectionManager {
@@ -78,5 +78,9 @@ export default class SelectionManager {
 		this.selecting = true;
 		const rect_maker = new SelectionRectangleMaker();
 		rect_maker.start();
+	}
+
+	static stop_selection() {
+		this.selecting = false;
 	}
 }
