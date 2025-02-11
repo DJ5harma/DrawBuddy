@@ -13,7 +13,7 @@ export class SelectionManager {
 		rect_maker.start();
 	}
 
-	static stop_selection() {
+	static stop_selection_lifecycle() {
 		this.selecting = false;
 	}
 }

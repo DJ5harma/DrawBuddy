@@ -14,7 +14,7 @@ export class CanvasManager {
 	}
 
 	static store_shape(Shape: Shape) {
-		this.arr.push(Shape);
+		this.arr.push(Shape.get_copy());
 		// console.log(this.arr);
 
 		return this;

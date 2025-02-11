@@ -1,5 +1,7 @@
 export abstract class Shape {
-	getCopy: () => Shape = () => this; // not this, but copy
+	get_copy(): Shape {
+		return { ...this };
+	} // not this, but copy
 
 	prepare_for_render(_ctx: CanvasRenderingContext2D) {}
 

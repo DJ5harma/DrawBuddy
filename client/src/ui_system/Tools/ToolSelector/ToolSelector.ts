@@ -74,7 +74,7 @@ export class ToolSelector {
 
 			elem.addEventListener("click", (_) => {
 				console.log(name, "clicked");
-				SelectionManager.stop_selection();
+				SelectionManager.stop_selection_lifecycle();
 				MakerManager.switch_maker(name);
 			});
 		});

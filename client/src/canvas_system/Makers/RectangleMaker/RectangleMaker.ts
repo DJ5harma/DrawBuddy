@@ -11,6 +11,7 @@ let curr = new Rectangle({ src: [0, 0], dims: [0, 0] });
 export class RectangleMaker extends Maker {
 	protected mousedown(e: MouseEvent): void {
 		draw = true;
+
 		curr.src = [e.clientX, e.clientY];
 		curr.dims = [0, 0];
 
