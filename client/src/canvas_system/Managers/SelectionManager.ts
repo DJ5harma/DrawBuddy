@@ -1,7 +1,7 @@
 import { SelectionRectangleMaker } from "../Makers/SelectionRectangleMaker/SelectionRectangleMaker";
 
 export class SelectionManager {
-	static selecting = false;
+	private static selecting = false;
 
 	static init() {
 		console.log(this.name);
@@ -15,5 +15,9 @@ export class SelectionManager {
 
 	static stop_selection_lifecycle() {
 		this.selecting = false;
+	}
+
+	static is_selecting() {
+		return this.selecting;
 	}
 }

@@ -43,7 +43,7 @@ export class ToolSelector {
 		console.log("tool_selector ui init");
 
 		this.tool_selector.addEventListener("mousedown", (e) => {
-			if (SelectionManager.selecting) return;
+			if (SelectionManager.is_selecting()) return;
 			e.stopPropagation();
 		});
 

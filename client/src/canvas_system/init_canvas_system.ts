@@ -8,13 +8,13 @@ function design_canvas() {
 	canvases.forEach((cvs) => {
 		const { style } = cvs;
 
-		style.position = "absolute";
+		style.position = "fixed";
 		style.border = "solid red";
 		style.left = "0px";
 		style.top = "0px";
 
-		cvs.width = window.innerWidth * 1.5;
-		cvs.height = window.innerHeight * 1.5;
+		cvs.width = window.innerWidth;
+		cvs.height = window.innerHeight;
 	});
 }
 

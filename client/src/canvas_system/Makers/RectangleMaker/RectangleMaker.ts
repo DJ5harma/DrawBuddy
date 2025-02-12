@@ -31,23 +31,24 @@ export class RectangleMaker extends Maker {
 		TempCanvasManager.clear_canvas_only_unrender().render_shape(curr);
 	}
 
-	protected mouseup(_: MouseEvent): void {
+	protected mouseup(e: MouseEvent): void {
+		if (e.button !== 0) return;
 		draw = false;
 		CanvasManager.store_shape(curr).render_shape(curr);
 		TempCanvasManager.clear_canvas_only_unrender();
 	}
 
-	public set_config(_config: { stroke: Stroke }): void {
+	set_config(_config: { stroke: Stroke }): void {
 		const { stroke } = _config;
 		curr.stroke = { ...curr.stroke, ...stroke };
 	}
 
-	public start(): void {
+	start(): void {
 		document.addEventListener("mousedown", this.mousedown);
 		document.addEventListener("mousemove", this.mousemove);
 		document.addEventListener("mouseup", this.mouseup);
 	}
-	public stop(): void {
+	stop(): void {
 		document.removeEventListener("mousedown", this.mousedown);
 		document.removeEventListener("mousemove", this.mousemove);
 		document.removeEventListener("mouseup", this.mouseup);

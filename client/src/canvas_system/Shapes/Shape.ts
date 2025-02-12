@@ -18,4 +18,6 @@ export abstract class Shape {
 	is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
 		return false;
 	}
+
+	displace_by(_displacement: vec2) {}
 }

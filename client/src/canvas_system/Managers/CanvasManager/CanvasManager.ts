@@ -21,6 +21,7 @@ export class CanvasManager {
 
 		return this;
 	}
+
 	static pop_shape() {
 		return this.arr.pop();
 	}
@@ -39,6 +40,7 @@ export class CanvasManager {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		return this;
 	}
+
 	static clear_canvas_fully() {
 		this.clear_canvas_only_unrender();
 		this.arr = [];

@@ -1,4 +1,3 @@
-import { CanvasDragger } from "../Managers/CanvasManager/CanvasDragger";
 import { Shape } from "./Shape";
 
 export class Rectangle extends Shape {
@@ -32,6 +31,7 @@ export class Rectangle extends Shape {
 
 	render_me_whole(ctx: CanvasRenderingContext2D): void {
 		this.prepare_for_render(ctx);
+
 		let [x, y] = this.pos;
 		let [w, l] = this.dims;
 
@@ -43,11 +43,6 @@ export class Rectangle extends Shape {
 			l = -l;
 			y -= l;
 		}
-
-		const [loc_x, loc_y] = CanvasDragger.get_location();
-
-		x -= loc_x;
-		y -= loc_y;
 
 		ctx.strokeRect(x, y, w, l);
 		ctx.fillStyle = this.fill;
@@ -75,5 +70,11 @@ export class Rectangle extends Shape {
 			pos[0] + dims[0] > this.pos[0] + this.dims[0] &&
 			pos[1] + dims[1] > this.pos[1] + this.dims[1]
 		);
+	}
+	displace_by(_displacement: vec2): void {
+		const [x, y] = _displacement;
+
+		this.pos[0] += x;
+		this.pos[1] += y;
 	}
 }

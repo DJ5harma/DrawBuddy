@@ -1,80 +1,54 @@
-import { canvas, canvases } from "../../../main";
+import { buffer_canvas, buffer_ctx, canvas, ctx } from "../../../main";
+import { CanvasManager } from "./CanvasManager";
 
 export class CanvasDragger {
-	private static location: vec2 = [0, 0];
-
 	private static move_start_pos: vec2 = [0, 0];
 
 	private static move: boolean = false;
 
 	static init() {
 		console.log("CanvasDragger init");
-
-		document.addEventListener("wheel", (e) => {
-			const { deltaY } = e;
-
-			const dir_multiple = deltaY < 0 ? 1 : -1;
-			const displacement: vec2 = [0, dir_multiple * 50];
-
-			this.location[1] += displacement[1];
-
-			this.move_canvas();
-			// console.log(this.location);
-		});
+		buffer_canvas.style.visibility = "hidden";
+		buffer_canvas.width = window.innerWidth * 2;
+		buffer_canvas.height = window.innerHeight * 2;
 
 		document.addEventListener("mousedown", (e) => {
-			if (e.button !== 1) return;
-			this.move_start_pos = [e.clientX, e.clientY];
+			if (e.button !== 1) return; // Middle mouse button
+			buffer_ctx.drawImage(canvas, 0, 0);
 			this.move = true;
+			this.move_start_pos = [e.clientX, e.clientY];
 		});
 
 		document.addEventListener("mousemove", (e) => {
 			if (!this.move) return;
 
-			const displacement: vec2 = [
+			// ctx.translate(0, 0);
+			const new_translate: vec2 = [
 				e.clientX - this.move_start_pos[0],
 				e.clientY - this.move_start_pos[1],
 			];
+			CanvasManager.clear_canvas_only_unrender();
+			ctx.drawImage(buffer_canvas, ...new_translate);
 
-			if (this.location[0] + displacement[0] < 0) {
-				this.location[0] += displacement[0];
-				this.move_start_pos[0] = e.clientX;
-			}
-
-			if (this.location[1] + displacement[1] < 0) {
-				this.location[1] += displacement[1];
-				this.move_start_pos[1] = e.clientY;
-			}
-
-			this.move_canvas();
+			// this.move_start_pos = [e.clientX, e.clientY];
 		});
 
 		document.addEventListener("mouseup", (e) => {
 			if (e.button !== 1) return;
 			this.move = false;
+
+			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
+
+			const new_translate: vec2 = [
+				e.clientX - this.move_start_pos[0],
+				e.clientY - this.move_start_pos[1],
+			];
+
+			CanvasManager.get_shapes().forEach((shape) => {
+				shape.displace_by(new_translate);
+			});
+
+			CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
 		});
-	}
-
-	static move_canvas() {
-		console.log("movingg");
-
-		canvases.forEach((cvs) => {
-			cvs.style.left = this.location[0] + "px";
-			cvs.style.top = this.location[1] + "px";
-		});
-	}
-
-	static get_mouse_pos(e: MouseEvent): vec2 {
-		return [e.clientX + this.location[0], e.clientY + this.location[1]];
-	}
-
-	static get_location(): vec2 {
-		// console.log("Canvas location = ", this.location);
-
-		return this.location;
-	}
-
-	static set_location(loc: vec2) {
-		this.location = loc;
 	}
 }

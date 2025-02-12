@@ -1,5 +1,4 @@
 import { ctx } from "../../main";
-import { CanvasDragger } from "../Managers/CanvasManager/CanvasDragger";
 import { Shape } from "./Shape";
 
 export class Pencil extends Shape {
@@ -32,12 +31,10 @@ export class Pencil extends Shape {
 		this.prepare_for_render();
 		ctx.beginPath();
 
-		const [loc_x, loc_y] = CanvasDragger.get_location();
-
-		ctx.moveTo(pts[0][0] - loc_x, pts[0][1] - loc_y);
+		ctx.moveTo(pts[0][0], pts[0][1]);
 
 		for (let i = 1; i < pts.length; ++i) {
-			let [x2, y2] = [pts[i][0] - loc_x, pts[i][1] - loc_y];
+			const [x2, y2] = [pts[i][0], pts[i][1]];
 
 			ctx.lineTo(x2, y2);
 			ctx.stroke();
@@ -64,8 +61,7 @@ export class Pencil extends Shape {
 		let [min_x, min_y] = pts[0];
 		let [max_x, max_y] = pts[0];
 
-		const [loc_x, loc_y] = CanvasDragger.get_location();
-		const pos = [_rect.pos[0] + loc_x, _rect.pos[1] + loc_y];
+		const pos = _rect.pos;
 
 		pts.forEach(([x, y]) => {
 			min_x = Math.min(min_x, x);
@@ -81,5 +77,14 @@ export class Pencil extends Shape {
 			pos[0] + dims[0] > max_x &&
 			pos[1] + dims[1] > max_y
 		);
+	}
+
+	displace_by(_displacement: vec2): void {
+		const [x, y] = _displacement;
+
+		this.points.forEach((pt) => {
+			pt[0] += x;
+			pt[1] += y;
+		});
 	}
 }
