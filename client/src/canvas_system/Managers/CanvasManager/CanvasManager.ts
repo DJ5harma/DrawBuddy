@@ -1,5 +1,6 @@
-import { canvas, ctx } from "../../main";
-import { Shape } from "../Shapes/Shape";
+import { canvas, ctx } from "../../../main";
+import { Shape } from "../../Shapes/Shape";
+import { CanvasDragger } from "./CanvasDragger";
 
 // only knows about real ctx
 export class CanvasManager {
@@ -7,6 +8,7 @@ export class CanvasManager {
 
 	static init() {
 		console.log(this.name);
+		CanvasDragger.init();
 	}
 
 	static get_shapes() {

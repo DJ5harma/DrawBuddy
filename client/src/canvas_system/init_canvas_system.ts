@@ -1,6 +1,6 @@
 import { canvas, temp_canvas } from "../main";
 import { MakerManager } from "./Managers/MakerManager";
-import { CanvasManager } from "./Managers/CanvasManager";
+import { CanvasManager } from "./Managers/CanvasManager/CanvasManager";
 import { UndoManager } from "./Managers/UndoManager";
 
 function design_canvas() {

@@ -1,18 +1,18 @@
 import { Rectangle } from "../../Shapes/Rectangle";
 import { Maker } from "../Maker";
-import { CanvasManager } from "../../Managers/CanvasManager";
+import { CanvasManager } from "../../Managers/CanvasManager/CanvasManager";
 import { temp_ctx } from "../../../main";
 import { TempCanvasManager } from "../../Managers/TempCanvasManager";
 
 let draw = false;
 
-let curr = new Rectangle({ src: [0, 0], dims: [0, 0] });
+let curr = new Rectangle({ pos: [0, 0], dims: [0, 0] });
 
 export class RectangleMaker extends Maker {
 	protected mousedown(e: MouseEvent): void {
 		draw = true;
 
-		curr.src = [e.clientX, e.clientY];
+		curr.pos = [e.clientX, e.clientY];
 		curr.dims = [0, 0];
 
 		curr.prepare_for_render(temp_ctx);
@@ -24,7 +24,7 @@ export class RectangleMaker extends Maker {
 		if (!draw) return;
 		const [x, y] = [e.clientX, e.clientY];
 
-		curr.dims = [x - curr.src[0], y - curr.src[1]];
+		curr.dims = [x - curr.pos[0], y - curr.pos[1]];
 
 		TempCanvasManager.clear_canvas_only_unrender().render_shape(curr);
 	}

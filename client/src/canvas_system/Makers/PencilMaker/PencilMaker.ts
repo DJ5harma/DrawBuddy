@@ -1,5 +1,5 @@
 import { ctx } from "../../../main";
-import { CanvasManager } from "../../Managers/CanvasManager";
+import { CanvasManager } from "../../Managers/CanvasManager/CanvasManager";
 import { Pencil } from "../../Shapes/Pencil";
 import { Maker } from "../Maker";
 

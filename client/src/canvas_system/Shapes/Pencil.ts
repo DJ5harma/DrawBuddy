@@ -49,12 +49,12 @@ export class Pencil extends Shape {
 		this.points = [...f.points];
 	}
 
-	is_inside_rect(_rect: { src: vec2; dims: vec2 }): boolean {
+	is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
 		const pts = this.points;
 
 		if (!pts.length) return false;
 
-		const { src, dims } = _rect;
+		const { pos, dims } = _rect;
 
 		let [min_x, min_y] = pts[0];
 		let [max_x, max_y] = pts[0];
@@ -68,10 +68,18 @@ export class Pencil extends Shape {
 		});
 
 		return (
-			src[0] < min_x &&
-			src[1] < min_y &&
-			src[0] + dims[0] > max_x &&
-			src[1] + dims[1] > max_y
+			pos[0] < min_x &&
+			pos[1] < min_y &&
+			pos[0] + dims[0] > max_x &&
+			pos[1] + dims[1] > max_y
 		);
+	}
+
+	displace_by(_gap: vec2): void {
+		const [x, y] = _gap;
+		this.points.forEach((pt) => {
+			pt[0] += x;
+			pt[1] += y;
+		});
 	}
 }

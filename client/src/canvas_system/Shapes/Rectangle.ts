@@ -1,24 +1,24 @@
 import { Shape } from "./Shape";
 
 export class Rectangle extends Shape {
-	src;
+	pos: vec2;
 	dims;
 	stroke;
 	fill;
 
 	constructor({
-		src,
+		pos,
 		dims,
 		stroke,
 		fill,
 	}: {
-		src?: vec2;
+		pos?: vec2;
 		dims?: vec2;
 		stroke?: Stroke;
 		fill?: Color;
 	}) {
 		super();
-		this.src = src || [-1, -1];
+		this.pos = pos || [0, 0];
 		this.dims = dims || [0, 0];
 		this.stroke = { width: 5, color: "rgba(255,255,255,1)", ...stroke };
 		this.fill = fill || "rgba(255, 251, 0, 0.5)";
@@ -31,7 +31,7 @@ export class Rectangle extends Shape {
 
 	render_me_whole(ctx: CanvasRenderingContext2D): void {
 		this.prepare_for_render(ctx);
-		let [x, y] = this.src;
+		let [x, y] = this.pos;
 		let [w, l] = this.dims;
 
 		if (w < 0) {
@@ -54,19 +54,25 @@ export class Rectangle extends Shape {
 	}
 
 	make_like(r: Rectangle) {
-		this.src = [...r.src] as vec2;
+		this.pos = [...r.pos] as vec2;
 		this.dims = [...r.dims] as vec2;
 		this.stroke = { ...r.stroke };
 	}
 
-	is_inside_rect(_rect: { src: vec2; dims: vec2 }): boolean {
-		const { src, dims } = _rect;
+	is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
+		const { pos, dims } = _rect;
 
 		return (
-			src[0] < this.src[0] &&
-			src[1] < this.src[1] &&
-			src[0] + dims[0] > this.src[0] + this.dims[0] &&
-			src[1] + dims[1] > this.src[1] + this.dims[1]
+			pos[0] < this.pos[0] &&
+			pos[1] < this.pos[1] &&
+			pos[0] + dims[0] > this.pos[0] + this.dims[0] &&
+			pos[1] + dims[1] > this.pos[1] + this.dims[1]
 		);
+	}
+
+	displace_by(_gap: vec2): void {
+		const [x, y] = _gap;
+		this.pos[0] += x;
+		this.pos[1] += y;
 	}
 }

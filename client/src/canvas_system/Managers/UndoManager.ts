@@ -1,4 +1,4 @@
-import { CanvasManager } from "./CanvasManager";
+import { CanvasManager } from "./CanvasManager/CanvasManager";
 import { Shape } from "../Shapes/Shape";
 
 export class UndoManager {
