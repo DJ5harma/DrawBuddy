@@ -5,7 +5,7 @@ import { CanvasDragManager } from "../../../canvas_system/Managers/CanvasDragMan
 export class ToolSelector {
 	private static tool_selector: HTMLDivElement;
 
-	static init() {
+	public static init() {
 		this.tool_selector =
 			document.querySelector<HTMLDivElement>("#tool_selector")!;
 
