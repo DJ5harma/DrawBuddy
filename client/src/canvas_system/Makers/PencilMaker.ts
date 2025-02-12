@@ -5,14 +5,13 @@ import { Maker } from "./Maker";
 
 let draw = false;
 
-let curr = new Pencil({});
+let curr = new Pencil({ stroke: { color: "rgb(255, 255, 255)", width: 5 } });
 
 export class PencilMaker extends Maker {
 	protected mousedown(e: MouseEvent): void {
 		if (e.button !== 0) return;
 
 		draw = true;
-		curr.prepare_for_render();
 
 		ctx.moveTo(e.clientX, e.clientY);
 		ctx.beginPath();
@@ -39,6 +38,10 @@ export class PencilMaker extends Maker {
 		draw = false;
 		ctx.closePath();
 		CanvasManager.store_shape(curr);
+	}
+
+	public set_config(_config: { stroke: Stroke }): void {
+		curr.stroke = _config.stroke;
 	}
 
 	public start(): void {

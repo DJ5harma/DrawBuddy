@@ -6,7 +6,12 @@ import { TempCanvasManager } from "../Managers/TempCanvasManager";
 
 let draw = false;
 
-let curr = new Rectangle({ pos: [0, 0], dims: [0, 0] });
+let curr = new Rectangle({
+	pos: [0, 0],
+	dims: [0, 0],
+	fill: "rgb(255, 255, 255)",
+	stroke: { color: "rgb(255, 0, 255)", width: 5 },
+});
 
 export class RectangleMaker extends Maker {
 	protected mousedown(e: MouseEvent): void {
@@ -37,11 +42,6 @@ export class RectangleMaker extends Maker {
 		CanvasManager.store_shape(curr).render_shape(curr);
 		TempCanvasManager.clear_canvas_only_unrender();
 		ctx.closePath();
-	}
-
-	set_config(_config: { stroke: Stroke }): void {
-		const { stroke } = _config;
-		curr.stroke = { ...curr.stroke, ...stroke };
 	}
 
 	start(): void {

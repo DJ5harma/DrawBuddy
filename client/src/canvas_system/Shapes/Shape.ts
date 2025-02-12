@@ -1,12 +1,4 @@
 export abstract class Shape {
-	// pos: vec2;
-
-	// constructor(_pos?: vec2) {
-	// 	this.pos = _pos || [0, 0];
-	// }
-
-	// displace_by(_gap: vec2) {}
-
 	get_copy(): Shape {
 		return { ...this };
 	}

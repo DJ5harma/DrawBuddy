@@ -1,7 +1,7 @@
 import { Shape } from "./Shape";
 
-export class Rectangle extends Shape {
-	pos: vec2;
+export class Rectangle implements Shape {
+	pos;
 	dims;
 	stroke;
 	fill;
@@ -12,15 +12,14 @@ export class Rectangle extends Shape {
 		stroke,
 		fill,
 	}: {
-		pos?: vec2;
-		dims?: vec2;
-		stroke?: Stroke;
-		fill?: Color;
+		pos: vec2;
+		dims: vec2;
+		stroke: Stroke;
+		fill: Color;
 	}) {
-		super();
 		this.pos = pos || [0, 0];
 		this.dims = dims || [0, 0];
-		this.stroke = { width: 5, color: "rgba(255,255,255,1)", ...stroke };
+		this.stroke = { ...stroke };
 		this.fill = fill || "rgba(255, 251, 0, 0.5)";
 	}
 
@@ -50,7 +49,12 @@ export class Rectangle extends Shape {
 	}
 
 	get_copy() {
-		const copy = new Rectangle({});
+		const copy = new Rectangle({
+			dims: { ...this.dims },
+			fill: this.fill,
+			pos: { ...this.pos },
+			stroke: { ...this.stroke },
+		});
 		copy.make_like(this);
 		return copy;
 	}

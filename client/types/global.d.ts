@@ -8,7 +8,7 @@ declare global {
 	type Tools = "RECTANGLE" | "PENCIL";
 	var Tools = Tools;
 
-	type Stroke = { width?: number; color?: Color };
+	type Stroke = { width: number; color: Color };
 	var Stroke = Stroke;
 
 	type Color =

@@ -1,9 +1,9 @@
 import { ctx } from "../../main";
 import { Shape } from "./Shape";
 
-export class Pencil extends Shape {
+export class Pencil implements Shape {
 	points: vec2[];
-	stroke;
+	stroke: Stroke;
 
 	cached_bounding_rect?: {
 		min_x: number;
@@ -12,17 +12,9 @@ export class Pencil extends Shape {
 		max_y: number;
 	};
 
-	constructor({
-		stroke,
-	}: {
-		stroke?: {
-			width?: number;
-			color?: string;
-		};
-	}) {
-		super();
+	constructor({ stroke }: { stroke: Stroke }) {
 		this.points = [];
-		this.stroke = { width: 5, color: "white", ...stroke };
+		this.stroke = { ...stroke };
 		this.cached_bounding_rect = undefined;
 	}
 
@@ -51,7 +43,7 @@ export class Pencil extends Shape {
 	}
 
 	get_copy() {
-		const copy = new Pencil({});
+		const copy = new Pencil({ stroke: { ...this.stroke } });
 		copy.make_like(this);
 		return copy;
 	}
