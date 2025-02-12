@@ -1,11 +1,11 @@
-import { canvases } from "../../../main";
+import { canvas, canvases } from "../../../main";
 
 export class CanvasDragger {
-	static location: vec2 = [0, 0];
+	private static location: vec2 = [0, 0];
 
-	static move_start_pos: vec2 = [0, 0];
+	private static move_start_pos: vec2 = [0, 0];
 
-	static move: boolean = false;
+	private static move: boolean = false;
 
 	static init() {
 		console.log("CanvasDragger init");
@@ -36,10 +36,15 @@ export class CanvasDragger {
 				e.clientY - this.move_start_pos[1],
 			];
 
-			this.location[0] += displacement[0];
-			this.location[1] += displacement[1];
+			if (this.location[0] + displacement[0] < 0) {
+				this.location[0] += displacement[0];
+				this.move_start_pos[0] = e.clientX;
+			}
 
-			this.move_start_pos = [e.clientX, e.clientY];
+			if (this.location[1] + displacement[1] < 0) {
+				this.location[1] += displacement[1];
+				this.move_start_pos[1] = e.clientY;
+			}
 
 			this.move_canvas();
 		});
@@ -64,8 +69,12 @@ export class CanvasDragger {
 	}
 
 	static get_location(): vec2 {
-		console.log("Canvas location = ", this.location);
+		// console.log("Canvas location = ", this.location);
 
 		return this.location;
+	}
+
+	static set_location(loc: vec2) {
+		this.location = loc;
 	}
 }

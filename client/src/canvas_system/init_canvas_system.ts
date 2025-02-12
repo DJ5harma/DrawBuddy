@@ -5,16 +5,16 @@ import { UndoManager } from "./Managers/UndoManager";
 
 function design_canvas() {
 	document.body.style.overflow = "hidden";
-	canvases.forEach((canvas) => {
-		const { style } = canvas;
+	canvases.forEach((cvs) => {
+		const { style } = cvs;
 
 		style.position = "absolute";
+		style.border = "solid red";
 		style.left = "0px";
 		style.top = "0px";
-		style.border = "solid red";
 
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
+		cvs.width = window.innerWidth * 1.5;
+		cvs.height = window.innerHeight * 1.5;
 	});
 }
 
@@ -37,7 +37,7 @@ export default function init_canvas_system() {
 			setTimeout(() => {
 				CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
 				mutex_unlocked = true;
-			}, 100);
+			}, 400);
 		}
 	});
 }

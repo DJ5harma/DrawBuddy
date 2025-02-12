@@ -59,10 +59,13 @@ export class Pencil extends Shape {
 
 		if (!pts.length) return false;
 
-		const { pos, dims } = _rect;
+		const dims = _rect.dims;
 
 		let [min_x, min_y] = pts[0];
 		let [max_x, max_y] = pts[0];
+
+		const [loc_x, loc_y] = CanvasDragger.get_location();
+		const pos = [_rect.pos[0] + loc_x, _rect.pos[1] + loc_y];
 
 		pts.forEach(([x, y]) => {
 			min_x = Math.min(min_x, x);
