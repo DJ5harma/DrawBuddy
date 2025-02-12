@@ -85,8 +85,5 @@ export class Pencil extends Shape {
 			this.points[i][0] += x;
 			this.points[i][1] += y;
 		}
-		console.log("Pencil displaced");
-
-		// this.points = this.points.map(([p_x, p_y]) => [p_x + x, p_y + y]);
 	}
 }

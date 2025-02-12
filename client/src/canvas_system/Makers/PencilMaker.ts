@@ -1,7 +1,7 @@
-import { ctx } from "../../../main";
-import { CanvasManager } from "../../Managers/CanvasManager/CanvasManager";
-import { Pencil } from "../../Shapes/Pencil";
-import { Maker } from "../Maker";
+import { ctx } from "../../main";
+import { CanvasManager } from "../Managers/CanvasManager";
+import { Pencil } from "../Shapes/Pencil";
+import { Maker } from "./Maker";
 
 let draw = false;
 

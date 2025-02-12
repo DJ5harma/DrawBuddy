@@ -1,6 +1,6 @@
 import { canvases } from "../main";
 import { MakerManager } from "./Managers/MakerManager";
-import { CanvasManager } from "./Managers/CanvasManager/CanvasManager";
+import { CanvasManager } from "./Managers/CanvasManager";
 import { UndoManager } from "./Managers/UndoManager";
 
 function design_canvas() {

@@ -1,27 +1,28 @@
-import { PencilMaker } from "../Makers/PencilMaker/PencilMaker";
-import { RectangleMaker } from "../Makers/RectangleMaker/RectangleMaker";
+import { PencilMaker } from "../Makers/PencilMaker";
+import { RectangleMaker } from "../Makers/RectangleMaker";
 import { Maker } from "../Makers/Maker";
-import { TempCanvasManager } from "./CanvasManager/TempCanvasManager";
 
 export class MakerManager {
-	private static makersMap = new Map<Tools, Maker>();
+	public static maker_names: Tools[] = ["PENCIL", "RECTANGLE"];
+
+	private static makers_map = new Map<Tools, Maker>();
 
 	private static curr_maker: Maker;
 
 	static init() {
 		console.log(this.name);
 
-		this.makersMap.set("PENCIL", new PencilMaker());
-		this.makersMap.set("RECTANGLE", new RectangleMaker());
+		this.makers_map.set("PENCIL", new PencilMaker());
+		this.makers_map.set("RECTANGLE", new RectangleMaker());
 
-		this.curr_maker = this.makersMap.get("RECTANGLE")!;
+		this.curr_maker = this.makers_map.get("RECTANGLE")!;
 
 		this.curr_maker.start();
 	}
 
 	static switch_maker(tool_name: Tools) {
 		this.pause_maker();
-		this.curr_maker = this.makersMap.get(tool_name)!;
+		this.curr_maker = this.makers_map.get(tool_name)!;
 		this.curr_maker.set_config({
 			stroke: { color: "rgb(255, 255, 0)" },
 		});
@@ -29,7 +30,6 @@ export class MakerManager {
 	}
 
 	static pause_maker() {
-		TempCanvasManager.clear_canvas_only_unrender();
 		this.curr_maker.stop();
 	}
 }

@@ -1,4 +1,4 @@
-import { SelectionRectangleMaker } from "../Makers/SelectionRectangleMaker/SelectionRectangleMaker";
+import { SelectionRectangleMaker } from "../Makers/SelectionRectangleMaker";
 
 export class SelectionManager {
 	private static selecting = false;

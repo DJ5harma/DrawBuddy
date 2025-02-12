@@ -1,17 +1,19 @@
-import { buffer_canvas, buffer_ctx, canvas, ctx } from "../../../main";
+import { buffer_canvas, buffer_ctx, canvas, ctx } from "../../main";
 import { CanvasManager } from "./CanvasManager";
 
-export class CanvasDragger {
+export class CanvasDragManager {
 	private static move_start_pos: vec2 = [0, 0];
 
 	private static move: boolean = false;
 
+	private static allowed_by_tool = false;
+
 	static init() {
-		console.log("CanvasDragger init");
+		console.log("CanvasDragManager init");
 		buffer_canvas.style.visibility = "hidden";
 
 		document.addEventListener("mousedown", (e) => {
-			if (e.button !== 1) return; // Middle mouse button
+			if (e.button !== 1 && !this.allowed_by_tool) return; // Middle mouse button
 			buffer_ctx.drawImage(canvas, 0, 0);
 			this.move = true;
 			this.move_start_pos = [e.clientX, e.clientY];
@@ -29,7 +31,7 @@ export class CanvasDragger {
 		});
 
 		document.addEventListener("mouseup", (e) => {
-			if (e.button !== 1) return;
+			if (e.button !== 1 && !this.allowed_by_tool) return;
 			this.move = false;
 
 			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
@@ -45,5 +47,12 @@ export class CanvasDragger {
 
 			CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
 		});
+	}
+
+	static allow_by_tool() {
+		this.allowed_by_tool = true;
+	}
+	static disallow_by_tool() {
+		this.allowed_by_tool = false;
 	}
 }
