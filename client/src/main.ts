@@ -19,7 +19,7 @@ export const temp_canvas =
 
 export const temp_ctx = temp_canvas.getContext("2d")!;
 
-// temp_canvas.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+export const canvases = [canvas, temp_canvas];
 
 init_canvas_system();
 init_ui_system();

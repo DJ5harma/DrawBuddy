@@ -3,7 +3,7 @@ import { Maker } from "../Maker";
 import { Rectangle } from "../../Shapes/Rectangle";
 import { CanvasManager } from "../../Managers/CanvasManager/CanvasManager";
 import { SelectionManager } from "../../Managers/SelectionManager";
-import { TempCanvasManager } from "../../Managers/TempCanvasManager";
+import { TempCanvasManager } from "../../Managers/CanvasManager/TempCanvasManager";
 
 let draw = false;
 

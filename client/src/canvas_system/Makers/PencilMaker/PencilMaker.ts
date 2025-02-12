@@ -1,4 +1,5 @@
 import { ctx } from "../../../main";
+import { CanvasDragger } from "../../Managers/CanvasManager/CanvasDragger";
 import { CanvasManager } from "../../Managers/CanvasManager/CanvasManager";
 import { Pencil } from "../../Shapes/Pencil";
 import { Maker } from "../Maker";
@@ -16,7 +17,9 @@ export class PencilMaker extends Maker {
 		curr.points = [];
 		curr.prepare_for_render();
 
-		ctx.moveTo(e.clientX, e.clientY);
+		const [loc_x, loc_y] = CanvasDragger.get_location();
+
+		ctx.moveTo(e.clientX - loc_x, e.clientY - loc_y);
 		ctx.beginPath();
 
 		curr.points = [[e.clientX, e.clientY]];
@@ -26,7 +29,9 @@ export class PencilMaker extends Maker {
 		// console.log("mouse move");
 
 		if (!draw) return;
-		const [x, y] = [e.clientX, e.clientY];
+
+		const [loc_x, loc_y] = CanvasDragger.get_location();
+		const [x, y] = [e.clientX - loc_x, e.clientY - loc_y];
 
 		curr.points.push([x, y]);
 
@@ -35,8 +40,7 @@ export class PencilMaker extends Maker {
 		ctx.moveTo(x, y);
 	}
 
-	protected mouseup(e: MouseEvent): void {
-		ctx.lineTo(e.clientX, e.clientY);
+	protected mouseup(_: MouseEvent): void {
 		draw = false;
 		ctx.closePath();
 		CanvasManager.store_shape(curr);

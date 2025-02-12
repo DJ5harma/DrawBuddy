@@ -1,3 +1,4 @@
+import { CanvasDragger } from "../Managers/CanvasManager/CanvasDragger";
 import { Shape } from "./Shape";
 
 export class Rectangle extends Shape {
@@ -42,6 +43,12 @@ export class Rectangle extends Shape {
 			l = -l;
 			y -= l;
 		}
+
+		const [loc_x, loc_y] = CanvasDragger.get_location();
+
+		x -= loc_x;
+		y -= loc_y;
+
 		ctx.strokeRect(x, y, w, l);
 		ctx.fillStyle = this.fill;
 		ctx.fillRect(x, y, w, l);

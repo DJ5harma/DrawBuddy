@@ -1,7 +1,9 @@
-import { CanvasManager } from "./CanvasManager";
+import { canvases } from "../../../main";
 
 export class CanvasDragger {
 	static location: vec2 = [0, 0];
+
+	static move_start_pos: vec2 = [0, 0];
 
 	static move: boolean = false;
 
@@ -16,12 +18,13 @@ export class CanvasDragger {
 
 			this.location[1] += displacement[1];
 
-			this.move_canvas_by_displacement(displacement);
-			console.log(this.location);
+			this.move_canvas();
+			// console.log(this.location);
 		});
 
 		document.addEventListener("mousedown", (e) => {
 			if (e.button !== 1) return;
+			this.move_start_pos = [e.clientX, e.clientY];
 			this.move = true;
 		});
 
@@ -29,14 +32,16 @@ export class CanvasDragger {
 			if (!this.move) return;
 
 			const displacement: vec2 = [
-				e.clientX - this.location[0],
-				e.clientY - this.location[1],
+				e.clientX - this.move_start_pos[0],
+				e.clientY - this.move_start_pos[1],
 			];
-
-			this.move_canvas_by_displacement(displacement);
 
 			this.location[0] += displacement[0];
 			this.location[1] += displacement[1];
+
+			this.move_start_pos = [e.clientX, e.clientY];
+
+			this.move_canvas();
 		});
 
 		document.addEventListener("mouseup", (e) => {
@@ -45,10 +50,22 @@ export class CanvasDragger {
 		});
 	}
 
-	static move_canvas_by_displacement(displacement: vec2) {
-		// CanvasManager.get_shapes().forEach((shape) => {
-		// shape.displace_by(displacement);
-		// });
-		// CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
+	static move_canvas() {
+		console.log("movingg");
+
+		canvases.forEach((cvs) => {
+			cvs.style.left = this.location[0] + "px";
+			cvs.style.top = this.location[1] + "px";
+		});
+	}
+
+	static get_mouse_pos(e: MouseEvent): vec2 {
+		return [e.clientX + this.location[0], e.clientY + this.location[1]];
+	}
+
+	static get_location(): vec2 {
+		console.log("Canvas location = ", this.location);
+
+		return this.location;
 	}
 }

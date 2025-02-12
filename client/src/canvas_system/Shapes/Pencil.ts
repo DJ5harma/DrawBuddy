@@ -1,4 +1,5 @@
 import { ctx } from "../../main";
+import { CanvasDragger } from "../Managers/CanvasManager/CanvasDragger";
 import { Shape } from "./Shape";
 
 export class Pencil extends Shape {
@@ -30,10 +31,14 @@ export class Pencil extends Shape {
 
 		this.prepare_for_render();
 		ctx.beginPath();
-		ctx.moveTo(pts[0][0], pts[0][1]);
+
+		const [loc_x, loc_y] = CanvasDragger.get_location();
+
+		ctx.moveTo(pts[0][0] - loc_x, pts[0][1] - loc_y);
 
 		for (let i = 1; i < pts.length; ++i) {
-			const [x2, y2] = pts[i];
+			let [x2, y2] = [pts[i][0] - loc_x, pts[i][1] - loc_y];
+
 			ctx.lineTo(x2, y2);
 			ctx.stroke();
 			ctx.moveTo(x2, y2);
