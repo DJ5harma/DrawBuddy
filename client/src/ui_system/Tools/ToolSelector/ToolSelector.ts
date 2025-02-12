@@ -42,11 +42,6 @@ export class ToolSelector {
 
 		console.log("tool_selector ui init");
 
-		this.tool_selector.addEventListener("mousedown", (e) => {
-			if (SelectionManager.is_selecting()) return;
-			e.stopPropagation();
-		});
-
 		const style = this.tool_selector.style;
 
 		style.position = "fixed";
