@@ -36,7 +36,8 @@ export class PencilMaker extends Maker {
 		ctx.moveTo(x, y);
 	}
 
-	protected mouseup(_: MouseEvent): void {
+	protected mouseup(e: MouseEvent): void {
+		if (e.button !== 0) return;
 		draw = false;
 		ctx.closePath();
 		CanvasManager.store_shape(curr);

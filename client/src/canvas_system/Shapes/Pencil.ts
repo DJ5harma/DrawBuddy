@@ -81,10 +81,12 @@ export class Pencil extends Shape {
 
 	displace_by(_displacement: vec2): void {
 		const [x, y] = _displacement;
+		for (let i = 0; i < this.points.length; ++i) {
+			this.points[i][0] += x;
+			this.points[i][1] += y;
+		}
+		console.log("Pencil displaced");
 
-		this.points.forEach((pt) => {
-			pt[0] += x;
-			pt[1] += y;
-		});
+		// this.points = this.points.map(([p_x, p_y]) => [p_x + x, p_y + y]);
 	}
 }

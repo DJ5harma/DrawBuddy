@@ -16,7 +16,7 @@ export class MakerManager {
 
 		this.curr_maker = this.makersMap.get("RECTANGLE")!;
 
-		this.curr_maker.start();
+		// this.curr_maker.start();
 	}
 
 	static switch_maker(tool_name: Tools) {

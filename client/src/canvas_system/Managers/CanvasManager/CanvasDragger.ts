@@ -9,8 +9,6 @@ export class CanvasDragger {
 	static init() {
 		console.log("CanvasDragger init");
 		buffer_canvas.style.visibility = "hidden";
-		buffer_canvas.width = window.innerWidth * 2;
-		buffer_canvas.height = window.innerHeight * 2;
 
 		document.addEventListener("mousedown", (e) => {
 			if (e.button !== 1) return; // Middle mouse button
@@ -22,15 +20,12 @@ export class CanvasDragger {
 		document.addEventListener("mousemove", (e) => {
 			if (!this.move) return;
 
-			// ctx.translate(0, 0);
 			const new_translate: vec2 = [
 				e.clientX - this.move_start_pos[0],
 				e.clientY - this.move_start_pos[1],
 			];
 			CanvasManager.clear_canvas_only_unrender();
 			ctx.drawImage(buffer_canvas, ...new_translate);
-
-			// this.move_start_pos = [e.clientX, e.clientY];
 		});
 
 		document.addEventListener("mouseup", (e) => {
