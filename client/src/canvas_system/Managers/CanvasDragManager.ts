@@ -7,7 +7,7 @@ export class CanvasDragManager {
 	private static move = false;
 	private static move_start_pos: vec2 = [0, 0];
 
-	static init() {
+	public static init() {
 		console.log("CanvasDragManager init");
 		buffer_canvas.style.visibility = "hidden";
 
@@ -48,10 +48,10 @@ export class CanvasDragManager {
 		});
 	}
 
-	static allow_by_tool() {
+	public static allow_by_tool() {
 		this.allowed_by_tool = true;
 	}
-	static disallow_by_tool() {
+	public static disallow_by_tool() {
 		this.allowed_by_tool = false;
 	}
 }

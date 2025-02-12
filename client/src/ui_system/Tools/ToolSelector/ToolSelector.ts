@@ -3,7 +3,7 @@ import { MakerManager } from "../../../canvas_system/Managers/MakerManager";
 import { CanvasDragManager } from "../../../canvas_system/Managers/CanvasDragManager";
 
 export class ToolSelector {
-	static tool_selector: HTMLDivElement;
+	private static tool_selector: HTMLDivElement;
 
 	static init() {
 		this.tool_selector =
@@ -13,13 +13,14 @@ export class ToolSelector {
 		this.setup_drawers();
 		this.setup_selection_maker();
 	}
-	static stop_all() {
+
+	public static stop_all() {
 		MakerManager.pause_maker();
 		SelectionManager.stop_selection_lifecycle();
 		CanvasDragManager.disallow_by_tool();
 	}
 
-	static style_btn(elem: HTMLButtonElement) {
+	private static style_btn(elem: HTMLButtonElement) {
 		const { style } = elem;
 		style.border = "solid cyan";
 		style.borderRadius = "20px";
@@ -27,7 +28,7 @@ export class ToolSelector {
 		style.color = "white";
 	}
 
-	static setup_selection_maker() {
+	private static setup_selection_maker() {
 		const tool_name = "SELECTION";
 		const elem = document.createElement("button");
 		this.tool_selector.appendChild(elem);
@@ -43,7 +44,7 @@ export class ToolSelector {
 		});
 	}
 
-	static setup_canvas_dragger() {
+	private static setup_canvas_dragger() {
 		const tool_name = "CANVAS_DRAGGER";
 		const elem = document.createElement("button");
 		this.tool_selector.appendChild(elem);
@@ -59,7 +60,7 @@ export class ToolSelector {
 		});
 	}
 
-	static setup_drawers() {
+	private static setup_drawers() {
 		console.log("tool_selector ui init");
 
 		const style = this.tool_selector.style;

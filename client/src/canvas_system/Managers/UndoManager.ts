@@ -4,7 +4,7 @@ import { Shape } from "../Shapes/Shape";
 export class UndoManager {
 	private static undo_stack: Shape[] = [];
 
-	static init() {
+	public static init() {
 		console.log(this.name);
 
 		document.addEventListener("keydown", (e) => {
@@ -13,7 +13,7 @@ export class UndoManager {
 		});
 	}
 
-	static undo() {
+	public static undo() {
 		const last_shape = CanvasManager.pop_shape();
 		if (!last_shape) return;
 
@@ -22,7 +22,7 @@ export class UndoManager {
 		CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
 	}
 
-	static redo() {
+	public static redo() {
 		const last_undid_shape = this.undo_stack.pop();
 
 		if (!last_undid_shape) return;

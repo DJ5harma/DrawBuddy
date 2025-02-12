@@ -18,12 +18,12 @@ export class Pencil implements Shape {
 		this.cached_bounding_rect = undefined;
 	}
 
-	prepare_for_render() {
+	public prepare_for_render() {
 		ctx.strokeStyle = this.stroke.color;
 		ctx.lineWidth = this.stroke.width;
 	}
 
-	render_me_whole(): void {
+	public render_me_whole(): void {
 		// console.log("rendering whole Pencil");
 		const pts = this.points;
 		if (pts.length < 2) return;
@@ -42,16 +42,18 @@ export class Pencil implements Shape {
 		}
 	}
 
-	get_copy() {
+	public get_copy() {
 		const copy = new Pencil({ stroke: { ...this.stroke } });
 		copy.make_like(this);
 		return copy;
 	}
-	make_like(f: Pencil) {
-		this.points = [...f.points];
+
+	public make_like(p: Pencil) {
+		this.points = [...p.points];
+		this.stroke = { ...p.stroke };
 	}
 
-	is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
+	public is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
 		let min_x: number, max_x: number, min_y: number, max_y: number;
 
 		if (this.cached_bounding_rect) {
@@ -91,7 +93,7 @@ export class Pencil implements Shape {
 		);
 	}
 
-	displace_by(_displacement: vec2): void {
+	public displace_by(_displacement: vec2): void {
 		const [x, y] = _displacement;
 		for (let i = 0; i < this.points.length; ++i) {
 			this.points[i][0] += x;

@@ -9,7 +9,7 @@ export class MakerManager {
 
 	private static curr_maker: Maker;
 
-	static init() {
+	public static init() {
 		console.log(this.name);
 
 		this.makers_map.set("PENCIL", new PencilMaker());
@@ -20,16 +20,16 @@ export class MakerManager {
 		this.curr_maker.start();
 	}
 
-	static switch_maker(tool_name: Tools) {
+	public static switch_maker(tool_name: Tools) {
 		this.pause_maker();
 		this.curr_maker = this.makers_map.get(tool_name)!;
 		this.curr_maker.set_config({
-			stroke: { color: "rgb(255, 255, 0)" },
+			stroke: { color: "rgb(255, 255, 0)", width: 5 },
 		});
 		this.curr_maker.start();
 	}
 
-	static pause_maker() {
+	public static pause_maker() {
 		this.curr_maker.stop();
 	}
 }

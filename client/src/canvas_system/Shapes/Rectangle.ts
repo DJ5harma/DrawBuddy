@@ -17,18 +17,18 @@ export class Rectangle implements Shape {
 		stroke: Stroke;
 		fill: Color;
 	}) {
-		this.pos = pos || [0, 0];
-		this.dims = dims || [0, 0];
-		this.stroke = { ...stroke };
-		this.fill = fill || "rgba(255, 251, 0, 0.5)";
+		this.pos = pos;
+		this.dims = dims;
+		this.stroke = stroke;
+		this.fill = fill;
 	}
 
-	prepare_for_render(ctx: CanvasRenderingContext2D): void {
+	public prepare_for_render(ctx: CanvasRenderingContext2D): void {
 		ctx.strokeStyle = this.stroke.color;
 		ctx.lineWidth = this.stroke.width;
 	}
 
-	render_me_whole(ctx: CanvasRenderingContext2D): void {
+	public render_me_whole(ctx: CanvasRenderingContext2D): void {
 		this.prepare_for_render(ctx);
 
 		let [x, y] = this.pos;
@@ -48,7 +48,7 @@ export class Rectangle implements Shape {
 		ctx.fillRect(x, y, w, l);
 	}
 
-	get_copy() {
+	public get_copy() {
 		const copy = new Rectangle({
 			dims: { ...this.dims },
 			fill: this.fill,
@@ -59,13 +59,14 @@ export class Rectangle implements Shape {
 		return copy;
 	}
 
-	make_like(r: Rectangle) {
+	public make_like(r: Rectangle) {
 		this.pos = [...r.pos] as vec2;
 		this.dims = [...r.dims] as vec2;
 		this.stroke = { ...r.stroke };
+		this.fill = r.fill;
 	}
 
-	is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
+	public is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
 		const { pos, dims } = _rect;
 
 		return (
@@ -75,7 +76,7 @@ export class Rectangle implements Shape {
 			pos[1] + dims[1] > this.pos[1] + this.dims[1]
 		);
 	}
-	displace_by(_displacement: vec2): void {
+	public displace_by(_displacement: vec2): void {
 		const [x, y] = _displacement;
 
 		this.pos[0] += x;

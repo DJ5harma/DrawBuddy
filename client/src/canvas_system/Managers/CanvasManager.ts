@@ -6,42 +6,42 @@ import { CanvasDragManager } from "./CanvasDragManager";
 export class CanvasManager {
 	private static arr: Shape[] = [];
 
-	static init() {
+	public static init() {
 		console.log(this.name);
 		CanvasDragManager.init();
 	}
 
-	static get_shapes() {
+	public static get_shapes() {
 		return this.arr;
 	}
 
-	static store_shape(Shape: Shape) {
+	public static store_shape(Shape: Shape) {
 		this.arr.push(Shape.get_copy());
 		// console.log(this.arr);
 
 		return this;
 	}
 
-	static pop_shape() {
+	public static pop_shape() {
 		return this.arr.pop();
 	}
 
-	static render_shape(Shape: Shape) {
+	public static render_shape(Shape: Shape) {
 		Shape.render_me_whole(ctx);
 		return this;
 	}
 
-	static render_stored_shapes_all() {
+	public static render_stored_shapes_all() {
 		this.arr.forEach((Shape) => this.render_shape(Shape));
 		return this;
 	}
 
-	static clear_canvas_only_unrender() {
+	public static clear_canvas_only_unrender() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		return this;
 	}
 
-	static clear_canvas_fully() {
+	public static clear_canvas_fully() {
 		this.clear_canvas_only_unrender();
 		this.arr = [];
 		return this;

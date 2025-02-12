@@ -20,8 +20,6 @@ export class PencilMaker extends Maker {
 	}
 
 	protected mousemove(e: MouseEvent): void {
-		// console.log("mouse move");
-
 		if (!draw) return;
 
 		const [x, y] = [e.clientX, e.clientY];
