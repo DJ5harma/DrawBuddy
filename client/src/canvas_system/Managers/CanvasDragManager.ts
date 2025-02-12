@@ -2,11 +2,10 @@ import { buffer_canvas, buffer_ctx, canvas, ctx } from "../../main";
 import { CanvasManager } from "./CanvasManager";
 
 export class CanvasDragManager {
-	private static move_start_pos: vec2 = [0, 0];
-
-	private static move: boolean = false;
-
 	private static allowed_by_tool = false;
+
+	private static move = false;
+	private static move_start_pos: vec2 = [0, 0];
 
 	static init() {
 		console.log("CanvasDragManager init");

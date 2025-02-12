@@ -5,6 +5,13 @@ export class Pencil extends Shape {
 	points: vec2[];
 	stroke;
 
+	cached_bounding_rect?: {
+		min_x: number;
+		min_y: number;
+		max_x: number;
+		max_y: number;
+	};
+
 	constructor({
 		stroke,
 	}: {
@@ -16,6 +23,7 @@ export class Pencil extends Shape {
 		super();
 		this.points = [];
 		this.stroke = { width: 5, color: "white", ...stroke };
+		this.cached_bounding_rect = undefined;
 	}
 
 	prepare_for_render() {
@@ -52,24 +60,35 @@ export class Pencil extends Shape {
 	}
 
 	is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
-		const pts = this.points;
+		let min_x: number, max_x: number, min_y: number, max_y: number;
 
-		if (!pts.length) return false;
+		if (this.cached_bounding_rect) {
+			min_x = this.cached_bounding_rect.min_x;
+			max_x = this.cached_bounding_rect.max_x;
+			min_y = this.cached_bounding_rect.min_y;
+			max_y = this.cached_bounding_rect.max_y;
+		} else {
+			const pts = this.points;
+			min_x = pts[0][0];
+			min_y = pts[0][1];
 
+			max_x = pts[0][0];
+			max_y = pts[0][1];
+
+			if (!pts.length) return false;
+
+			pts.forEach(([x, y]) => {
+				min_x = Math.min(min_x, x);
+				min_y = Math.min(min_y, y);
+
+				max_x = Math.max(max_x, x);
+				max_y = Math.max(max_y, y);
+			});
+
+			this.cached_bounding_rect = { min_x, min_y, max_x, max_y };
+		}
 		const dims = _rect.dims;
-
-		let [min_x, min_y] = pts[0];
-		let [max_x, max_y] = pts[0];
-
 		const pos = _rect.pos;
-
-		pts.forEach(([x, y]) => {
-			min_x = Math.min(min_x, x);
-			min_y = Math.min(min_y, y);
-
-			max_x = Math.max(max_x, x);
-			max_y = Math.max(max_y, y);
-		});
 
 		return (
 			pos[0] < min_x &&
@@ -84,6 +103,12 @@ export class Pencil extends Shape {
 		for (let i = 0; i < this.points.length; ++i) {
 			this.points[i][0] += x;
 			this.points[i][1] += y;
+		}
+		if (this.cached_bounding_rect) {
+			this.cached_bounding_rect.min_x += x;
+			this.cached_bounding_rect.max_x += x;
+			this.cached_bounding_rect.min_y += y;
+			this.cached_bounding_rect.max_y += y;
 		}
 	}
 }
