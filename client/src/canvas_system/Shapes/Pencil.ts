@@ -67,6 +67,7 @@ export class Pencil extends Shape {
 			max_x = this.cached_bounding_rect.max_x;
 			min_y = this.cached_bounding_rect.min_y;
 			max_y = this.cached_bounding_rect.max_y;
+			console.log("ALREADY CACHED BOUNDING RECT for this Pencil");
 		} else {
 			const pts = this.points;
 			min_x = pts[0][0];

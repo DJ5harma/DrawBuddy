@@ -12,8 +12,6 @@ export class PencilMaker extends Maker {
 		if (e.button !== 0) return;
 
 		draw = true;
-
-		curr.points = [];
 		curr.prepare_for_render();
 
 		ctx.moveTo(e.clientX, e.clientY);

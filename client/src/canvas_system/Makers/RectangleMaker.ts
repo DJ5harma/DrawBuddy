@@ -1,7 +1,7 @@
 import { Rectangle } from "../Shapes/Rectangle";
 import { Maker } from "./Maker";
 import { CanvasManager } from "../Managers/CanvasManager";
-import { temp_ctx } from "../../main";
+import { ctx, temp_ctx } from "../../main";
 import { TempCanvasManager } from "../Managers/TempCanvasManager";
 
 let draw = false;
@@ -36,6 +36,7 @@ export class RectangleMaker extends Maker {
 		draw = false;
 		CanvasManager.store_shape(curr).render_shape(curr);
 		TempCanvasManager.clear_canvas_only_unrender();
+		ctx.closePath();
 	}
 
 	set_config(_config: { stroke: Stroke }): void {
