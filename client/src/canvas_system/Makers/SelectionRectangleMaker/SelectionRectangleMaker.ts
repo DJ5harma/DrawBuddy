@@ -11,8 +11,10 @@ let curr = new Rectangle({
 	src: [0, 0],
 	dims: [0, 0],
 	stroke: {
-		color: "cyan",
+		color: "rgb(5, 247, 255)",
+		width: 1,
 	},
+	fill: "rgba(5, 247, 255, 0.1)",
 });
 
 export class SelectionRectangleMaker extends Maker {

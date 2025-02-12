@@ -4,20 +4,24 @@ export class Rectangle extends Shape {
 	src;
 	dims;
 	stroke;
+	fill;
 
 	constructor({
 		src,
 		dims,
 		stroke,
+		fill,
 	}: {
 		src?: vec2;
 		dims?: vec2;
 		stroke?: Stroke;
+		fill?: Color;
 	}) {
 		super();
 		this.src = src || [-1, -1];
 		this.dims = dims || [0, 0];
-		this.stroke = { width: 5, color: "white", ...stroke };
+		this.stroke = { width: 5, color: "rgba(255,255,255,1)", ...stroke };
+		this.fill = fill || "rgba(255, 251, 0, 0.5)";
 	}
 
 	prepare_for_render(ctx: CanvasRenderingContext2D): void {
@@ -39,6 +43,8 @@ export class Rectangle extends Shape {
 			y -= l;
 		}
 		ctx.strokeRect(x, y, w, l);
+		ctx.fillStyle = this.fill;
+		ctx.fillRect(x, y, w, l);
 	}
 
 	get_copy() {
