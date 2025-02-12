@@ -10,6 +10,8 @@ let curr = new Rectangle({ pos: [0, 0], dims: [0, 0] });
 
 export class RectangleMaker extends Maker {
 	protected mousedown(e: MouseEvent): void {
+		if (e.button !== 0) return;
+
 		draw = true;
 
 		curr.pos = [e.clientX, e.clientY];
@@ -32,6 +34,7 @@ export class RectangleMaker extends Maker {
 	protected mouseup(_: MouseEvent): void {
 		draw = false;
 		CanvasManager.store_shape(curr).render_shape(curr);
+		TempCanvasManager.clear_canvas_only_unrender();
 	}
 
 	public set_config(_config: { stroke: Stroke }): void {

@@ -5,7 +5,7 @@ export abstract class Shape {
 	// 	this.pos = _pos || [0, 0];
 	// }
 
-	displace_by(_gap: vec2) {}
+	// displace_by(_gap: vec2) {}
 
 	get_copy(): Shape {
 		return { ...this };

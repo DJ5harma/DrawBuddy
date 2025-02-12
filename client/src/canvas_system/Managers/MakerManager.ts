@@ -21,7 +21,7 @@ export class MakerManager {
 	static switch_maker(tool_name: Tools) {
 		this.curr_maker.stop();
 		this.curr_maker = this.makersMap.get(tool_name)!;
-		this.curr_maker.set_config({ stroke: { color: "yellow" } });
+		this.curr_maker.set_config({ stroke: { color: "rgb(255, 255, 0)" } });
 		this.curr_maker.start();
 	}
 

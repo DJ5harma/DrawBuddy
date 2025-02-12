@@ -9,6 +9,8 @@ let curr = new Pencil({});
 
 export class PencilMaker extends Maker {
 	protected mousedown(e: MouseEvent): void {
+		if (e.button !== 0) return;
+
 		draw = true;
 
 		curr.points = [];

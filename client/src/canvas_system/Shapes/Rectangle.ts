@@ -69,10 +69,4 @@ export class Rectangle extends Shape {
 			pos[1] + dims[1] > this.pos[1] + this.dims[1]
 		);
 	}
-
-	displace_by(_gap: vec2): void {
-		const [x, y] = _gap;
-		this.pos[0] += x;
-		this.pos[1] += y;
-	}
 }

@@ -74,12 +74,4 @@ export class Pencil extends Shape {
 			pos[1] + dims[1] > max_y
 		);
 	}
-
-	displace_by(_gap: vec2): void {
-		const [x, y] = _gap;
-		this.points.forEach((pt) => {
-			pt[0] += x;
-			pt[1] += y;
-		});
-	}
 }
