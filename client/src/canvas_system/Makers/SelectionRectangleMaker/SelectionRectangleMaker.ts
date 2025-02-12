@@ -19,7 +19,7 @@ let curr = new Rectangle({
 
 export class SelectionRectangleMaker extends Maker {
 	protected mousedown(e: MouseEvent): void {
-		if (!SelectionManager.selecting) return;
+		if (e.button !== 0 || !SelectionManager.is_selecting()) return;
 
 		draw = true;
 		curr.pos = [e.clientX, e.clientY];
