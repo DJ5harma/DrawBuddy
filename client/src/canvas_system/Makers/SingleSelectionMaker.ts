@@ -28,6 +28,8 @@ export class SingleSelectionManager {
 					y > top_left[1] - 10 &&
 					y < bottom_right[1] + 10
 				) {
+					// SelectionManager
+					SelectionManager.remove_selection_of_all();
 					SelectionManager.add_shape(shapes[i]).render_selection_of_shape(
 						shapes[i]
 					);
