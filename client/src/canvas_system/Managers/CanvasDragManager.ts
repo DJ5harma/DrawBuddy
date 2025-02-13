@@ -12,6 +12,7 @@ export class CanvasDragManager {
 		buffer_canvas.style.visibility = "hidden";
 
 		document.addEventListener("wheel", (e) => {
+			if (this.move) return;
 			const dirY = e.deltaY < 0 ? 1 : -1;
 			console.log(dirY);
 			buffer_ctx.drawImage(canvas, 0, 0);
