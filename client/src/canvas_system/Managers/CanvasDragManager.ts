@@ -12,13 +12,16 @@ export class CanvasDragManager {
 		buffer_canvas.style.visibility = "hidden";
 
 		document.addEventListener("wheel", (e) => {
-			// const dirY = e.deltaY > 0 ? 1 : -1;
-			// console.log(dirY);
-			// buffer_ctx.drawImage(canvas, 0, 0);
-			// CanvasManager.get_shapes().forEach((shape) => {
-			// 	shape.displace_by([0, -dirY * 50]);
-			// });
-			// CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
+			const dirY = e.deltaY < 0 ? 1 : -1;
+			console.log(dirY);
+			buffer_ctx.drawImage(canvas, 0, 0);
+			CanvasManager.get_shapes().forEach((shape) => {
+				shape.displace_by([0, dirY * 50]);
+			});
+
+			CanvasManager.clear_canvas_only_unrender();
+			ctx.drawImage(buffer_canvas, 0, dirY * 50);
+			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
 		});
 
 		document.addEventListener("mousedown", (e) => {
