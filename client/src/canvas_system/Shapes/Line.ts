@@ -70,5 +70,12 @@ export class Line implements Shape {
 
 		this.end[0] += x;
 		this.end[1] += y;
+
+		if (this.bounding_rect) {
+			this.bounding_rect.top_left[0] += x;
+			this.bounding_rect.bottom_right[0] += x;
+			this.bounding_rect.top_left[1] += y;
+			this.bounding_rect.bottom_right[1] += y;
+		}
 	}
 }

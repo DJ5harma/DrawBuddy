@@ -41,7 +41,7 @@ export class SingleSelectionManager {
 		});
 	}
 
-	private static show_selection_rect() {
+	public static show_selection_rect() {
 		if (!this.selected_shape?.bounding_rect) {
 			console.error("Shape has no bounding_rect: ", this.selected_shape);
 			return;
