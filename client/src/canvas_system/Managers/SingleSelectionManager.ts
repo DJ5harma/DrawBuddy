@@ -1,7 +1,6 @@
 import { Shape } from "../Shapes/Shape";
 import { CanvasManager } from "./CanvasManager";
 import { SelectionManager } from "./SelectionManager";
-import { TempCanvasManager } from "./TempCanvasManager";
 
 export class SingleSelectionManager {
 	static allow_selection = false;
@@ -12,7 +11,7 @@ export class SingleSelectionManager {
 		console.log("SingleSelectionManager init");
 
 		document.addEventListener("click", (e) => {
-			if (!this.allow_selection) return;
+			if (!SingleSelectionManager.allow_selection) return;
 
 			const shapes = CanvasManager.get_shapes();
 			console.log("total shapes: ", shapes.length);
@@ -53,6 +52,6 @@ export class SingleSelectionManager {
 
 	static stop() {
 		this.allow_selection = false;
-		TempCanvasManager.clear_canvas_only_unrender();
+		this.selected_shape = undefined;
 	}
 }

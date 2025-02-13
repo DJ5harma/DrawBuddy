@@ -63,6 +63,10 @@ export class SelectionManager {
 			this.render_selection_of_shape(shape);
 		});
 	}
+	public static unrender_selection_of_all() {
+		TempCanvasManager.clear_canvas_only_unrender();
+		this.selected_shapes = new Set();
+	}
 
 	public static is_selecting() {
 		return this.selecting;
