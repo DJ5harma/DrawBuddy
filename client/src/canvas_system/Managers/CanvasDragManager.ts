@@ -27,6 +27,7 @@ export class CanvasDragManager {
 
 		document.addEventListener("mousedown", (e) => {
 			if (e.button !== 1 && !this.allowed_by_tool) return; // Middle mouse button
+			document.body.style.cursor = "grab";
 			buffer_ctx.drawImage(canvas, 0, 0);
 			this.move = true;
 			this.move_start_pos = [e.clientX, e.clientY];
@@ -45,6 +46,7 @@ export class CanvasDragManager {
 
 		document.addEventListener("mouseup", (e) => {
 			if (e.button !== 1 && !this.allowed_by_tool) return;
+			document.body.style.cursor = "default";
 			this.move = false;
 
 			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
