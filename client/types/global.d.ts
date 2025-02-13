@@ -5,7 +5,7 @@ declare global {
 	type vec2 = [number, number];
 	var vec2: vec2;
 
-	type Tools = "RECTANGLE" | "PENCIL" | "CIRCLE";
+	type Tools = "RECTANGLE" | "PENCIL" | "CIRCLE" | "LINE";
 	var Tools = Tools;
 
 	type Stroke = { width: number; color: Color };

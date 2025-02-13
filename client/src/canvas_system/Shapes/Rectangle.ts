@@ -42,10 +42,11 @@ export class Rectangle implements Shape {
 			l = -l;
 			y -= l;
 		}
-
+		ctx.beginPath();
 		ctx.strokeRect(x, y, w, l);
 		ctx.fillStyle = this.fill;
 		ctx.fillRect(x, y, w, l);
+		ctx.closePath();
 	}
 
 	public get_copy() {

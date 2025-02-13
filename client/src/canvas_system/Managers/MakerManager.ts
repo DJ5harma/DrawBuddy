@@ -2,9 +2,15 @@ import { PencilMaker } from "../Makers/PencilMaker";
 import { RectangleMaker } from "../Makers/RectangleMaker";
 import { CircleMaker } from "../Makers/CircleMaker.ts";
 import { Maker } from "../Makers/Maker";
+import { LineMaker } from "../Makers/LineMaker.ts";
 
 export class MakerManager {
-	public static maker_names: Tools[] = ["PENCIL", "RECTANGLE" , "CIRCLE"];
+	public static maker_names: Tools[] = [
+		"PENCIL",
+		"RECTANGLE",
+		"CIRCLE",
+		"LINE",
+	];
 
 	private static makers_map = new Map<Tools, Maker>();
 
@@ -16,6 +22,7 @@ export class MakerManager {
 		this.makers_map.set("PENCIL", new PencilMaker());
 		this.makers_map.set("RECTANGLE", new RectangleMaker());
 		this.makers_map.set("CIRCLE", new CircleMaker());
+		this.makers_map.set("LINE", new LineMaker());
 
 		this.curr_maker = this.makers_map.get("RECTANGLE")!;
 

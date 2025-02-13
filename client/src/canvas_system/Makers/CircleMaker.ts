@@ -1,7 +1,7 @@
 import { Circle } from "../Shapes/Circle";
 import { Maker } from "./Maker";
 import { CanvasManager } from "../Managers/CanvasManager";
-import { ctx, temp_ctx } from "../../main";
+import { temp_ctx } from "../../main";
 import { TempCanvasManager } from "../Managers/TempCanvasManager";
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 
@@ -30,18 +30,15 @@ export class CircleMaker extends Maker {
 		};
 
 		curr.prepare_for_render(temp_ctx);
-
-		temp_ctx.beginPath();
-		// temp_ctx.moveTo(e.clientX, e.clientY);
 	}
 
 	protected mousemove(e: MouseEvent): void {
 		if (!draw) return;
 		const [x, y] = [e.clientX, e.clientY];
-        const dx = x - curr.pos[0];
-        const dy = y - curr.pos[1];
-    
-        curr.radius = Math.sqrt(dx * dx + dy * dy);
+		const dx = x - curr.pos[0];
+		const dy = y - curr.pos[1];
+
+		curr.radius = Math.sqrt(dx * dx + dy * dy);
 
 		TempCanvasManager.clear_canvas_only_unrender().render_shape(curr);
 	}
@@ -51,7 +48,6 @@ export class CircleMaker extends Maker {
 		draw = false;
 		CanvasManager.store_shape(curr).render_shape(curr);
 		TempCanvasManager.clear_canvas_only_unrender();
-		ctx.closePath();
 	}
 
 	start(): void {

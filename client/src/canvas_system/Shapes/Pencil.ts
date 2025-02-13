@@ -31,6 +31,8 @@ export class Pencil implements Shape {
 		if (this.cached_image_data) {
 			buffer_ctx.putImageData(this.cached_image_data.img, 0, 0);
 
+			ctx.beginPath();
+
 			// Now draw it without erasing existing content
 			ctx.drawImage(
 				buffer_canvas,
@@ -39,6 +41,8 @@ export class Pencil implements Shape {
 			);
 
 			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
+
+			ctx.closePath();
 			return;
 		} else {
 			console.error(
