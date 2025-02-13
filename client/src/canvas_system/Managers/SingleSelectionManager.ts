@@ -40,7 +40,7 @@ export class SingleSelectionManager {
 						shapes[i]
 					);
 
-					// break;
+					break;
 				}
 			}
 		});

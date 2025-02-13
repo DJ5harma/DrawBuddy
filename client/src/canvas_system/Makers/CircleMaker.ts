@@ -1,7 +1,6 @@
 import { Circle } from "../Shapes/Circle";
 import { Maker } from "./Maker";
 import { CanvasManager } from "../Managers/CanvasManager";
-import { temp_ctx } from "../../main";
 import { TempCanvasManager } from "../Managers/TempCanvasManager";
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 
@@ -28,8 +27,6 @@ export class CircleMaker extends Maker {
 			color: ToolPallete.stroke.color,
 			width: ToolPallete.stroke.width,
 		};
-
-		curr.prepare_for_render(temp_ctx);
 	}
 
 	protected mousemove(e: MouseEvent): void {

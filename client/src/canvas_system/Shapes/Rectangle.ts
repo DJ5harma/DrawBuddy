@@ -32,21 +32,10 @@ export class Rectangle implements Shape {
 	public render_me_whole(ctx: CanvasRenderingContext2D): void {
 		this.prepare_for_render(ctx);
 
-		let [x, y] = this.pos;
-		let [w, l] = this.dims;
-
-		if (w < 0) {
-			w = -w;
-			x -= w;
-		}
-		if (l < 0) {
-			l = -l;
-			y -= l;
-		}
 		ctx.beginPath();
-		ctx.strokeRect(x, y, w, l);
+		ctx.strokeRect(...this.pos, ...this.dims);
 		ctx.fillStyle = this.fill;
-		ctx.fillRect(x, y, w, l);
+		ctx.fillRect(...this.pos, ...this.dims);
 		ctx.closePath();
 	}
 

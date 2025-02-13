@@ -1,7 +1,6 @@
 import { Rectangle } from "../Shapes/Rectangle";
 import { Maker } from "./Maker";
 import { CanvasManager } from "../Managers/CanvasManager";
-import { ctx } from "../../main";
 import { TempCanvasManager } from "../Managers/TempCanvasManager";
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 
@@ -42,7 +41,21 @@ export class RectangleMaker extends Maker {
 	protected mouseup(e: MouseEvent): void {
 		if (e.button !== 0) return;
 		draw = false;
-		ctx.closePath();
+
+		let [x, y] = curr.pos;
+		let [w, l] = curr.dims;
+
+		if (w < 0) {
+			w = -w;
+			x -= w;
+		}
+		if (l < 0) {
+			l = -l;
+			y -= l;
+		}
+
+		curr.pos = [x, y];
+		curr.dims = [w, l];
 
 		RectangleMaker.ensure_bounding_rect();
 		CanvasManager.store_shape(curr).render_shape(curr);
