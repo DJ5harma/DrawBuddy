@@ -29,13 +29,18 @@ export class SelectionManager {
 		this.selecting = false;
 		if (!this.selector_rect) return;
 		this.selector_rect.stop();
-		this.selected_shapes = new Set();
+		this.selected_shapes.clear();
 	}
 
 	public static add_shape(shape: Shape) {
 		console.log(shape, "added to selection list");
 		if (!this.selected_shapes.has(shape)) this.selected_shapes.add(shape);
 		return this;
+	}
+
+	public static remove_selection_of_all() {
+		TempCanvasManager.clear_canvas_only_unrender();
+		this.selected_shapes.clear();
 	}
 
 	public static render_selection_of_shape(shape: Shape) {
@@ -63,10 +68,6 @@ export class SelectionManager {
 		this.selected_shapes.forEach((shape) => {
 			this.render_selection_of_shape(shape);
 		});
-	}
-	public static unrender_selection_of_all() {
-		TempCanvasManager.clear_canvas_only_unrender();
-		this.selected_shapes = new Set();
 	}
 
 	public static is_selecting() {

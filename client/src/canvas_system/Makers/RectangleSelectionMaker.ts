@@ -58,8 +58,11 @@ export class RectangleSelectionMaker extends Maker {
 		if (w < 40 || l < 40) return;
 		TempCanvasManager.clear_canvas_only_unrender();
 
+		SelectionManager.remove_selection_of_all();
 		CanvasManager.get_shapes().forEach((shape) => {
-			if (shape.is_inside_rect({ pos: [x, y], dims: [w, l] })) {
+			if (
+				shape.is_inside_rect({ pos: [x - 10, y - 10], dims: [w + 20, l + 20] })
+			) {
 				SelectionManager.add_shape(shape);
 				SelectionManager.render_selection_of_shape(shape);
 			}
