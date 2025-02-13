@@ -1,6 +1,9 @@
 export abstract class Shape {
 	abstract bounding_rect: BoundingRect | undefined;
 
+	abstract fill?: Color;
+	abstract stroke?: Stroke;
+
 	public abstract get_copy(): Shape;
 
 	public abstract prepare_for_render(_ctx: CanvasRenderingContext2D): void;

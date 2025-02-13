@@ -57,7 +57,7 @@ export class SelectionRectangleMaker extends Maker {
 
 		CanvasManager.get_shapes().forEach((shape) => {
 			if (shape.is_inside_rect({ pos: [x, y], dims: [w, l] }))
-				console.log("INSIDE: ", shape);
+				SelectionManager.add_shape(shape);
 		});
 
 		TempCanvasManager.clear_canvas_only_unrender();

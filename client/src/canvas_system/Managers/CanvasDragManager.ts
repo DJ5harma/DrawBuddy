@@ -1,5 +1,6 @@
 import { buffer_canvas, buffer_ctx, canvas, ctx } from "../../main";
 import { CanvasManager } from "./CanvasManager";
+import { SelectionManager } from "./SelectionManager";
 
 export class CanvasDragManager {
 	private static allowed_by_tool = false;
@@ -59,6 +60,8 @@ export class CanvasDragManager {
 
 			CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
 			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
+
+			SelectionManager.render_selection_of_all();
 		});
 	}
 

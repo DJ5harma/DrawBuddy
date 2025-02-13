@@ -1,6 +1,7 @@
 import { Rectangle } from "../Shapes/Rectangle";
 import { Shape } from "../Shapes/Shape";
 import { CanvasManager } from "./CanvasManager";
+import { SelectionManager } from "./SelectionManager";
 import { TempCanvasManager } from "./TempCanvasManager";
 
 export class SingleSelectionManager {
@@ -34,8 +35,8 @@ export class SingleSelectionManager {
 					y < bottom_right[1] + 10
 				) {
 					this.selected_shape = shapes[i];
-					this.show_selection_rect();
-					break;
+					SelectionManager.add_shape(shapes[i]);
+					// break;
 				}
 			}
 		});
@@ -68,5 +69,6 @@ export class SingleSelectionManager {
 
 	static stop() {
 		this.allow_selection = false;
+		TempCanvasManager.clear_canvas_only_unrender();
 	}
 }

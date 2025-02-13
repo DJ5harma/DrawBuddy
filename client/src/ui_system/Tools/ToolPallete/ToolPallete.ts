@@ -1,3 +1,5 @@
+import { SelectionManager } from "../../../canvas_system/Managers/SelectionManager";
+
 export class ToolPallete {
 	static tool_pallete: HTMLDivElement;
 
@@ -5,7 +7,7 @@ export class ToolPallete {
 		color: "rgb(255, 255, 255)",
 		width: 3,
 	};
-	static fill: Color;
+	static fill: Color = "rgb(0, 0, 0)";
 
 	static init() {
 		this.tool_pallete =
@@ -63,7 +65,8 @@ export class ToolPallete {
 			stroke_div.appendChild(elem);
 
 			elem.addEventListener("click", (_) => {
-				this.stroke.color = color;
+				ToolPallete.stroke.color = color;
+				SelectionManager.update_selected_shapes_from_pallete();
 			});
 		});
 
@@ -104,7 +107,8 @@ export class ToolPallete {
 			background_div.appendChild(elem);
 
 			elem.addEventListener("click", (_) => {
-				this.fill = color;
+				ToolPallete.fill = color;
+				SelectionManager.update_selected_shapes_from_pallete();
 			});
 		});
 
@@ -121,7 +125,7 @@ export class ToolPallete {
 		bar_div.style.width = "100%";
 
 		bar_div.innerHTML = /*html*/ `
-            <input id="stroke_width_bar" type="range" min="1" max="10" value="3" />
+		<input id="stroke_width_bar" type="range" min="1" max="10" value="3" />
         `;
 		this.tool_pallete.appendChild(bar_div);
 
@@ -133,7 +137,8 @@ export class ToolPallete {
 		this.stroke.width = parseInt(elem.value, 10);
 
 		elem.addEventListener("input", (_) => {
-			this.stroke.width = parseInt(elem.value, 10);
+			ToolPallete.stroke.width = parseInt(elem.value, 10);
+			SelectionManager.update_selected_shapes_from_pallete();
 		});
 	}
 }
