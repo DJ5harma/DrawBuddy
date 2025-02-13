@@ -44,12 +44,12 @@ export class RectangleMaker extends Maker {
 		draw = false;
 		ctx.closePath();
 
-		this.ensure_bounding_rect();
+		RectangleMaker.ensure_bounding_rect();
 		CanvasManager.store_shape(curr).render_shape(curr);
 		TempCanvasManager.clear_canvas_only_unrender();
 	}
 
-	ensure_bounding_rect(): void {
+	public static ensure_bounding_rect(): void {
 		curr.bounding_rect = {
 			top_left: [curr.pos[0] - 10, curr.pos[1] - 10],
 			bottom_right: [

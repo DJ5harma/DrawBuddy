@@ -66,13 +66,13 @@ export class SelectionRectangleMaker extends Maker {
 	}
 
 	public start(): void {
-		document.addEventListener("mousedown", this.mousedown);
-		document.addEventListener("mousemove", this.mousemove);
-		document.addEventListener("mouseup", this.mouseup);
+		document.addEventListener("mousedown", (e) => this.mousedown(e));
+		document.addEventListener("mousemove", (e) => this.mousemove(e));
+		document.addEventListener("mouseup", (e) => this.mouseup(e));
 	}
 	public stop(): void {
-		document.removeEventListener("mousedown", this.mousedown);
-		document.removeEventListener("mousemove", this.mousemove);
-		document.removeEventListener("mouseup", this.mouseup);
+		document.removeEventListener("mousedown", (e) => this.mousedown(e));
+		document.removeEventListener("mousemove", (e) => this.mousemove(e));
+		document.removeEventListener("mouseup", (e) => this.mouseup(e));
 	}
 }

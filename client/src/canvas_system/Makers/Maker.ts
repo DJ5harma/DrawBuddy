@@ -9,5 +9,5 @@ export abstract class Maker {
 	public start() {}
 	public stop() {}
 
-	public abstract ensure_bounding_rect(): void;
+	public static ensure_bounding_rect(): void {}
 }

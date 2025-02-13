@@ -40,30 +40,31 @@ export class CircleMaker extends Maker {
 
 		curr.radius = Math.sqrt(dx * dx + dy * dy);
 
-		this.ensure_bounding_rect();
 		TempCanvasManager.clear_canvas_only_unrender().render_shape(curr);
 	}
 
-	ensure_bounding_rect(): void {
+	protected mouseup(e: MouseEvent): void {
+		if (e.button !== 0) return;
+		draw = false;
+
+		CircleMaker.ensure_bounding_rect();
+		CanvasManager.store_shape(curr).render_shape(curr);
+		TempCanvasManager.clear_canvas_only_unrender();
+	}
+
+	public static ensure_bounding_rect(): void {
 		curr.bounding_rect = {
 			top_left: [curr.pos[0] - curr.radius, curr.pos[1] - curr.radius],
 			bottom_right: [curr.pos[0] + curr.radius, curr.pos[1] + curr.radius],
 		};
 	}
 
-	protected mouseup(e: MouseEvent): void {
-		if (e.button !== 0) return;
-		draw = false;
-		CanvasManager.store_shape(curr).render_shape(curr);
-		TempCanvasManager.clear_canvas_only_unrender();
-	}
-
-	start(): void {
+	public start(): void {
 		document.addEventListener("mousedown", this.mousedown);
 		document.addEventListener("mousemove", this.mousemove);
 		document.addEventListener("mouseup", this.mouseup);
 	}
-	stop(): void {
+	public stop(): void {
 		document.removeEventListener("mousedown", this.mousedown);
 		document.removeEventListener("mousemove", this.mousemove);
 		document.removeEventListener("mouseup", this.mouseup);

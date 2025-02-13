@@ -43,24 +43,24 @@ export class LineMaker extends Maker {
 		curr.end = [e.clientX, e.clientY];
 		ctx.closePath();
 
-		this.ensure_bounding_rect();
+		LineMaker.ensure_bounding_rect();
 		CanvasManager.store_shape(curr).render_shape(curr);
 		TempCanvasManager.clear_canvas_only_unrender();
 	}
 
-	ensure_bounding_rect(): void {
+	public static ensure_bounding_rect(): void {
 		curr.bounding_rect = {
 			top_left: [...curr.start],
 			bottom_right: [...curr.end],
 		};
 	}
 
-	start(): void {
+	public start(): void {
 		document.addEventListener("mousedown", this.mousedown);
 		document.addEventListener("mousemove", this.mousemove);
 		document.addEventListener("mouseup", this.mouseup);
 	}
-	stop(): void {
+	public stop(): void {
 		document.removeEventListener("mousedown", this.mousedown);
 		document.removeEventListener("mousemove", this.mousemove);
 		document.removeEventListener("mouseup", this.mouseup);

@@ -53,12 +53,12 @@ export class PencilMaker extends Maker {
 
 		console.log("added Cached image data: ", curr.cached_image_data);
 
-		this.ensure_bounding_rect();
+		PencilMaker.ensure_bounding_rect();
 		CanvasManager.store_shape(curr).render_shape(curr);
 		TempCanvasManager.clear_canvas_only_unrender();
 	}
 
-	ensure_bounding_rect(): void {
+	public static ensure_bounding_rect(): void {
 		let min_x: number, max_x: number, min_y: number, max_y: number;
 		const pts = curr.points;
 		min_x = pts[0][0];
