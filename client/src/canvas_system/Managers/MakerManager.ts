@@ -41,4 +41,5 @@ export class MakerManager {
 	public static pause_maker() {
 		this.curr_maker.stop();
 	}
+
 }

@@ -5,6 +5,8 @@ declare global {
 	type vec2 = [number, number];
 	var vec2: vec2;
 
+	type ResizeHandle = 'n' | 'e' | 's' | 'w' | 'ne' | 'nw' | 'se' | 'sw' | undefined;
+
 	type Tools = "RECTANGLE" | "PENCIL" | "CIRCLE" | "LINE";
 	var Tools = Tools;
 

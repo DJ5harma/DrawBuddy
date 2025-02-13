@@ -6,6 +6,7 @@ export class Rectangle implements Shape {
     stroke;
     fill;
     bounding_rect: BoundingRect | undefined;
+    resize_handle : ResizeHandle = undefined
 
     constructor({
         pos,
@@ -80,6 +81,92 @@ export class Rectangle implements Shape {
             this.bounding_rect.bottom_right[0] += x;
             this.bounding_rect.top_left[1] += y;
             this.bounding_rect.bottom_right[1] += y;
+        }
+    }
+
+    public start_interaction(touch_pos: vec2): void {
+        console.log("setting dir");
+        const [x, y] = touch_pos;
+        if (this.bounding_rect) {
+            
+            const left = this.bounding_rect.top_left[0];
+            const right = this.bounding_rect.bottom_right[0];
+            const top = this.bounding_rect.top_left[1];
+            const bottom = this.bounding_rect.bottom_right[1];
+            if(x - left <= 10 && y - top <= 10){
+                this.resize_handle = 'nw'
+            }
+            else if(x - left <= 10 && bottom - y <= 10){
+                this.resize_handle = 'sw'
+            }
+            else if(right - x <= 10 && y - top <= 10){
+                this.resize_handle = 'ne'
+            }
+            else if(right - x <= 10 && bottom - y <= 10){
+                this.resize_handle = 'sw'
+            }
+            else if(x - left <= 10){
+                this.resize_handle = 'w'
+            }
+            else if(y - top <= 10){
+                this.resize_handle = 'n'
+            }
+            else if(right - x <= 10){
+                this.resize_handle = 'e'
+            }
+            else if(bottom - y <= 10){
+                this.resize_handle = 's'
+            }
+            console.log("setting dir to :" , this.resize_handle);
+        }
+        
+    }
+    
+    public start_resizing_shapes(resize_pos : vec2){
+        console.log("updating dir to :" , this.resize_handle);
+        if(this.resize_handle !== undefined){
+            const [x , y] = resize_pos;
+            console.log(this.dims[0] ,this.dims[1]);
+            
+            switch(this.resize_handle){
+                case 'e' : {
+                    this.dims[0] += (x - (this.pos[0] + this.dims[0]))
+                    break;
+                }
+                case 'n' : {
+                    this.dims[1] += (this.pos[1] - y)
+                    break;
+                }
+                case 'w' : {
+                    this.dims[0] += ((this.pos[0] + this.dims[0]) - x)
+                    break;
+                }
+                case 's' : {
+                    this.dims[1] += (y - this.pos[1])
+                    break;
+                }
+                case 'ne' : {
+                    this.dims[0] += (x - (this.pos[0] + this.dims[0]))
+                    this.dims[1] += (this.pos[1] - y)
+                    break;
+                }
+                case 'se' : {
+                    this.dims[0] += (x - (this.pos[0] + this.dims[0]))
+                    this.dims[1] += (y - this.pos[1])
+                    break;
+                }
+                case 'nw' : {
+                    this.dims[0] += ((this.pos[0] + this.dims[0]) - x)
+                    this.dims[1] += (this.pos[1] - y)
+                    break;
+                }
+                case 'sw' : {
+                    this.dims[0] += ((this.pos[0] + this.dims[0]) - x)
+                    this.dims[1] += (y - this.pos[1])
+                    break;
+                }
+            }
+            console.log(this.dims[0] ,this.dims[1]);
         }
     }
 }

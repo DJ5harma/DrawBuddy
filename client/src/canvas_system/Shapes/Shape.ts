@@ -13,4 +13,8 @@ export abstract class Shape {
     public abstract is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean;
 
     public abstract displace_by(_displacement: vec2): void;
+
+    public abstract start_interaction(_touch_pos:vec2): void;
+
+    public abstract start_resizing_shapes(_resize_pos:vec2) : void;
 }

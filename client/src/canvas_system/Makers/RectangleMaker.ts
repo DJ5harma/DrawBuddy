@@ -71,6 +71,7 @@ export class RectangleMaker extends Maker {
             ],
         };
     }
+    
 
     start(): void {
         document.addEventListener("mousedown", this.mousedown);

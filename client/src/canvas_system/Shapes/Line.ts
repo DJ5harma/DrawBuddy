@@ -78,4 +78,9 @@ export class Line implements Shape {
             this.bounding_rect.bottom_right[1] += y;
         }
     }
+
+    public start_interaction(): void {
+        
+    }
+    public start_resizing_shapes(){}
 }
