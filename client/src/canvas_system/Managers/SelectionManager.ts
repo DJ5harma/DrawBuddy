@@ -32,6 +32,7 @@ export class SelectionManager {
 	public static add_shape(shape: Shape) {
 		console.log(shape, "added to selection list");
 		this.selected_shapes.add(shape);
+		return this;
 	}
 
 	public static render_selection_of_shape(shape: Shape) {

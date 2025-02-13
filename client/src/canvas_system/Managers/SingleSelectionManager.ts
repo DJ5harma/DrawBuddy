@@ -20,6 +20,8 @@ export class SingleSelectionManager {
 			const [x, y] = [e.clientX, e.clientY];
 
 			for (let i = shapes.length - 1; i != -1; --i) {
+				if (shapes[i] === this.selected_shape) continue;
+
 				const { bounding_rect } = shapes[i];
 				if (!bounding_rect) {
 					console.error("Bounding rect of", shapes[i], "is undefined");
@@ -34,7 +36,10 @@ export class SingleSelectionManager {
 					y < bottom_right[1] + 10
 				) {
 					this.selected_shape = shapes[i];
-					SelectionManager.add_shape(shapes[i]);
+					SelectionManager.add_shape(shapes[i]).render_selection_of_shape(
+						shapes[i]
+					);
+
 					// break;
 				}
 			}
