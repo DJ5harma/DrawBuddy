@@ -51,8 +51,11 @@ export class SingleSelectionManager {
 
 		const { top_left, bottom_right } = this.selected_shape.bounding_rect;
 		const rect = new Rectangle({
-			pos: [...top_left],
-			dims: [bottom_right[0] - top_left[0], bottom_right[1] - top_left[1]],
+			pos: [top_left[0] - 10, top_left[1] - 10],
+			dims: [
+				bottom_right[0] - top_left[0] + 20,
+				bottom_right[1] - top_left[1] + 20,
+			],
 			fill: "rgba(100, 100, 242, 0.1)",
 			stroke: { color: "rgba(100, 100, 242, 1)", width: 2 },
 		});
