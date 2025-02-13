@@ -17,7 +17,7 @@ let curr = new Rectangle({
 	fill: "rgba(5, 247, 255, 0.1)",
 });
 
-export class SelectionRectangleMaker extends Maker {
+export class RectangleSelectionMaker extends Maker {
 	protected mousedown(e: MouseEvent): void {
 		if (e.button !== 0 || !SelectionManager.is_selecting()) return;
 
@@ -55,6 +55,7 @@ export class SelectionRectangleMaker extends Maker {
 			y -= l;
 		}
 
+		if (w < 40 || l < 40) return;
 		TempCanvasManager.clear_canvas_only_unrender();
 
 		CanvasManager.get_shapes().forEach((shape) => {

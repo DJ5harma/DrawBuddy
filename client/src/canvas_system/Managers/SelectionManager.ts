@@ -1,14 +1,15 @@
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
-import { SelectionRectangleMaker } from "../Makers/SelectionRectangleMaker";
+import { RectangleSelectionMaker } from "../Makers/RectangleSelectionMaker";
 import { Rectangle } from "../Shapes/Rectangle";
 import { Shape } from "../Shapes/Shape";
 import { CanvasManager } from "./CanvasManager";
+import { SingleSelectionManager } from "../Makers/SingleSelectionMaker";
 import { TempCanvasManager } from "./TempCanvasManager";
 
 export class SelectionManager {
 	private static selecting = false;
 
-	private static selector_rect: SelectionRectangleMaker;
+	private static selector_rect: RectangleSelectionMaker;
 
 	private static selected_shapes = new Set<Shape>();
 
@@ -17,8 +18,10 @@ export class SelectionManager {
 	}
 
 	public static start_selection_lifecycle() {
+		this.selected_shapes = new Set();
 		this.selecting = true;
-		this.selector_rect = new SelectionRectangleMaker();
+		this.selector_rect = new RectangleSelectionMaker();
+		SingleSelectionManager.start();
 		this.selector_rect.start();
 	}
 
@@ -31,7 +34,7 @@ export class SelectionManager {
 
 	public static add_shape(shape: Shape) {
 		console.log(shape, "added to selection list");
-		this.selected_shapes.add(shape);
+		if (!this.selected_shapes.has(shape)) this.selected_shapes.add(shape);
 		return this;
 	}
 
@@ -40,8 +43,6 @@ export class SelectionManager {
 			console.error("Shape has no bounding_rect: ", shape);
 			return;
 		}
-
-		console.log("TESTT");
 
 		const { top_left, bottom_right } = shape.bounding_rect;
 

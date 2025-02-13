@@ -2,7 +2,7 @@ import { canvases } from "../main";
 import { MakerManager } from "./Managers/MakerManager";
 import { CanvasManager } from "./Managers/CanvasManager";
 import { UndoManager } from "./Managers/UndoManager";
-import { SingleSelectionManager } from "./Managers/SingleSelectionManager";
+import { SingleSelectionManager } from "./Makers/SingleSelectionMaker";
 import { CanvasDragManager } from "./Managers/CanvasDragManager";
 
 function design_canvas() {
