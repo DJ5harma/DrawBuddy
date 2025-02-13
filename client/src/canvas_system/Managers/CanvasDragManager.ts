@@ -11,6 +11,16 @@ export class CanvasDragManager {
 		console.log("CanvasDragManager init");
 		buffer_canvas.style.visibility = "hidden";
 
+		document.addEventListener("wheel", (e) => {
+			// const dirY = e.deltaY > 0 ? 1 : -1;
+			// console.log(dirY);
+			// buffer_ctx.drawImage(canvas, 0, 0);
+			// CanvasManager.get_shapes().forEach((shape) => {
+			// 	shape.displace_by([0, -dirY * 50]);
+			// });
+			// CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
+		});
+
 		document.addEventListener("mousedown", (e) => {
 			if (e.button !== 1 && !this.allowed_by_tool) return; // Middle mouse button
 			buffer_ctx.drawImage(canvas, 0, 0);
@@ -44,7 +54,7 @@ export class CanvasDragManager {
 				shape.displace_by(new_translate);
 			});
 
-			CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
+			// CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
 		});
 	}
 
