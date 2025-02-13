@@ -5,7 +5,7 @@ export class ToolPallete {
 
 	static stroke: Stroke = {
 		color: "rgb(255, 255, 255)",
-		width: 3,
+		width: 10,
 	};
 	static fill: Color = "rgb(0, 0, 0)";
 
@@ -125,7 +125,7 @@ export class ToolPallete {
 		bar_div.style.width = "100%";
 
 		bar_div.innerHTML = /*html*/ `
-		<input id="stroke_width_bar" type="range" min="1" max="10" value="3" />
+		<input id="stroke_width_bar" type="range" min="1" max="100" value="10" />
         `;
 
 		this.tool_pallete.appendChild(bar_div);
