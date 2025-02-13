@@ -5,6 +5,7 @@ export class Rectangle implements Shape {
 	dims;
 	stroke;
 	fill;
+	bounding_rect: BoundingRect | undefined;
 
 	constructor({
 		pos,
@@ -65,6 +66,7 @@ export class Rectangle implements Shape {
 		this.dims = [...r.dims] as vec2;
 		this.stroke = { ...r.stroke };
 		this.fill = r.fill;
+		this.bounding_rect = r.bounding_rect && { ...r.bounding_rect };
 	}
 
 	public is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
@@ -77,6 +79,7 @@ export class Rectangle implements Shape {
 			pos[1] + dims[1] > this.pos[1] + this.dims[1]
 		);
 	}
+
 	public displace_by(_displacement: vec2): void {
 		const [x, y] = _displacement;
 

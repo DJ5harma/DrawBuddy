@@ -1,14 +1,12 @@
 import { canvas, ctx } from "../../main";
 import { Shape } from "../Shapes/Shape";
-import { CanvasDragManager } from "./CanvasDragManager";
 
 // only knows about real ctx
 export class CanvasManager {
 	private static arr: Shape[] = [];
 
 	public static init() {
-		console.log(this.name);
-		CanvasDragManager.init();
+		console.log(this.name, "init");
 	}
 
 	public static get_shapes() {
@@ -17,8 +15,6 @@ export class CanvasManager {
 
 	public static store_shape(Shape: Shape) {
 		this.arr.push(Shape.get_copy());
-		// console.log(this.arr);
-
 		return this;
 	}
 

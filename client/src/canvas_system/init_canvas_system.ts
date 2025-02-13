@@ -2,6 +2,8 @@ import { canvases } from "../main";
 import { MakerManager } from "./Managers/MakerManager";
 import { CanvasManager } from "./Managers/CanvasManager";
 import { UndoManager } from "./Managers/UndoManager";
+import { SingleSelectionManager } from "./Managers/SingleSelectionManager";
+import { CanvasDragManager } from "./Managers/CanvasDragManager";
 
 function design_canvas() {
 	document.body.style.overflow = "hidden";
@@ -23,7 +25,9 @@ export default function init_canvas_system() {
 
 	MakerManager.init();
 	CanvasManager.init();
+	CanvasDragManager.init();
 	UndoManager.init();
+	SingleSelectionManager.init();
 	let mutex_unlocked = true;
 
 	window.addEventListener("resize", () => {

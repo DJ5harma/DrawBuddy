@@ -5,19 +5,14 @@ export class Pencil implements Shape {
 	points: vec2[];
 	stroke: Stroke;
 
-	cached_bounding_rect?: {
-		min_x: number;
-		min_y: number;
-		max_x: number;
-		max_y: number;
-	};
+	bounding_rect: BoundingRect | undefined;
 
 	cached_image_data?: { img: ImageData; sx: number; sy: number };
 
 	constructor({ stroke }: { stroke: Stroke }) {
 		this.points = [];
 		this.stroke = { ...stroke };
-		this.cached_bounding_rect = undefined;
+		this.bounding_rect = undefined;
 	}
 
 	public prepare_for_render(ctx: CanvasRenderingContext2D) {
@@ -43,7 +38,6 @@ export class Pencil implements Shape {
 			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
 
 			ctx.closePath();
-			return;
 		} else {
 			console.error(
 				"A pencil drawing was requested but its cached image data was not found"
@@ -63,47 +57,22 @@ export class Pencil implements Shape {
 		this.cached_image_data = p.cached_image_data
 			? { ...p.cached_image_data }
 			: undefined;
-		this.cached_bounding_rect = p.cached_bounding_rect
-			? { ...p.cached_bounding_rect }
-			: undefined;
+		this.bounding_rect = p.bounding_rect ? { ...p.bounding_rect } : undefined;
 	}
 
 	public is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
-		let min_x: number, max_x: number, min_y: number, max_y: number;
-
-		if (this.cached_bounding_rect) {
-			min_x = this.cached_bounding_rect.min_x;
-			max_x = this.cached_bounding_rect.max_x;
-			min_y = this.cached_bounding_rect.min_y;
-			max_y = this.cached_bounding_rect.max_y;
-		} else {
-			const pts = this.points;
-			min_x = pts[0][0];
-			min_y = pts[0][1];
-
-			max_x = pts[0][0];
-			max_y = pts[0][1];
-
-			if (!pts.length) return false;
-
-			pts.forEach(([x, y]) => {
-				min_x = Math.min(min_x, x);
-				min_y = Math.min(min_y, y);
-
-				max_x = Math.max(max_x, x);
-				max_y = Math.max(max_y, y);
-			});
-
-			this.cached_bounding_rect = { min_x, min_y, max_x, max_y };
+		if (!this.bounding_rect) {
+			console.error("Bounding rect not found");
+			return false;
 		}
 		const dims = _rect.dims;
 		const pos = _rect.pos;
 
 		return (
-			pos[0] < min_x &&
-			pos[1] < min_y &&
-			pos[0] + dims[0] > max_x &&
-			pos[1] + dims[1] > max_y
+			pos[0] < this.bounding_rect.top_left[0] &&
+			pos[1] < this.bounding_rect.top_left[1] &&
+			pos[0] + dims[0] > this.bounding_rect.bottom_right[0] &&
+			pos[1] + dims[1] > this.bounding_rect.bottom_right[1]
 		);
 	}
 
@@ -113,11 +82,11 @@ export class Pencil implements Shape {
 			this.points[i][0] += x;
 			this.points[i][1] += y;
 		}
-		if (this.cached_bounding_rect) {
-			this.cached_bounding_rect.min_x += x;
-			this.cached_bounding_rect.max_x += x;
-			this.cached_bounding_rect.min_y += y;
-			this.cached_bounding_rect.max_y += y;
+		if (this.bounding_rect) {
+			this.bounding_rect.top_left[0] += x;
+			this.bounding_rect.bottom_right[0] += x;
+			this.bounding_rect.top_left[1] += y;
+			this.bounding_rect.bottom_right[1] += y;
 		}
 
 		if (this.cached_image_data) {

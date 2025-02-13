@@ -40,7 +40,15 @@ export class CircleMaker extends Maker {
 
 		curr.radius = Math.sqrt(dx * dx + dy * dy);
 
+		this.ensure_bounding_rect();
 		TempCanvasManager.clear_canvas_only_unrender().render_shape(curr);
+	}
+
+	ensure_bounding_rect(): void {
+		curr.bounding_rect = {
+			top_left: [curr.pos[0] - curr.radius, curr.pos[1] - curr.radius],
+			bottom_right: [curr.pos[0] + curr.radius, curr.pos[1] + curr.radius],
+		};
 	}
 
 	protected mouseup(e: MouseEvent): void {

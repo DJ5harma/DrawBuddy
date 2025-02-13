@@ -4,6 +4,7 @@ export class Line implements Shape {
 	start: vec2;
 	end: vec2;
 	stroke;
+	bounding_rect: BoundingRect | undefined;
 
 	constructor({
 		start,
@@ -48,6 +49,7 @@ export class Line implements Shape {
 		this.start = [...r.start] as vec2;
 		this.end = [...r.end] as vec2;
 		this.stroke = { ...r.stroke };
+		this.bounding_rect = r.bounding_rect && { ...r.bounding_rect };
 	}
 
 	public is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {

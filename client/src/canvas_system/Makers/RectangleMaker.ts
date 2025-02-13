@@ -43,8 +43,20 @@ export class RectangleMaker extends Maker {
 		if (e.button !== 0) return;
 		draw = false;
 		ctx.closePath();
+
+		this.ensure_bounding_rect();
 		CanvasManager.store_shape(curr).render_shape(curr);
 		TempCanvasManager.clear_canvas_only_unrender();
+	}
+
+	ensure_bounding_rect(): void {
+		curr.bounding_rect = {
+			top_left: [curr.pos[0] - 10, curr.pos[1] - 10],
+			bottom_right: [
+				curr.pos[0] + curr.dims[0] + 10,
+				curr.pos[1] + curr.dims[1] + 10,
+			],
+		};
 	}
 
 	start(): void {

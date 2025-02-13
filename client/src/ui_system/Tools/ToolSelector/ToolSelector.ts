@@ -1,6 +1,7 @@
 import { SelectionManager } from "../../../canvas_system/Managers/SelectionManager";
 import { MakerManager } from "../../../canvas_system/Managers/MakerManager";
 import { CanvasDragManager } from "../../../canvas_system/Managers/CanvasDragManager";
+import { SingleSelectionManager } from "../../../canvas_system/Managers/SingleSelectionManager";
 
 export class ToolSelector {
 	private static tool_selector: HTMLDivElement;
@@ -12,12 +13,14 @@ export class ToolSelector {
 		this.setup_canvas_dragger();
 		this.setup_drawers();
 		this.setup_selection_maker();
+		this.setup_single_selection();
 	}
 
 	public static stop_all() {
 		MakerManager.pause_maker();
 		SelectionManager.stop_selection_lifecycle();
 		CanvasDragManager.disallow_by_tool();
+		SingleSelectionManager.stop();
 	}
 
 	private static style_btn(elem: HTMLButtonElement) {
@@ -41,6 +44,23 @@ export class ToolSelector {
 			console.log(tool_name, "clicked");
 			this.stop_all();
 			SelectionManager.start_selection_lifecycle();
+			return;
+		});
+	}
+
+	private static setup_single_selection() {
+		const tool_name = "SINGLE SELECTION";
+		const elem = document.createElement("button");
+		this.tool_selector.appendChild(elem);
+
+		this.style_btn(elem);
+
+		elem.innerText = tool_name;
+
+		elem.addEventListener("click", (_) => {
+			console.log(tool_name, "clicked");
+			this.stop_all();
+			SingleSelectionManager.start();
 			return;
 		});
 	}

@@ -16,6 +16,11 @@ declare global {
 		| `rgb(${number}, ${number}, ${number})`;
 	var Color = Color;
 
+	type BoundingRect = {
+		top_left: vec2;
+		bottom_right: vec2;
+	};
+
 	// interface Rectangle {
 	// 	name: "RECTANGLE";
 	// 	src: vec2;

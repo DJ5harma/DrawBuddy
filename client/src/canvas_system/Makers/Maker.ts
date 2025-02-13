@@ -8,4 +8,6 @@ export abstract class Maker {
 	public set_config(_config: { stroke: Stroke }) {}
 	public start() {}
 	public stop() {}
+
+	public abstract ensure_bounding_rect(): void;
 }

@@ -53,8 +53,34 @@ export class PencilMaker extends Maker {
 
 		console.log("added Cached image data: ", curr.cached_image_data);
 
+		this.ensure_bounding_rect();
 		CanvasManager.store_shape(curr).render_shape(curr);
 		TempCanvasManager.clear_canvas_only_unrender();
+	}
+
+	ensure_bounding_rect(): void {
+		let min_x: number, max_x: number, min_y: number, max_y: number;
+		const pts = curr.points;
+		min_x = pts[0][0];
+		min_y = pts[0][1];
+
+		max_x = pts[0][0];
+		max_y = pts[0][1];
+
+		if (!pts.length) return;
+
+		pts.forEach(([x, y]) => {
+			min_x = Math.min(min_x, x);
+			min_y = Math.min(min_y, y);
+
+			max_x = Math.max(max_x, x);
+			max_y = Math.max(max_y, y);
+		});
+
+		curr.bounding_rect = {
+			top_left: [min_x, min_y],
+			bottom_right: [max_x, max_y],
+		};
 	}
 
 	public set_config(_config: { stroke: Stroke }): void {

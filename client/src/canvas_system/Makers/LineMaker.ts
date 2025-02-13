@@ -42,8 +42,17 @@ export class LineMaker extends Maker {
 		draw = false;
 		curr.end = [e.clientX, e.clientY];
 		ctx.closePath();
+
+		this.ensure_bounding_rect();
 		CanvasManager.store_shape(curr).render_shape(curr);
 		TempCanvasManager.clear_canvas_only_unrender();
+	}
+
+	ensure_bounding_rect(): void {
+		curr.bounding_rect = {
+			top_left: [...curr.start],
+			bottom_right: [...curr.end],
+		};
 	}
 
 	start(): void {
