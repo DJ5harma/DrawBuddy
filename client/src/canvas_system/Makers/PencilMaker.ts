@@ -1,6 +1,7 @@
-import { ctx } from "../../main";
+import { temp_ctx, temp_canvas } from "../../main";
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { CanvasManager } from "../Managers/CanvasManager";
+import { TempCanvasManager } from "../Managers/TempCanvasManager";
 import { Pencil } from "../Shapes/Pencil";
 import { Maker } from "./Maker";
 
@@ -19,10 +20,10 @@ export class PencilMaker extends Maker {
 			width: ToolPallete.stroke.width,
 		};
 
-		curr.prepare_for_render(ctx);
+		curr.prepare_for_render(temp_ctx);
 
-		ctx.moveTo(e.clientX, e.clientY);
-		ctx.beginPath();
+		temp_ctx.moveTo(e.clientX, e.clientY);
+		temp_ctx.beginPath();
 
 		curr.points = [[e.clientX, e.clientY]];
 	}
@@ -34,16 +35,26 @@ export class PencilMaker extends Maker {
 
 		curr.points.push([x, y]);
 
-		ctx.lineTo(x, y);
-		ctx.stroke();
-		ctx.moveTo(x, y);
+		temp_ctx.lineTo(x, y);
+		temp_ctx.stroke();
+		temp_ctx.moveTo(x, y);
 	}
 
 	protected mouseup(e: MouseEvent): void {
 		if (e.button !== 0) return;
 		draw = false;
-		ctx.closePath();
-		CanvasManager.store_shape(curr);
+		temp_ctx.closePath();
+
+		curr.cached_image_data = {
+			img: temp_ctx.getImageData(0, 0, temp_canvas.width, temp_canvas.height),
+			sx: 0,
+			sy: 0,
+		};
+
+		console.log("added Cached image data: ", curr.cached_image_data);
+
+		CanvasManager.store_shape(curr).render_shape(curr);
+		TempCanvasManager.clear_canvas_only_unrender();
 	}
 
 	public set_config(_config: { stroke: Stroke }): void {

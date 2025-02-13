@@ -17,7 +17,9 @@ export const ctx = canvas.getContext("2d")!;
 
 export const temp_canvas =
 	document.querySelector<HTMLCanvasElement>("#temp_canvas")!;
-export const temp_ctx = temp_canvas.getContext("2d")!;
+export const temp_ctx = temp_canvas.getContext("2d", {
+	willReadFrequently: true,
+})!;
 
 export const buffer_canvas =
 	document.querySelector<HTMLCanvasElement>("#buffer_canvas")!;
