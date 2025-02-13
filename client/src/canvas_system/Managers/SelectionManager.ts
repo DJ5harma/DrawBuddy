@@ -68,6 +68,10 @@ export class SelectionManager {
 		return this.selecting;
 	}
 
+	public static is_shape_selected(shape: Shape) {
+		return this.selected_shapes.has(shape);
+	}
+
 	public static update_selected_shapes_from_pallete() {
 		console.log(this.selected_shapes, " selected");
 

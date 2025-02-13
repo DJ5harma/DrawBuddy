@@ -20,7 +20,7 @@ export class SingleSelectionManager {
 			const [x, y] = [e.clientX, e.clientY];
 
 			for (let i = shapes.length - 1; i != -1; --i) {
-				if (shapes[i] === this.selected_shape) continue;
+				if (SelectionManager.is_shape_selected(shapes[i])) continue;
 
 				const { bounding_rect } = shapes[i];
 				if (!bounding_rect) {
