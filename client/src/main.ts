@@ -16,13 +16,13 @@ export const canvas = document.querySelector<HTMLCanvasElement>("#canvas")!;
 export const ctx = canvas.getContext("2d")!;
 
 export const temp_canvas =
-	document.querySelector<HTMLCanvasElement>("#temp_canvas")!;
+    document.querySelector<HTMLCanvasElement>("#temp_canvas")!;
 export const temp_ctx = temp_canvas.getContext("2d", {
-	willReadFrequently: true,
+    willReadFrequently: true,
 })!;
 
 export const buffer_canvas =
-	document.querySelector<HTMLCanvasElement>("#buffer_canvas")!;
+    document.querySelector<HTMLCanvasElement>("#buffer_canvas")!;
 export const buffer_ctx = buffer_canvas.getContext("2d")!;
 
 export const canvases = [buffer_canvas, canvas, temp_canvas];

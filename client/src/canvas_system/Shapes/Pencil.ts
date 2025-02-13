@@ -2,96 +2,103 @@ import { buffer_canvas, buffer_ctx } from "../../main";
 import { Shape } from "./Shape";
 
 export class Pencil implements Shape {
-	points: vec2[];
-	stroke: Stroke;
+    points: vec2[];
+    stroke: Stroke;
 
-	bounding_rect: BoundingRect | undefined;
+    bounding_rect: BoundingRect | undefined;
 
-	cached_image_data?: { img: ImageData; sx: number; sy: number };
+    cached_image_data?: { img: ImageData; sx: number; sy: number };
 
-	constructor({ stroke }: { stroke: Stroke }) {
-		this.points = [];
-		this.stroke = { ...stroke };
-		this.bounding_rect = undefined;
-	}
+    constructor({ stroke }: { stroke: Stroke }) {
+        this.points = [];
+        this.stroke = { ...stroke };
+        this.bounding_rect = undefined;
+    }
 
-	public prepare_for_render(ctx: CanvasRenderingContext2D) {
-		ctx.strokeStyle = this.stroke.color;
-		ctx.lineWidth = this.stroke.width;
-	}
+    public prepare_for_render(ctx: CanvasRenderingContext2D) {
+        ctx.strokeStyle = this.stroke.color;
+        ctx.lineWidth = this.stroke.width;
+    }
 
-	public render_me_whole(ctx: CanvasRenderingContext2D): void {
-		console.log("retrived image data: ", this.cached_image_data);
+    public render_me_whole(ctx: CanvasRenderingContext2D): void {
+        console.log("retrived image data: ", this.cached_image_data);
 
-		if (this.cached_image_data) {
-			buffer_ctx.putImageData(this.cached_image_data.img, 0, 0);
+        if (this.cached_image_data) {
+            buffer_ctx.putImageData(this.cached_image_data.img, 0, 0);
 
-			ctx.beginPath();
+            ctx.beginPath();
 
-			// Now draw it without erasing existing content
-			ctx.drawImage(
-				buffer_canvas,
-				this.cached_image_data.sx,
-				this.cached_image_data.sy
-			);
+            // Now draw it without erasing existing content
+            ctx.drawImage(
+                buffer_canvas,
+                this.cached_image_data.sx,
+                this.cached_image_data.sy
+            );
 
-			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
+            buffer_ctx.clearRect(
+                0,
+                0,
+                buffer_canvas.width,
+                buffer_canvas.height
+            );
 
-			ctx.closePath();
-		} else {
-			console.error(
-				"A pencil drawing was requested but its cached image data was not found"
-			);
-		}
-	}
+            ctx.closePath();
+        } else {
+            console.error(
+                "A pencil drawing was requested but its cached image data was not found"
+            );
+        }
+    }
 
-	public get_copy() {
-		const copy = new Pencil({ stroke: { ...this.stroke } });
-		copy.make_like(this);
-		return copy;
-	}
+    public get_copy() {
+        const copy = new Pencil({ stroke: { ...this.stroke } });
+        copy.make_like(this);
+        return copy;
+    }
 
-	public make_like(p: Pencil) {
-		this.points = [...p.points];
-		this.stroke = { ...p.stroke };
-		this.cached_image_data = p.cached_image_data
-			? { ...p.cached_image_data }
-			: undefined;
-		this.bounding_rect = p.bounding_rect ? { ...p.bounding_rect } : undefined;
-	}
+    public make_like(p: Pencil) {
+        this.points = [...p.points];
+        this.stroke = { ...p.stroke };
+        this.cached_image_data = p.cached_image_data
+            ? { ...p.cached_image_data }
+            : undefined;
+        this.bounding_rect = p.bounding_rect
+            ? { ...p.bounding_rect }
+            : undefined;
+    }
 
-	public is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
-		if (!this.bounding_rect) {
-			console.error("Bounding rect not found");
-			return false;
-		}
-		const dims = _rect.dims;
-		const pos = _rect.pos;
+    public is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
+        if (!this.bounding_rect) {
+            console.error("Bounding rect not found");
+            return false;
+        }
+        const dims = _rect.dims;
+        const pos = _rect.pos;
 
-		return (
-			pos[0] < this.bounding_rect.top_left[0] &&
-			pos[1] < this.bounding_rect.top_left[1] &&
-			pos[0] + dims[0] > this.bounding_rect.bottom_right[0] &&
-			pos[1] + dims[1] > this.bounding_rect.bottom_right[1]
-		);
-	}
+        return (
+            pos[0] < this.bounding_rect.top_left[0] &&
+            pos[1] < this.bounding_rect.top_left[1] &&
+            pos[0] + dims[0] > this.bounding_rect.bottom_right[0] &&
+            pos[1] + dims[1] > this.bounding_rect.bottom_right[1]
+        );
+    }
 
-	public displace_by(_displacement: vec2): void {
-		const [x, y] = _displacement;
-		for (let i = 0; i < this.points.length; ++i) {
-			this.points[i][0] += x;
-			this.points[i][1] += y;
-		}
-		if (this.bounding_rect) {
-			this.bounding_rect.top_left[0] += x;
-			this.bounding_rect.bottom_right[0] += x;
-			this.bounding_rect.top_left[1] += y;
-			this.bounding_rect.bottom_right[1] += y;
-		}
+    public displace_by(_displacement: vec2): void {
+        const [x, y] = _displacement;
+        for (let i = 0; i < this.points.length; ++i) {
+            this.points[i][0] += x;
+            this.points[i][1] += y;
+        }
+        if (this.bounding_rect) {
+            this.bounding_rect.top_left[0] += x;
+            this.bounding_rect.bottom_right[0] += x;
+            this.bounding_rect.top_left[1] += y;
+            this.bounding_rect.bottom_right[1] += y;
+        }
 
-		if (this.cached_image_data) {
-			this.cached_image_data.sx += x;
-			this.cached_image_data.sy += y;
-		}
-	}
+        if (this.cached_image_data) {
+            this.cached_image_data.sx += x;
+            this.cached_image_data.sy += y;
+        }
+    }
 }
