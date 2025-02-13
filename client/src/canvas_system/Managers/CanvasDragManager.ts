@@ -23,6 +23,7 @@ export class CanvasDragManager {
 
 			CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
 			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
+			SelectionManager.render_selection_of_all();
 		});
 
 		document.addEventListener("mousedown", (e) => {
