@@ -1,3 +1,4 @@
+import { buffer_canvas, buffer_ctx } from "../../main";
 import { Shape } from "./Shape";
 
 export class Pencil implements Shape {
@@ -11,6 +12,8 @@ export class Pencil implements Shape {
 		max_y: number;
 	};
 
+	cached_image_data?: { img: ImageData; sx: number; sy: number };
+
 	constructor({ stroke }: { stroke: Stroke }) {
 		this.points = [];
 		this.stroke = { ...stroke };
@@ -23,21 +26,24 @@ export class Pencil implements Shape {
 	}
 
 	public render_me_whole(ctx: CanvasRenderingContext2D): void {
-		// console.log("rendering whole Pencil");
-		const pts = this.points;
-		if (pts.length < 2) return;
+		console.log("retrived image data: ", this.cached_image_data);
 
-		this.prepare_for_render(ctx);
-		ctx.beginPath();
+		if (this.cached_image_data) {
+			buffer_ctx.putImageData(this.cached_image_data.img, 0, 0);
 
-		ctx.moveTo(pts[0][0], pts[0][1]);
+			// Now draw it without erasing existing content
+			ctx.drawImage(
+				buffer_canvas,
+				this.cached_image_data.sx,
+				this.cached_image_data.sy
+			);
 
-		for (let i = 1; i < pts.length; ++i) {
-			const [x2, y2] = [pts[i][0], pts[i][1]];
-
-			ctx.lineTo(x2, y2);
-			ctx.stroke();
-			ctx.moveTo(x2, y2);
+			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
+			return;
+		} else {
+			console.error(
+				"A pencil drawing was requested but its cached image data was not found"
+			);
 		}
 	}
 
@@ -50,6 +56,12 @@ export class Pencil implements Shape {
 	public make_like(p: Pencil) {
 		this.points = [...p.points];
 		this.stroke = { ...p.stroke };
+		this.cached_image_data = p.cached_image_data
+			? { ...p.cached_image_data }
+			: undefined;
+		this.cached_bounding_rect = p.cached_bounding_rect
+			? { ...p.cached_bounding_rect }
+			: undefined;
 	}
 
 	public is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
@@ -102,6 +114,11 @@ export class Pencil implements Shape {
 			this.cached_bounding_rect.max_x += x;
 			this.cached_bounding_rect.min_y += y;
 			this.cached_bounding_rect.max_y += y;
+		}
+
+		if (this.cached_image_data) {
+			this.cached_image_data.sx += x;
+			this.cached_image_data.sy += y;
 		}
 	}
 }

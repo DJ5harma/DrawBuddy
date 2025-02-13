@@ -39,7 +39,8 @@ export class SelectionRectangleMaker extends Maker {
 		TempCanvasManager.clear_canvas_only_unrender().render_shape(curr);
 	}
 
-	protected mouseup(_: MouseEvent): void {
+	protected mouseup(e: MouseEvent): void {
+		if (e.button !== 0 || !SelectionManager.is_selecting()) return;
 		draw = false;
 
 		let [x, y] = curr.pos;
@@ -58,16 +59,20 @@ export class SelectionRectangleMaker extends Maker {
 			if (shape.is_inside_rect({ pos: [x, y], dims: [w, l] }))
 				console.log("INSIDE: ", shape);
 		});
-		document.removeEventListener("mousedown", this.mousedown);
-		document.removeEventListener("mousemove", this.mousemove);
-		document.removeEventListener("mouseup", this.mouseup);
 
 		TempCanvasManager.clear_canvas_only_unrender();
+
+		console.log("MOUSE UPPED FROM SELECTION RECT MAKER");
 	}
 
 	public start(): void {
 		document.addEventListener("mousedown", this.mousedown);
 		document.addEventListener("mousemove", this.mousemove);
 		document.addEventListener("mouseup", this.mouseup);
+	}
+	public stop(): void {
+		document.removeEventListener("mousedown", this.mousedown);
+		document.removeEventListener("mousemove", this.mousemove);
+		document.removeEventListener("mouseup", this.mouseup);
 	}
 }

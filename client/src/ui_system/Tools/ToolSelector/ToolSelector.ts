@@ -41,6 +41,7 @@ export class ToolSelector {
 			console.log(tool_name, "clicked");
 			this.stop_all();
 			SelectionManager.start_selection_lifecycle();
+			return;
 		});
 	}
 

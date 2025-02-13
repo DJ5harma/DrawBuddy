@@ -47,9 +47,9 @@ export class RectangleMaker extends Maker {
 	protected mouseup(e: MouseEvent): void {
 		if (e.button !== 0) return;
 		draw = false;
+		ctx.closePath();
 		CanvasManager.store_shape(curr).render_shape(curr);
 		TempCanvasManager.clear_canvas_only_unrender();
-		ctx.closePath();
 	}
 
 	start(): void {

@@ -60,7 +60,7 @@ export class CanvasDragManager {
 				shape.displace_by(new_translate);
 			});
 
-			// CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
+			CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
 		});
 	}
 
