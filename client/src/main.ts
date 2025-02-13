@@ -8,6 +8,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = /*html*/ `
   <canvas id="canvas"></canvas>
   <canvas id="temp_canvas"></canvas>
   <div id="tool_selector"></div>
+  <div id="tool_pallete"></div>
   </div>
 `;
 

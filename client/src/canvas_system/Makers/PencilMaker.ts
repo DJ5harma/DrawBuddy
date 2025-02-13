@@ -1,4 +1,5 @@
 import { ctx } from "../../main";
+import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { CanvasManager } from "../Managers/CanvasManager";
 import { Pencil } from "../Shapes/Pencil";
 import { Maker } from "./Maker";
@@ -12,6 +13,13 @@ export class PencilMaker extends Maker {
 		if (e.button !== 0) return;
 
 		draw = true;
+
+		curr.stroke = {
+			color: ToolPallete.stroke.color,
+			width: ToolPallete.stroke.width,
+		};
+
+		curr.prepare_for_render(ctx);
 
 		ctx.moveTo(e.clientX, e.clientY);
 		ctx.beginPath();

@@ -3,6 +3,7 @@ import { Maker } from "./Maker";
 import { CanvasManager } from "../Managers/CanvasManager";
 import { ctx, temp_ctx } from "../../main";
 import { TempCanvasManager } from "../Managers/TempCanvasManager";
+import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 
 let draw = false;
 
@@ -22,7 +23,14 @@ export class RectangleMaker extends Maker {
 		curr.pos = [e.clientX, e.clientY];
 		curr.dims = [0, 0];
 
+		curr.fill = ToolPallete.fill;
+		curr.stroke = {
+			color: ToolPallete.stroke.color,
+			width: ToolPallete.stroke.width,
+		};
+
 		curr.prepare_for_render(temp_ctx);
+
 		temp_ctx.beginPath();
 		temp_ctx.moveTo(e.clientX, e.clientY);
 	}

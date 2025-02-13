@@ -32,4 +32,10 @@ export class MakerManager {
 	public static pause_maker() {
 		this.curr_maker.stop();
 	}
+
+	// public static update_pallete_config() {
+	// 	ctx.fillStyle = ToolPallete.fill;
+	// 	ctx.strokeStyle = ToolPallete.stroke.color;
+	// 	ctx.lineWidth = ToolPallete.stroke.width;
+	// }
 }

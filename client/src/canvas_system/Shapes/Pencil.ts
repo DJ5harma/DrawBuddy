@@ -1,4 +1,3 @@
-import { ctx } from "../../main";
 import { Shape } from "./Shape";
 
 export class Pencil implements Shape {
@@ -18,17 +17,17 @@ export class Pencil implements Shape {
 		this.cached_bounding_rect = undefined;
 	}
 
-	public prepare_for_render() {
+	public prepare_for_render(ctx: CanvasRenderingContext2D) {
 		ctx.strokeStyle = this.stroke.color;
 		ctx.lineWidth = this.stroke.width;
 	}
 
-	public render_me_whole(): void {
+	public render_me_whole(ctx: CanvasRenderingContext2D): void {
 		// console.log("rendering whole Pencil");
 		const pts = this.points;
 		if (pts.length < 2) return;
 
-		this.prepare_for_render();
+		this.prepare_for_render(ctx);
 		ctx.beginPath();
 
 		ctx.moveTo(pts[0][0], pts[0][1]);
@@ -61,7 +60,6 @@ export class Pencil implements Shape {
 			max_x = this.cached_bounding_rect.max_x;
 			min_y = this.cached_bounding_rect.min_y;
 			max_y = this.cached_bounding_rect.max_y;
-			console.log("ALREADY CACHED BOUNDING RECT for this Pencil");
 		} else {
 			const pts = this.points;
 			min_x = pts[0][0];
