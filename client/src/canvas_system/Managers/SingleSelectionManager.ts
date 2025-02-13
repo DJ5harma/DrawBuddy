@@ -28,10 +28,10 @@ export class SingleSelectionManager {
 				const { top_left, bottom_right } = bounding_rect;
 
 				if (
-					x > top_left[0] &&
-					x < bottom_right[0] &&
-					y > top_left[1] &&
-					y < bottom_right[1]
+					x > top_left[0] - 10 &&
+					x < bottom_right[0] + 10 &&
+					y > top_left[1] - 10 &&
+					y < bottom_right[1] + 10
 				) {
 					this.selected_shape = shapes[i];
 					this.show_selection_rect();
