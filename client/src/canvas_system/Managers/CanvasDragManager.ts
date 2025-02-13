@@ -20,8 +20,7 @@ export class CanvasDragManager {
 				shape.displace_by([0, dirY * 50]);
 			});
 
-			CanvasManager.clear_canvas_only_unrender();
-			ctx.drawImage(buffer_canvas, 0, dirY * 50);
+			CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
 			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
 		});
 
@@ -49,8 +48,6 @@ export class CanvasDragManager {
 			document.body.style.cursor = "default";
 			this.move = false;
 
-			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
-
 			const new_translate: vec2 = [
 				e.clientX - this.move_start_pos[0],
 				e.clientY - this.move_start_pos[1],
@@ -61,6 +58,7 @@ export class CanvasDragManager {
 			});
 
 			CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
+			buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
 		});
 	}
 
