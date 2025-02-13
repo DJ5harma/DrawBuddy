@@ -20,6 +20,7 @@ export class ToolSelector {
 		SelectionManager.stop_selection_lifecycle();
 		CanvasDragManager.disallow_by_tool();
 		SingleSelectionManager.stop();
+		SelectionManager.remove_selection_of_all();
 	}
 
 	private static style_btn(elem: HTMLButtonElement) {
