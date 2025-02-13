@@ -55,12 +55,14 @@ export class SelectionRectangleMaker extends Maker {
 			y -= l;
 		}
 
-		CanvasManager.get_shapes().forEach((shape) => {
-			if (shape.is_inside_rect({ pos: [x, y], dims: [w, l] }))
-				SelectionManager.add_shape(shape);
-		});
-
 		TempCanvasManager.clear_canvas_only_unrender();
+
+		CanvasManager.get_shapes().forEach((shape) => {
+			if (shape.is_inside_rect({ pos: [x, y], dims: [w, l] })) {
+				SelectionManager.add_shape(shape);
+				SelectionManager.render_selection_of_shape(shape);
+			}
+		});
 
 		console.log("MOUSE UPPED FROM SELECTION RECT MAKER");
 	}

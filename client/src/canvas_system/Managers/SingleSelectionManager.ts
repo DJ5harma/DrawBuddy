@@ -1,4 +1,3 @@
-import { Rectangle } from "../Shapes/Rectangle";
 import { Shape } from "../Shapes/Shape";
 import { CanvasManager } from "./CanvasManager";
 import { SelectionManager } from "./SelectionManager";
@@ -42,28 +41,8 @@ export class SingleSelectionManager {
 		});
 	}
 
-	public static show_selection_rect() {
-		if (!this.selected_shape?.bounding_rect) {
-			console.error("Shape has no bounding_rect: ", this.selected_shape);
-			return;
-		}
-
-		TempCanvasManager.clear_canvas_only_unrender();
-
-		const { top_left, bottom_right } = this.selected_shape.bounding_rect;
-		const rect = new Rectangle({
-			pos: [top_left[0] - 10, top_left[1] - 10],
-			dims: [
-				bottom_right[0] - top_left[0] + 20,
-				bottom_right[1] - top_left[1] + 20,
-			],
-			fill: "rgba(100, 100, 242, 0.1)",
-			stroke: { color: "rgba(100, 100, 242, 1)", width: 2 },
-		});
-		TempCanvasManager.render_shape(rect);
-	}
-
 	static start() {
+		this.selected_shape = undefined;
 		this.allow_selection = true;
 	}
 

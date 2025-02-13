@@ -127,7 +127,6 @@ export class ToolPallete {
 		bar_div.innerHTML = /*html*/ `
 		<input id="stroke_width_bar" type="range" min="1" max="10" value="3" />
         `;
-		this.tool_pallete.appendChild(bar_div);
 
 		const elem = document.querySelector<HTMLInputElement>("#stroke_width_bar")!;
 		elem.style.width = "100%";
@@ -140,5 +139,7 @@ export class ToolPallete {
 			ToolPallete.stroke.width = parseInt(elem.value, 10);
 			SelectionManager.update_selected_shapes_from_pallete();
 		});
+
+		this.tool_pallete.appendChild(bar_div);
 	}
 }

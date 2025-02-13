@@ -26,14 +26,12 @@ export class SelectionManager {
 		this.selecting = false;
 		if (!this.selector_rect) return;
 		this.selector_rect.stop();
+		this.selected_shapes = new Set();
 	}
 
 	public static add_shape(shape: Shape) {
 		console.log(shape, "added to selection list");
-
-		TempCanvasManager.clear_canvas_only_unrender();
 		this.selected_shapes.add(shape);
-		this.render_selection_of_shape(shape);
 	}
 
 	public static render_selection_of_shape(shape: Shape) {
@@ -82,10 +80,11 @@ export class SelectionManager {
 			}
 			if (shape.stroke) {
 				console.log("prev stroke: ", shape.stroke);
-				shape.stroke = ToolPallete.stroke;
+				shape.stroke = { ...ToolPallete.stroke };
 				console.log("new stroke: ", shape.stroke);
 			}
 		});
 		CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
+		this.render_selection_of_all();
 	}
 }
