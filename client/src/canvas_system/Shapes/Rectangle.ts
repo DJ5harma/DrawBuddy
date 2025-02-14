@@ -6,7 +6,7 @@ export class Rectangle implements Shape {
     stroke;
     fill;
     bounding_rect: BoundingRect | undefined;
-    resize_handle : ResizeHandle = undefined
+    resize_handle: ResizeHandle;
 
     constructor({
         pos,
@@ -82,44 +82,6 @@ export class Rectangle implements Shape {
             this.bounding_rect.top_left[1] += y;
             this.bounding_rect.bottom_right[1] += y;
         }
-    }
-
-    public start_interaction(touch_pos: vec2): void {
-        console.log("setting dir");
-        const [x, y] = touch_pos;
-        if (this.bounding_rect) {
-            
-            const left = this.bounding_rect.top_left[0];
-            const right = this.bounding_rect.bottom_right[0];
-            const top = this.bounding_rect.top_left[1];
-            const bottom = this.bounding_rect.bottom_right[1];
-            if(x - left <= 10 && y - top <= 10){
-                this.resize_handle = 'nw'
-            }
-            else if(x - left <= 10 && bottom - y <= 10){
-                this.resize_handle = 'sw'
-            }
-            else if(right - x <= 10 && y - top <= 10){
-                this.resize_handle = 'ne'
-            }
-            else if(right - x <= 10 && bottom - y <= 10){
-                this.resize_handle = 'sw'
-            }
-            else if(x - left <= 10){
-                this.resize_handle = 'w'
-            }
-            else if(y - top <= 10){
-                this.resize_handle = 'n'
-            }
-            else if(right - x <= 10){
-                this.resize_handle = 'e'
-            }
-            else if(bottom - y <= 10){
-                this.resize_handle = 's'
-            }
-            console.log("setting dir to :" , this.resize_handle);
-        }
-        
     }
     
     public start_resizing_shapes(resize_pos : vec2){

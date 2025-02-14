@@ -5,6 +5,7 @@ export class Line implements Shape {
     end: vec2;
     stroke;
     bounding_rect: BoundingRect | undefined;
+    resize_handle: ResizeHandle;
 
     constructor({
         start,

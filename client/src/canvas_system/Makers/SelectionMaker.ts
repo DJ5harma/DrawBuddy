@@ -89,6 +89,8 @@ export class SelectionMaker extends Maker {
             ).render_selection_of_shape(selected_shape);
         }
 
+        
+
         CanvasManager.get_shapes().forEach((shape) => {
             if (
                 shape.is_inside_rect({
