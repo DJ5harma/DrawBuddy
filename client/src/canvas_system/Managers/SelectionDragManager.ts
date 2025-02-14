@@ -27,6 +27,7 @@ export class SelectionDragManager {
     }
     protected static keyup(_: KeyboardEvent): void {
         is_active = false;
+        move = false;
     }
     public static is_dragging() {
         return is_active;
@@ -73,23 +74,23 @@ export class SelectionDragManager {
         if (!move) return;
 
         const new_pos: vec2 = [e.clientX, e.clientY];
+        const delta: vec2 = [
+            new_pos[0] - move_start_pos[0],
+            new_pos[1] - move_start_pos[1],
+        ];
 
         const selected_shapes = SelectionManager.get_selected_shapes();
 
         console.log("Shapes selected: ", selected_shapes.size);
 
-        CanvasManager.clear_canvas_only_unrender();
+        TempCanvasManager.clear_canvas_only_unrender();
 
         selected_shapes.forEach((shape) => {
-            const delta: vec2 = [
-                new_pos[0] - move_start_pos[0],
-                new_pos[1] - move_start_pos[1],
-            ];
-
             shape.displace_by(delta);
-            move_start_pos = new_pos;
+            TempCanvasManager.render_shape(shape);
         });
-        CanvasManager.render_stored_shapes_all();
+
+        move_start_pos = new_pos;
     }
     private static mouseup(): void {
         if (!move) return;
@@ -98,6 +99,7 @@ export class SelectionDragManager {
 
         document.body.style.cursor = "default";
         SelectionManager.unrender_selection_of_all().render_selection_of_all();
+        CanvasManager.render_stored_shapes_all();
     }
 
     // public static is_dragging_selection() {
