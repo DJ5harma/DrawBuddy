@@ -83,6 +83,8 @@ export class Rectangle implements Shape {
             this.bounding_rect.bottom_right[1] += y;
         }
     }
+
+    
     
     public start_resizing_shapes(resize_pos : vec2){
         console.log("updating dir to :" , this.resize_handle);
