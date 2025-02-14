@@ -6,6 +6,7 @@ export class Circle implements Shape {
     stroke;
     fill;
     bounding_rect: BoundingRect | undefined;
+    resize_handle: ResizeHandle;
 
     constructor({
         pos,
@@ -84,8 +85,8 @@ export class Circle implements Shape {
             this.bounding_rect.bottom_right[1] += y;
         }
     }
-    public start_interaction(): void {
+    
+    public resize_to(_touch_pos: vec2): void {
         
     }
-    public start_resizing_shapes(){}
 }

@@ -1,4 +1,5 @@
 div {
 	justify-content: "";
 	visibility: hidden;
+	cursor: e-resize;
 }

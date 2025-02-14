@@ -8,6 +8,7 @@ export class Pencil implements Shape {
     bounding_rect: BoundingRect | undefined;
 
     cached_image_data?: { img: ImageData; sx: number; sy: number };
+     resize_handle: ResizeHandle;
 
     constructor({ stroke }: { stroke: Stroke }) {
         this.points = [];
@@ -102,8 +103,7 @@ export class Pencil implements Shape {
         }
     }
 
-    public start_interaction(): void {
+    public resize_to(_touch_pos: vec2): void {
         
     }
-    public start_resizing_shapes(){}
 }

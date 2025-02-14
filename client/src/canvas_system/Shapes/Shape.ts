@@ -17,5 +17,5 @@ export abstract class Shape {
 
     
 
-    public abstract start_resizing_shapes(_touch_pos:vec2): void;
+    public abstract resize_to(_touch_pos:vec2): void;
 }
