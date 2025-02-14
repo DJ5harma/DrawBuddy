@@ -20,7 +20,7 @@ let curr = new Rectangle({
     fill: "rgba(5, 247, 255, 0.1)",
 });
 
-export class RectangleSelectionMaker extends Maker {
+export class SelectionMaker extends Maker {
     public static init(): void {
         document.addEventListener("mousedown", (e) => this.mousedown(e));
         document.addEventListener("mousemove", (e) => this.mousemove(e));
