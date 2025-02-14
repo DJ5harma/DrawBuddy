@@ -68,7 +68,7 @@ export class SelectionManager {
     }
 
     public static update_selected_shapes_from_pallete() {
-        console.log(this.selected_shapes, " selected");
+        console.log(this.selected_shapes.size, " selected");
 
         if (!this.selected_shapes.size) return;
 

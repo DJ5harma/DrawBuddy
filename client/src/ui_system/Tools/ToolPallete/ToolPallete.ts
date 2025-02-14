@@ -29,6 +29,16 @@ export class ToolPallete {
         this.setup_stroke_colors_div();
         this.setup_background_colors_div();
         this.setup_stroke_width_bar();
+
+        this.tool_pallete.addEventListener("mousedown", (e) => {
+            e.stopPropagation();
+        });
+        this.tool_pallete.addEventListener("click", (e) => {
+            e.stopPropagation();
+        });
+        this.tool_pallete.addEventListener("mouseup", (e) => {
+            e.stopPropagation();
+        });
     }
 
     private static setup_stroke_colors_div() {
