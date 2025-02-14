@@ -4,6 +4,7 @@ import { SelectionManager } from "./SelectionManager";
 
 export class ResizeManager {
     // private static resizing = false;
+    private static starting_pos :vec2 = [0,0];
 
     private static resizing_shape : Shape | undefined = undefined
 
@@ -36,7 +37,7 @@ export class ResizeManager {
                 shape.resize_handle = 'ne'
             }
             else if(right - x <= 10 && bottom - y <= 10){
-                shape.resize_handle = 'sw'
+                shape.resize_handle = 'se'
             }
             else if(x - left <= 10){
                 shape.resize_handle = 'w'
@@ -80,7 +81,8 @@ export class ResizeManager {
                 if(d < 10){
                     // this.resizing = true;
                     ResizeManager.start_interaction([x, y],shape);
-                    this.resizing_shape = shape
+                    this.resizing_shape = shape;
+                    this.starting_pos = [x, y];
                     return;
                 } 
             })
@@ -89,7 +91,8 @@ export class ResizeManager {
     private static mousemove(e: MouseEvent) {
         if(!this.resizing_shape) return;
         
-        this.resizing_shape.resize_to([e.clientX, e.clientY]);
+        this.resizing_shape.resize_to([e.clientX - this.starting_pos[0], e.clientY - this.starting_pos[1]]);
+        this.starting_pos = [e.clientX , e.clientY]
         SelectionManager.unrender_selection_of_all().render_selection_of_all();
         CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
     }

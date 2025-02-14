@@ -84,51 +84,54 @@ export class Rectangle implements Shape {
         }
     }
     
-    public resize_to(resize_pos : vec2){
+    public resize_to(delta_xy : vec2){
         console.log("updating dir to :" , this.resize_handle);
         if(this.resize_handle !== undefined){
-            const [x , y] = resize_pos;
+            const [x , y] = delta_xy;
             console.log(this.dims[0] ,this.dims[1]);
             
-            switch(this.resize_handle){
-                case 'e' : {
-                    this.dims[0] += (x - (this.pos[0] + this.dims[0]))
-                    break;
-                }
-                case 'n' : {
-                    this.dims[1] += (this.pos[1] - y)
-                    break;
-                }
-                case 'w' : {
-                    this.dims[0] += ((this.pos[0] + this.dims[0]) - x)
-                    break;
-                }
-                case 's' : {
-                    this.dims[1] += (y - this.pos[1])
-                    break;
-                }
-                case 'ne' : {
-                    this.dims[0] += (x - (this.pos[0] + this.dims[0]))
-                    this.dims[1] += (this.pos[1] - y)
-                    break;
-                }
-                case 'se' : {
-                    this.dims[0] += (x - (this.pos[0] + this.dims[0]))
-                    this.dims[1] += (y - this.pos[1])
-                    break;
-                }
-                case 'nw' : {
-                    this.dims[0] += ((this.pos[0] + this.dims[0]) - x)
-                    this.dims[1] += (this.pos[1] - y)
-                    break;
-                }
-                case 'sw' : {
-                    this.dims[0] += ((this.pos[0] + this.dims[0]) - x)
-                    this.dims[1] += (y - this.pos[1])
-                    break;
-                }
+
+            
+            if(!this.bounding_rect){
+                console.error("BR not found");
+                return;
             }
-            console.log(this.dims[0] ,this.dims[1]);
+            
+            if(!this.resize_handle){
+                console.error("Resize handle not found");
+                return;
+            }
+
+            const str = this.resize_handle;
+
+            for(let i = 0 ; i<str.length; ++i){
+                switch(str[i]){
+                    case 'e' : { 
+                        this.dims[0] += x;
+                        this.bounding_rect.bottom_right[0] += x;
+                        break;
+                    }
+                    case 's' : {
+                        this.dims[1] += y;
+                        this.bounding_rect.bottom_right[1] += y;
+                        break;
+                    }
+                    case 'w' : {
+                        this.dims[0] -= x;
+                        this.bounding_rect.top_left[0] += x;
+                        this.pos[0] += x;
+                        
+                        break;
+                    }
+                    case 'n' : {
+                        this.dims[1] -= y
+                        this.bounding_rect.top_left[1] += y;
+                        this.pos[1] += y;
+                        break;
+                    }
+                }
+                
+            }
         }
     }
 }
