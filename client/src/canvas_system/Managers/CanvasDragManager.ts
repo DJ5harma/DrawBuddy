@@ -28,6 +28,7 @@ export class CanvasDragManager {
                 buffer_canvas.width,
                 buffer_canvas.height
             );
+            SelectionManager.unrender_selection_of_all();
             SelectionManager.render_selection_of_all();
         });
 
@@ -47,6 +48,8 @@ export class CanvasDragManager {
                 e.clientY - this.move_start_pos[1],
             ];
             CanvasManager.clear_canvas_only_unrender();
+            SelectionManager.unrender_selection_of_all();
+            SelectionManager.render_selection_of_all();
             ctx.drawImage(buffer_canvas, ...new_translate);
         });
 
@@ -72,7 +75,7 @@ export class CanvasDragManager {
                 buffer_canvas.height
             );
 
-            SelectionManager.render_selection_of_all();
+            SelectionManager.unrender_selection_of_all().render_selection_of_all();
         });
     }
 

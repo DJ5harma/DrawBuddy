@@ -60,6 +60,7 @@ export class SelectionDragManager {
         selected_shapes.forEach((shape) => {
             shape.displace_by(delta);
         });
+        SelectionManager.unrender_selection_of_all().render_selection_of_all();
         CanvasManager.render_stored_shapes_all();
 
         move_start_pos = new_pos;
