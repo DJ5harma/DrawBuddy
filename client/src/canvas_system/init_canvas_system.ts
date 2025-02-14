@@ -1,9 +1,14 @@
 import { canvases } from "../main";
-import { MakerManager } from "./Managers/MakerManager";
 import { CanvasManager } from "./Managers/CanvasManager";
 import { UndoManager } from "./Managers/UndoManager";
-import { SingleSelectionManager } from "./Makers/SingleSelectionMaker";
 import { CanvasDragManager } from "./Managers/CanvasDragManager";
+import { SelectionManager } from "./Managers/SelectionManager";
+import { RectangleMaker } from "./Makers/RectangleMaker";
+import { CircleMaker } from "./Makers/CircleMaker";
+import { LineMaker } from "./Makers/LineMaker";
+import { PencilMaker } from "./Makers/PencilMaker";
+import { SelectionDragManager } from "./Managers/SelectionDragManager";
+import { RectangleSelectionMaker } from "./Makers/RectangleSelectionMaker";
 
 function design_canvas() {
     document.body.style.overflow = "hidden";
@@ -23,11 +28,21 @@ function design_canvas() {
 export default function init_canvas_system() {
     design_canvas();
 
-    MakerManager.init();
     CanvasManager.init();
     CanvasDragManager.init();
     UndoManager.init();
-    SingleSelectionManager.init();
+
+    //
+    RectangleMaker.init();
+    CircleMaker.init();
+    LineMaker.init();
+    PencilMaker.init();
+
+    //
+    SelectionManager.init();
+    SelectionDragManager.init();
+    RectangleSelectionMaker.init();
+
     let mutex_unlocked = true;
 
     window.addEventListener("resize", () => {

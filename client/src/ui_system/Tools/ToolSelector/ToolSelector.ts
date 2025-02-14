@@ -1,26 +1,21 @@
-import { SelectionManager } from "../../../canvas_system/Managers/SelectionManager";
-import { MakerManager } from "../../../canvas_system/Managers/MakerManager";
-import { CanvasDragManager } from "../../../canvas_system/Managers/CanvasDragManager";
-import { SingleSelectionManager } from "../../../canvas_system/Makers/SingleSelectionMaker";
+const maker_names: Tools[] = ["PENCIL", "RECTANGLE", "CIRCLE", "LINE"];
+const selection_tool_name: Tools = "SELECTION";
+const canvas_dragger_tool_name: Tools = "CANVAS-DRAGGER";
 
 export class ToolSelector {
     private static tool_selector: HTMLDivElement;
+
+    public static selected_tool: Tools;
 
     public static init() {
         this.tool_selector =
             document.querySelector<HTMLDivElement>("#tool_selector")!;
 
+        this.selected_tool = "RECTANGLE";
+
         this.setup_canvas_dragger();
         this.setup_selection_maker();
         this.setup_drawers();
-    }
-
-    public static stop_all() {
-        MakerManager.pause_maker();
-        SelectionManager.stop_selection_lifecycle();
-        CanvasDragManager.disallow_by_tool();
-        SingleSelectionManager.stop();
-        SelectionManager.remove_selection_of_all();
     }
 
     private static style_btn(elem: HTMLButtonElement) {
@@ -32,18 +27,16 @@ export class ToolSelector {
     }
 
     private static setup_selection_maker() {
-        const tool_name = "SELECTION";
         const elem = document.createElement("button");
         this.tool_selector.appendChild(elem);
 
         this.style_btn(elem);
 
-        elem.innerText = tool_name;
+        elem.innerText = selection_tool_name;
 
         elem.addEventListener("click", (_) => {
-            console.log(tool_name, "clicked");
-            this.stop_all();
-            SelectionManager.start_selection_lifecycle();
+            console.log(selection_tool_name, "clicked");
+            this.selected_tool = selection_tool_name;
             return;
         });
     }
@@ -59,8 +52,7 @@ export class ToolSelector {
 
         elem.addEventListener("click", (_) => {
             console.log(tool_name, "clicked");
-            this.stop_all();
-            CanvasDragManager.allow_by_tool();
+            this.selected_tool = canvas_dragger_tool_name;
         });
     }
 
@@ -84,7 +76,7 @@ export class ToolSelector {
 
         style.userSelect = "none";
 
-        MakerManager.maker_names.forEach((name) => {
+        maker_names.forEach((name) => {
             const elem = document.createElement("button");
             this.tool_selector.appendChild(elem);
 
@@ -94,8 +86,7 @@ export class ToolSelector {
 
             elem.addEventListener("click", (_) => {
                 console.log(name, "clicked");
-                this.stop_all();
-                MakerManager.switch_maker(name);
+                this.selected_tool = name;
             });
         });
     }

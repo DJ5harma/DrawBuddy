@@ -1,9 +1,11 @@
-import { temp_ctx } from "../../main";
+import { canvas, temp_ctx } from "../../main";
 import { Maker } from "./Maker";
 import { Rectangle } from "../Shapes/Rectangle";
 import { SelectionManager } from "../Managers/SelectionManager";
 import { TempCanvasManager } from "../Managers/TempCanvasManager";
 import { CanvasManager } from "../Managers/CanvasManager";
+import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
+import { SelectionDragManager } from "../Managers/SelectionDragManager";
 
 let draw = false;
 
@@ -18,8 +20,18 @@ let curr = new Rectangle({
 });
 
 export class RectangleSelectionMaker extends Maker {
-    protected mousedown(e: MouseEvent): void {
-        if (e.button !== 0 || !SelectionManager.is_selecting()) return;
+    public static init(): void {
+        document.addEventListener("mousedown", (e) => this.mousedown(e));
+        document.addEventListener("mousemove", (e) => this.mousemove(e));
+        document.addEventListener("mouseup", (e) => this.mouseup(e));
+    }
+    protected static mousedown(e: MouseEvent): void {
+        if (
+            e.button !== 0 ||
+            SelectionDragManager.is_dragging_selection() ||
+            ToolSelector.selected_tool !== "SELECTION"
+        )
+            return;
 
         draw = true;
         curr.pos = [e.clientX, e.clientY];
@@ -30,7 +42,9 @@ export class RectangleSelectionMaker extends Maker {
         temp_ctx.moveTo(e.clientX, e.clientY);
     }
 
-    protected mousemove(e: MouseEvent): void {
+    protected static mousemove(e: MouseEvent): void {
+        console.log(SelectionDragManager.is_dragging_selection());
+
         if (!draw) return;
         const [x, y] = [e.clientX, e.clientY];
 
@@ -39,8 +53,8 @@ export class RectangleSelectionMaker extends Maker {
         TempCanvasManager.clear_canvas_only_unrender().render_shape(curr);
     }
 
-    protected mouseup(e: MouseEvent): void {
-        if (e.button !== 0 || !SelectionManager.is_selecting()) return;
+    protected static mouseup(e: MouseEvent): void {
+        if (e.button !== 0 || !draw) return;
         draw = false;
 
         let [x, y] = curr.pos;
@@ -55,7 +69,41 @@ export class RectangleSelectionMaker extends Maker {
             y -= l;
         }
 
-        if (w < 40 || l < 40) return;
+        SelectionManager.remove_selection_of_all();
+
+        if (w < 40 || l < 40) {
+            const shapes = CanvasManager.get_shapes();
+
+            const [x, y] = [
+                e.clientX - canvas.getBoundingClientRect().left,
+                e.clientY - canvas.getBoundingClientRect().left,
+            ];
+
+            for (let i = shapes.length - 1; i > -1; --i) {
+                const { bounding_rect } = shapes[i];
+                if (!bounding_rect || !shapes[i]) {
+                    console.error(
+                        "Bounding rect of",
+                        shapes[i],
+                        "is undefined"
+                    );
+                    return;
+                }
+                const { top_left, bottom_right } = bounding_rect;
+
+                if (
+                    x > top_left[0] - 10 &&
+                    x < bottom_right[0] + 10 &&
+                    y > top_left[1] - 10 &&
+                    y < bottom_right[1] + 10
+                ) {
+                    SelectionManager.add_shape_to_selection(shapes[i]);
+                    break;
+                }
+            }
+            return;
+        }
+
         TempCanvasManager.clear_canvas_only_unrender();
 
         SelectionManager.remove_selection_of_all();
@@ -66,22 +114,10 @@ export class RectangleSelectionMaker extends Maker {
                     dims: [w + 20, l + 20],
                 })
             ) {
-                SelectionManager.add_shape(shape);
-                SelectionManager.render_selection_of_shape(shape);
+                SelectionManager.add_shape_to_selection(shape);
             }
         });
 
         console.log("MOUSE UPPED FROM SELECTION RECT MAKER");
-    }
-
-    public start(): void {
-        document.addEventListener("mousedown", (e) => this.mousedown(e));
-        document.addEventListener("mousemove", (e) => this.mousemove(e));
-        document.addEventListener("mouseup", (e) => this.mouseup(e));
-    }
-    public stop(): void {
-        document.removeEventListener("mousedown", (e) => this.mousedown(e));
-        document.removeEventListener("mousemove", (e) => this.mousemove(e));
-        document.removeEventListener("mouseup", (e) => this.mouseup(e));
     }
 }

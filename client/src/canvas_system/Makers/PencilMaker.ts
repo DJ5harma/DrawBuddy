@@ -1,5 +1,6 @@
 import { temp_ctx, temp_canvas } from "../../main";
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
+import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
 import { CanvasManager } from "../Managers/CanvasManager";
 import { TempCanvasManager } from "../Managers/TempCanvasManager";
 import { Pencil } from "../Shapes/Pencil";
@@ -10,8 +11,15 @@ let draw = false;
 let curr = new Pencil({ stroke: { color: "rgb(255, 255, 255)", width: 5 } });
 
 export class PencilMaker extends Maker {
-    protected mousedown(e: MouseEvent): void {
-        if (e.button !== 0) return;
+    public static init(): void {
+        document.addEventListener("mousedown", this.mousedown);
+        document.addEventListener("mousemove", this.mousemove);
+        document.addEventListener("mouseup", this.mouseup);
+    }
+
+    protected static mousedown(e: MouseEvent): void {
+        if (e.button !== 0 || ToolSelector.selected_tool !== "PENCIL") return;
+        console.log(ToolSelector.selected_tool, "FROM PENCIL MAKER");
 
         draw = true;
 
@@ -28,7 +36,7 @@ export class PencilMaker extends Maker {
         curr.points = [[e.clientX, e.clientY]];
     }
 
-    protected mousemove(e: MouseEvent): void {
+    protected static mousemove(e: MouseEvent): void {
         if (!draw) return;
 
         const [x, y] = [e.clientX, e.clientY];
@@ -40,8 +48,8 @@ export class PencilMaker extends Maker {
         temp_ctx.moveTo(x, y);
     }
 
-    protected mouseup(e: MouseEvent): void {
-        if (e.button !== 0) return;
+    protected static mouseup(e: MouseEvent): void {
+        if (e.button !== 0 || !draw) return;
         draw = false;
         temp_ctx.closePath();
 
@@ -88,18 +96,7 @@ export class PencilMaker extends Maker {
         };
     }
 
-    public set_config(_config: { stroke: Stroke }): void {
+    public static set_config(_config: { stroke: Stroke }): void {
         curr.stroke = _config.stroke;
-    }
-
-    public start(): void {
-        document.addEventListener("mousedown", this.mousedown);
-        document.addEventListener("mousemove", this.mousemove);
-        document.addEventListener("mouseup", this.mouseup);
-    }
-    public stop(): void {
-        document.removeEventListener("mousedown", this.mousedown);
-        document.removeEventListener("mousemove", this.mousemove);
-        document.removeEventListener("mouseup", this.mouseup);
     }
 }

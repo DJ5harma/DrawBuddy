@@ -3,6 +3,7 @@ import { Maker } from "./Maker";
 import { CanvasManager } from "../Managers/CanvasManager";
 import { TempCanvasManager } from "../Managers/TempCanvasManager";
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
+import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
 
 let draw = false;
 
@@ -14,8 +15,14 @@ let curr = new Circle({
 });
 
 export class CircleMaker extends Maker {
-    protected mousedown(e: MouseEvent): void {
-        if (e.button !== 0) return;
+    public static init(): void {
+        document.addEventListener("mousedown", this.mousedown);
+        document.addEventListener("mousemove", this.mousemove);
+        document.addEventListener("mouseup", this.mouseup);
+    }
+
+    protected static mousedown(e: MouseEvent): void {
+        if (e.button !== 0 || ToolSelector.selected_tool !== "CIRCLE") return;
 
         draw = true;
 
@@ -29,7 +36,7 @@ export class CircleMaker extends Maker {
         };
     }
 
-    protected mousemove(e: MouseEvent): void {
+    protected static mousemove(e: MouseEvent): void {
         if (!draw) return;
         const [x, y] = [e.clientX, e.clientY];
         const dx = x - curr.pos[0];
@@ -40,8 +47,8 @@ export class CircleMaker extends Maker {
         TempCanvasManager.clear_canvas_only_unrender().render_shape(curr);
     }
 
-    protected mouseup(e: MouseEvent): void {
-        if (e.button !== 0) return;
+    protected static mouseup(e: MouseEvent): void {
+        if (e.button !== 0 || !draw) return;
         draw = false;
 
         CircleMaker.ensure_bounding_rect();
@@ -57,16 +64,5 @@ export class CircleMaker extends Maker {
                 curr.pos[1] + curr.radius,
             ],
         };
-    }
-
-    public start(): void {
-        document.addEventListener("mousedown", this.mousedown);
-        document.addEventListener("mousemove", this.mousemove);
-        document.addEventListener("mouseup", this.mouseup);
-    }
-    public stop(): void {
-        document.removeEventListener("mousedown", this.mousedown);
-        document.removeEventListener("mousemove", this.mousemove);
-        document.removeEventListener("mouseup", this.mouseup);
     }
 }
