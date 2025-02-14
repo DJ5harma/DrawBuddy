@@ -1,14 +1,9 @@
-import { canvas, ctx } from "../../main";
 import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
-import { RectangleSelectionMaker } from "../Makers/RectangleSelectionMaker";
-import { Shape } from "../Shapes/Shape";
 import { CanvasManager } from "./CanvasManager";
 import { SelectionManager } from "./SelectionManager";
-import { TempCanvasManager } from "./TempCanvasManager";
 
 let move = false;
 let move_start_pos: vec2 = [0, 0];
-let resizing = false;
 
 let is_active = false;
 
@@ -45,31 +40,8 @@ export class SelectionDragManager {
         console.log("Started drag");
 
         CanvasManager.clear_canvas_only_unrender();
-
-        // const x = e.clientX - canvas.getBoundingClientRect().left;
-        // const y = e.clientY - canvas.getBoundingClientRect().top;
-
-        // selected_shapes.forEach((shape) => {
-        //     if (shape.bounding_rect) {
-        //         let left = shape.bounding_rect.top_left[0] + 10;
-        //         let top = shape.bounding_rect.top_left[1] + 10;
-        //         let right = shape.bounding_rect.bottom_right[0] - 10;
-        //         let bottom = shape.bounding_rect.bottom_right[1] - 10;
-
-        //         if (x >= left && x <= right && y >= top && y <= bottom) {
-        //             move = true;
-        //         } else if (
-        //             x >= left - 10 &&
-        //             x <= right + 10 &&
-        //             y >= top - 10 &&
-        //             y <= bottom + 10
-        //         ) {
-        //             // resizing = true;
-        //             // shape.start_interaction([x, y]);
-        //         }
-        //     }
-        // });
     }
+
     private static mousemove(e: MouseEvent) {
         if (!move) return;
 
@@ -83,12 +55,12 @@ export class SelectionDragManager {
 
         console.log("Shapes selected: ", selected_shapes.size);
 
-        TempCanvasManager.clear_canvas_only_unrender();
+        CanvasManager.clear_canvas_only_unrender();
 
         selected_shapes.forEach((shape) => {
             shape.displace_by(delta);
-            TempCanvasManager.render_shape(shape);
         });
+        CanvasManager.render_stored_shapes_all();
 
         move_start_pos = new_pos;
     }
@@ -101,8 +73,4 @@ export class SelectionDragManager {
         SelectionManager.unrender_selection_of_all().render_selection_of_all();
         CanvasManager.render_stored_shapes_all();
     }
-
-    // public static is_dragging_selection() {
-    //     return move;
-    // }
 }

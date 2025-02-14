@@ -5,8 +5,6 @@ import { CanvasManager } from "./CanvasManager";
 import { TempCanvasManager } from "./TempCanvasManager";
 
 export class SelectionManager {
-    // private static selecting = false;
-
     private static selected_shapes = new Set<Shape>();
 
     public static init() {
@@ -52,18 +50,14 @@ export class SelectionManager {
 
         TempCanvasManager.render_shape(rect);
     }
+
     public static render_selection_of_all() {
-        // TempCanvasManager.clear_canvas_only_unrender();
         this.selected_shapes.forEach((shape) => {
             this.render_selection_of_shape(shape);
         });
 
         return this;
     }
-
-    // public static is_selecting() {
-    //     return this.selecting;
-    // }
 
     public static is_shape_selected(shape: Shape) {
         return this.selected_shapes.has(shape);
