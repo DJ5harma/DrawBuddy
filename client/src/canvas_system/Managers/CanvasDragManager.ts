@@ -1,10 +1,9 @@
 import { buffer_canvas, buffer_ctx, canvas, ctx } from "../../main";
+import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
 import { CanvasManager } from "./CanvasManager";
 import { SelectionManager } from "./SelectionManager";
 
 export class CanvasDragManager {
-    private static allowed_by_tool = false;
-
     private static move = false;
     private static move_start_pos: vec2 = [0, 0];
 
@@ -33,7 +32,11 @@ export class CanvasDragManager {
         });
 
         document.addEventListener("mousedown", (e) => {
-            if (e.button !== 1 && !this.allowed_by_tool) return; // Middle mouse button
+            if (
+                e.button !== 1 &&
+                ToolSelector.selected_tool !== "CANVAS-DRAGGER"
+            )
+                return; // Middle mouse button
             document.body.style.cursor = "grab";
             buffer_ctx.drawImage(canvas, 0, 0);
             this.move = true;
@@ -54,7 +57,11 @@ export class CanvasDragManager {
         });
 
         document.addEventListener("mouseup", (e) => {
-            if (e.button !== 1 && !this.allowed_by_tool) return;
+            if (
+                e.button !== 1 &&
+                ToolSelector.selected_tool !== "CANVAS-DRAGGER"
+            )
+                return;
             document.body.style.cursor = "default";
             this.move = false;
 
@@ -77,12 +84,5 @@ export class CanvasDragManager {
 
             SelectionManager.unrender_selection_of_all().render_selection_of_all();
         });
-    }
-
-    public static allow_by_tool() {
-        this.allowed_by_tool = true;
-    }
-    public static disallow_by_tool() {
-        this.allowed_by_tool = false;
     }
 }

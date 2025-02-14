@@ -13,7 +13,7 @@ export class SelectionManager {
 
     public static add_shape_to_selection(shape: Shape) {
         console.log(shape, "added to selection list");
-        if (this.selected_shapes.has(shape)) return;
+        if (this.selected_shapes.has(shape)) return this;
         this.selected_shapes.add(shape);
         this.render_selection_of_shape(shape);
         return this;
@@ -30,10 +30,10 @@ export class SelectionManager {
         return this;
     }
 
-    private static render_selection_of_shape(shape: Shape) {
+    public static render_selection_of_shape(shape: Shape) {
         if (!shape.bounding_rect) {
             console.error("Shape has no bounding_rect: ", shape);
-            return;
+            return this;
         }
 
         const { top_left, bottom_right } = shape.bounding_rect;

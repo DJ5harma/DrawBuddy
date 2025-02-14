@@ -6,6 +6,7 @@ import { TempCanvasManager } from "../Managers/TempCanvasManager";
 import { CanvasManager } from "../Managers/CanvasManager";
 import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
 import { SelectionDragManager } from "../Managers/SelectionDragManager";
+import { Shape } from "../Shapes/Shape";
 
 let draw = false;
 
@@ -74,15 +75,20 @@ export class RectangleSelectionMaker extends Maker {
         if (w < 40 || l < 40) {
             const shapes = CanvasManager.get_shapes();
 
+            let selected_shape: Shape | undefined;
+
             for (let i = shapes.length - 1; i > -1; --i) {
                 if (SelectionManager.is_cursor_on_shape(shapes[i], e)) {
-                    TempCanvasManager.clear_canvas_only_unrender();
-                    SelectionManager.add_shape_to_selection(shapes[i]);
+                    selected_shape = shapes[i];
                     break;
                 }
             }
-            return;
+            if (!selected_shape) return;
+            SelectionManager.add_shape_to_selection(
+                selected_shape
+            ).render_selection_of_shape(selected_shape);
         }
+
         CanvasManager.get_shapes().forEach((shape) => {
             if (
                 shape.is_inside_rect({
