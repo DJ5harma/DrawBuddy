@@ -101,4 +101,9 @@ export class Pencil implements Shape {
             this.cached_image_data.sy += y;
         }
     }
+
+    public start_interaction(): void {
+        
+    }
+    public start_resizing_shapes(){}
 }

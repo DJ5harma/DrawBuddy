@@ -9,6 +9,7 @@ export class SingleSelectionManager {
     public static curr_Shape: Shape | undefined = undefined;
     public move = false;
     public move_start_pos: vec2 = [0, 0];
+    public resizing = false;
 
     static init() {
         console.log("SingleSelectionManager init");
@@ -59,10 +60,10 @@ export class SingleSelectionManager {
 
         if (SingleSelectionManager.curr_Shape?.bounding_rect) {
             let left =
-                SingleSelectionManager.curr_Shape.bounding_rect.top_left[0] -
+                SingleSelectionManager.curr_Shape.bounding_rect.top_left[0] +
                 10;
             let top =
-                SingleSelectionManager.curr_Shape.bounding_rect.top_left[1] -
+                SingleSelectionManager.curr_Shape.bounding_rect.top_left[1] +
                 10;
             let right =
                 SingleSelectionManager.curr_Shape.bounding_rect
@@ -75,30 +76,44 @@ export class SingleSelectionManager {
                 document.body.style.cursor = "grab";
                 this.move = true;
                 this.move_start_pos = [e.clientX, e.clientY];
+            } else if (
+                x >= left - 10 &&
+                x <= right + 10 &&
+                y >= top - 10 &&
+                y <= bottom + 10
+            ) {
+                this.resizing = true;
+                SingleSelectionManager.curr_Shape.start_interaction([x, y]);
             }
         }
     }
     public mousemove(e: MouseEvent) {
-        if (!this.move) return;
+        if (this.resizing) {
+          if (SingleSelectionManager.curr_Shape)
+          SingleSelectionManager.curr_Shape.start_resizing_shapes([e.clientX,e.clientY]);
+        } 
+        if(this.move){
+            const rect = canvas.getBoundingClientRect();
+            const currentX = e.clientX - rect.left;
+            const currentY = e.clientY - rect.top;
 
-        const rect = canvas.getBoundingClientRect();
-        const currentX = e.clientX - rect.left;
-        const currentY = e.clientY - rect.top;
+            const delta: vec2 = [
+                currentX - this.move_start_pos[0],
+                currentY - this.move_start_pos[1],
+            ];
 
-        const delta: vec2 = [
-            currentX - this.move_start_pos[0],
-            currentY - this.move_start_pos[1],
-        ];
+            const shape = SingleSelectionManager.curr_Shape;
+            if (shape) {
+                shape.displace_by(delta);
 
-        const shape = SingleSelectionManager.curr_Shape;
-        if (shape) {
-            shape.displace_by(delta);
+                this.move_start_pos = [currentX, currentY];
 
-            this.move_start_pos = [currentX, currentY];
+                TempCanvasManager.clear_canvas_only_unrender().render_shape(
+                    shape
+                );
 
-            TempCanvasManager.clear_canvas_only_unrender().render_shape(shape);
-
-            CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
+                CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
+            }
         }
     }
     public mouseup(): void {
