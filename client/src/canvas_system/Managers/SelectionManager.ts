@@ -96,10 +96,10 @@ export class SelectionManager {
         const { top_left, bottom_right } = shape.bounding_rect;
         const [x, y] = [e.clientX, e.clientY];
         return (
-            x > top_left[0] &&
-            x < bottom_right[0] &&
-            y > top_left[1] &&
-            y < bottom_right[1]
+            x > top_left[0]+30 &&
+            x < bottom_right[0]-30 &&
+            y > top_left[1]+30 &&
+            y < bottom_right[1]-30
         );
     }
 }

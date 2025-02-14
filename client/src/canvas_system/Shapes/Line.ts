@@ -80,8 +80,7 @@ export class Line implements Shape {
         }
     }
 
-    public start_interaction(): void {
+    public resize_to(_touch_pos: vec2): void {
         
     }
-    public start_resizing_shapes(){}
 }
