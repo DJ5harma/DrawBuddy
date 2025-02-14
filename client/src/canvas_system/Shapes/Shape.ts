@@ -15,44 +15,7 @@ export abstract class Shape {
 
     public abstract displace_by(_displacement: vec2): void;
 
-    public static start_interaction(_touch_pos:vec2, shape: Shape): void {
-        console.log("setting dir");
-        const [x, y] = _touch_pos;
-
-
-        if (shape.bounding_rect) {
-            
-            const left = shape.bounding_rect.top_left[0];
-            const right = shape.bounding_rect.bottom_right[0];
-            const top = shape.bounding_rect.top_left[1];
-            const bottom = shape.bounding_rect.bottom_right[1];
-            if(x - left <= 10 && y - top <= 10){
-                shape.resize_handle = 'nw'
-            }
-            else if(x - left <= 10 && bottom - y <= 10){
-                shape.resize_handle = 'sw'
-            }
-            else if(right - x <= 10 && y - top <= 10){
-                shape.resize_handle = 'ne'
-            }
-            else if(right - x <= 10 && bottom - y <= 10){
-                shape.resize_handle = 'sw'
-            }
-            else if(x - left <= 10){
-                shape.resize_handle = 'w'
-            }
-            else if(y - top <= 10){
-                shape.resize_handle = 'n'
-            }
-            else if(right - x <= 10){
-                shape.resize_handle = 'e'
-            }
-            else if(bottom - y <= 10){
-                shape.resize_handle = 's'
-            }
-            console.log("setting dir to :" , shape.resize_handle);
-        }
-    };
+    
 
     public abstract start_resizing_shapes(_touch_pos:vec2): void;
 }
