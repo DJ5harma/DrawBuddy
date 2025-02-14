@@ -24,6 +24,12 @@ export class SelectionManager {
     public static remove_selection_of_all() {
         TempCanvasManager.clear_canvas_only_unrender();
         this.selected_shapes.clear();
+        return this;
+    }
+
+    public static unrender_selection_of_all() {
+        TempCanvasManager.clear_canvas_only_unrender();
+        return this;
     }
 
     private static render_selection_of_shape(shape: Shape) {
@@ -47,10 +53,12 @@ export class SelectionManager {
         TempCanvasManager.render_shape(rect);
     }
     public static render_selection_of_all() {
-        TempCanvasManager.clear_canvas_only_unrender();
+        // TempCanvasManager.clear_canvas_only_unrender();
         this.selected_shapes.forEach((shape) => {
             this.render_selection_of_shape(shape);
         });
+
+        return this;
     }
 
     // public static is_selecting() {
@@ -84,5 +92,20 @@ export class SelectionManager {
         });
         CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
         this.render_selection_of_all();
+    }
+
+    public static is_cursor_on_shape(shape: Shape, e: MouseEvent) {
+        if (!shape.bounding_rect) {
+            console.error("Shape doesn't have bounding rect: ", shape);
+            return;
+        }
+        const { top_left, bottom_right } = shape.bounding_rect;
+        const [x, y] = [e.clientX, e.clientY];
+        return (
+            x > top_left[0] &&
+            x < bottom_right[0] &&
+            y > top_left[1] &&
+            y < bottom_right[1]
+        );
     }
 }
