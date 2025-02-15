@@ -99,7 +99,9 @@ export class Circle implements Shape {
     public resize_by(_delta_xy: vec2): void {
         if (!this.bounding_rect) return;
 
-        const sum = _delta_xy[0] + _delta_xy[1];
+        
+        let sum = _delta_xy[0] + _delta_xy[1];
+        if(this.resize_handle === 'n' || this.resize_handle === 'w') sum = -sum;
 
         if (sum + this.radius < 10) return;
 
