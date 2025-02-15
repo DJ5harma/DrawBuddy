@@ -109,7 +109,7 @@ export class Rectangle implements Shape {
         };
     }
 
-    public resize_to(delta_xy: vec2) {
+    public resize_by(delta_xy: vec2) {
         console.log("updating dir to :", this.resize_handle);
         if (this.resize_handle !== undefined) {
             const [x, y] = delta_xy;

@@ -86,7 +86,7 @@ export class ResizeManager {
     private static mousemove(e: MouseEvent) {
         if (!this.resizing_shape) return;
 
-        this.resizing_shape.resize_to([
+        this.resizing_shape.resize_by([
             e.clientX - this.starting_pos[0],
             e.clientY - this.starting_pos[1],
         ]);

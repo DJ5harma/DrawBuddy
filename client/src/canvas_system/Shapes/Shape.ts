@@ -19,5 +19,5 @@ export abstract class Shape {
 
     public abstract fix_maths(): void;
 
-    public abstract resize_to(_touch_pos: vec2): void;
+    public abstract resize_by(_delta_xy: vec2): void;
 }

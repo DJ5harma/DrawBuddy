@@ -87,5 +87,5 @@ export class Line implements Shape {
         };
     }
 
-    public resize_to(_touch_pos: vec2): void {}
+    public resize_by(_delta_xy: vec2): void {}
 }
