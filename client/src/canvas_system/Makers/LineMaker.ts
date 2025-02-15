@@ -44,18 +44,8 @@ export class LineMaker extends Maker {
     protected static mouseup(e: MouseEvent): void {
         if (e.button !== 0 || !draw) return;
         draw = false;
-        curr.end = [e.clientX, e.clientY];
-        // ctx.closePath();
 
-        LineMaker.ensure_bounding_rect();
         CanvasManager.store_shape(curr).render_shape(curr);
         TempCanvasManager.clear_canvas_only_unrender();
-    }
-
-    public static ensure_bounding_rect(): void {
-        curr.bounding_rect = {
-            top_left: [...curr.start],
-            bottom_right: [...curr.end],
-        };
     }
 }

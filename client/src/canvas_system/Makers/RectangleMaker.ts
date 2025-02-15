@@ -50,33 +50,7 @@ export class RectangleMaker extends Maker {
         if (e.button !== 0 || !draw) return;
         draw = false;
 
-        let [x, y] = curr.pos;
-        let [w, l] = curr.dims;
-
-        if (w < 0) {
-            w = -w;
-            x -= w;
-        }
-        if (l < 0) {
-            l = -l;
-            y -= l;
-        }
-
-        curr.pos = [x, y];
-        curr.dims = [w, l];
-
-        RectangleMaker.ensure_bounding_rect();
         CanvasManager.store_shape(curr).render_shape(curr);
         TempCanvasManager.clear_canvas_only_unrender();
-    }
-
-    public static ensure_bounding_rect(): void {
-        curr.bounding_rect = {
-            top_left: [curr.pos[0], curr.pos[1]],
-            bottom_right: [
-                curr.pos[0] + curr.dims[0],
-                curr.pos[1] + curr.dims[1],
-            ],
-        };
     }
 }

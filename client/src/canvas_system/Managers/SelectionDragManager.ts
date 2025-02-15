@@ -39,40 +39,31 @@ export class SelectionDragManager {
         move_start_pos = [e.clientX, e.clientY];
         console.log("Started drag");
 
-        CanvasManager.clear_canvas_only_unrender();
         document.body.style.cursor = "grab";
     }
-    
+
     private static mousemove(e: MouseEvent) {
         if (!move) return;
-        
+
         const new_pos: vec2 = [e.clientX, e.clientY];
         const delta: vec2 = [
             new_pos[0] - move_start_pos[0],
             new_pos[1] - move_start_pos[1],
         ];
-        
-        const selected_shapes = SelectionManager.get_selected_shapes();
-        
-        console.log("Shapes selected: ", selected_shapes.size);
-        
-        CanvasManager.clear_canvas_only_unrender();
-        
-        selected_shapes.forEach((shape) => {
+
+        SelectionManager.get_selected_shapes().forEach((shape) => {
             shape.displace_by(delta);
         });
+        CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
         SelectionManager.unrender_selection_of_all().render_selection_of_all();
-        CanvasManager.render_stored_shapes_all();
 
         move_start_pos = new_pos;
     }
     private static mouseup(): void {
         if (!move) return;
-        
+
         move = false;
-        
+
         document.body.style.cursor = "default";
-        SelectionManager.unrender_selection_of_all().render_selection_of_all();
-        CanvasManager.render_stored_shapes_all();
     }
 }

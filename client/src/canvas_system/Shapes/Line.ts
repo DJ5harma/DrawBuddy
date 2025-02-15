@@ -80,7 +80,12 @@ export class Line implements Shape {
         }
     }
 
-    public resize_to(_touch_pos: vec2): void {
-        
+    public fix_maths(): void {
+        this.bounding_rect = {
+            top_left: [...this.start],
+            bottom_right: [...this.end],
+        };
     }
+
+    public resize_to(_touch_pos: vec2): void {}
 }

@@ -51,18 +51,7 @@ export class CircleMaker extends Maker {
         if (e.button !== 0 || !draw) return;
         draw = false;
 
-        CircleMaker.ensure_bounding_rect();
         CanvasManager.store_shape(curr).render_shape(curr);
         TempCanvasManager.clear_canvas_only_unrender();
-    }
-
-    public static ensure_bounding_rect(): void {
-        curr.bounding_rect = {
-            top_left: [curr.pos[0] - curr.radius, curr.pos[1] - curr.radius],
-            bottom_right: [
-                curr.pos[0] + curr.radius,
-                curr.pos[1] + curr.radius,
-            ],
-        };
     }
 }

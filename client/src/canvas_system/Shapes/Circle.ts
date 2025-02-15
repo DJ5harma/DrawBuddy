@@ -85,8 +85,16 @@ export class Circle implements Shape {
             this.bounding_rect.bottom_right[1] += y;
         }
     }
-    
-    public resize_to(_touch_pos: vec2): void {
-        
+
+    public fix_maths(): void {
+        this.bounding_rect = {
+            top_left: [this.pos[0] - this.radius, this.pos[1] - this.radius],
+            bottom_right: [
+                this.pos[0] + this.radius,
+                this.pos[1] + this.radius,
+            ],
+        };
     }
+
+    public resize_to(_touch_pos: vec2): void {}
 }

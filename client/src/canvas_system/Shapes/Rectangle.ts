@@ -83,54 +83,76 @@ export class Rectangle implements Shape {
             this.bounding_rect.bottom_right[1] += y;
         }
     }
-    
-    public resize_to(delta_xy : vec2){
-        console.log("updating dir to :" , this.resize_handle);
-        if(this.resize_handle !== undefined){
-            const [x , y] = delta_xy;
-            console.log(this.dims[0] ,this.dims[1]);
-            
 
-            
-            if(!this.bounding_rect){
+    public fix_maths(): void {
+        let [x, y] = this.pos;
+        let [w, l] = this.dims;
+
+        if (w < 0) {
+            w = -w;
+            x -= w;
+        }
+        if (l < 0) {
+            l = -l;
+            y -= l;
+        }
+
+        this.pos = [x, y] as vec2;
+        this.dims = [w, l] as vec2;
+
+        this.bounding_rect = {
+            top_left: [this.pos[0], this.pos[1]],
+            bottom_right: [
+                this.pos[0] + this.dims[0],
+                this.pos[1] + this.dims[1],
+            ],
+        };
+    }
+
+    public resize_to(delta_xy: vec2) {
+        console.log("updating dir to :", this.resize_handle);
+        if (this.resize_handle !== undefined) {
+            const [x, y] = delta_xy;
+            console.log(this.dims[0], this.dims[1]);
+
+            if (!this.bounding_rect) {
                 console.error("BR not found");
                 return;
             }
-            
-            if(!this.resize_handle){
+
+            if (!this.resize_handle) {
                 console.error("Resize handle not found");
                 return;
             }
 
             const str = this.resize_handle;
 
-            for(let i = 0 ; i<str.length; ++i){
-                switch(str[i]){
-                    case 'e' : { 
+            for (let i = 0; i < str.length; ++i) {
+                switch (str[i]) {
+                    case "e": {
                         this.dims[0] += x;
                         this.bounding_rect.bottom_right[0] += x;
                         break;
                     }
-                    case 's' : {
+                    case "s": {
                         this.dims[1] += y;
                         this.bounding_rect.bottom_right[1] += y;
                         break;
                     }
-                    case 'w' : {
+                    case "w": {
                         this.dims[0] -= x;
                         this.bounding_rect.top_left[0] += x;
                         this.pos[0] += x;
-                        
+
                         break;
                     }
-                    case 'n' : {
-                        this.dims[1] -= y
+                    case "n": {
+                        this.dims[1] -= y;
                         this.bounding_rect.top_left[1] += y;
                         this.pos[1] += y;
                         break;
                     }
                 }
-                
             }
         }
     }

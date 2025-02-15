@@ -8,7 +8,7 @@ export class Pencil implements Shape {
     bounding_rect: BoundingRect | undefined;
 
     cached_image_data?: { img: ImageData; sx: number; sy: number };
-     resize_handle: ResizeHandle;
+    resize_handle: ResizeHandle;
 
     constructor({ stroke }: { stroke: Stroke }) {
         this.points = [];
@@ -103,7 +103,30 @@ export class Pencil implements Shape {
         }
     }
 
-    public resize_to(_touch_pos: vec2): void {
-        
+    public fix_maths(): void {
+        let min_x: number, max_x: number, min_y: number, max_y: number;
+        const pts = this.points;
+        min_x = pts[0][0];
+        min_y = pts[0][1];
+
+        max_x = pts[0][0];
+        max_y = pts[0][1];
+
+        if (!pts.length) return;
+
+        pts.forEach(([x, y]) => {
+            min_x = Math.min(min_x, x);
+            min_y = Math.min(min_y, y);
+
+            max_x = Math.max(max_x, x);
+            max_y = Math.max(max_y, y);
+        });
+
+        this.bounding_rect = {
+            top_left: [min_x, min_y],
+            bottom_right: [max_x, max_y],
+        };
     }
+
+    public resize_to(_touch_pos: vec2): void {}
 }

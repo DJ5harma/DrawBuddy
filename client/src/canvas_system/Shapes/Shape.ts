@@ -1,6 +1,6 @@
 export abstract class Shape {
     abstract bounding_rect: BoundingRect | undefined;
-    resize_handle : ResizeHandle = undefined
+    resize_handle: ResizeHandle = undefined;
 
     abstract fill?: Color;
     abstract stroke?: Stroke;
@@ -15,7 +15,9 @@ export abstract class Shape {
 
     public abstract displace_by(_displacement: vec2): void;
 
-    
+    // public abstract ensure_bounding_rect(): void;
 
-    public abstract resize_to(_touch_pos:vec2): void;
+    public abstract fix_maths(): void;
+
+    public abstract resize_to(_touch_pos: vec2): void;
 }
