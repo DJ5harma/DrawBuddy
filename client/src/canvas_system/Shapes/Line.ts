@@ -1,27 +1,14 @@
+import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { Shape } from "./Shape";
 
 export class Line implements Shape {
-    stroke;
+    stroke = ToolPallete.stroke;
 
-    start: vec2;
-    end: vec2;
+    start: vec2 = [0, 0];
+    end: vec2 = [0, 0];
 
     bounding_rect: BoundingRect | undefined;
     resize_handle: ResizeHandle | undefined;
-
-    constructor({
-        start,
-        end,
-        stroke,
-    }: {
-        start: vec2;
-        end: vec2;
-        stroke: Stroke;
-    }) {
-        this.start = [...start];
-        this.end = [...end];
-        this.stroke = stroke;
-    }
 
     public prepare_for_render(ctx: CanvasRenderingContext2D): void {
         ctx.strokeStyle = this.stroke.color;
@@ -39,11 +26,7 @@ export class Line implements Shape {
     }
 
     public get_copy() {
-        const copy = new Line({
-            start: [...this.start],
-            end: [...this.end],
-            stroke: { ...this.stroke },
-        });
+        const copy = new Line();
         copy.make_like(this);
         return copy;
     }

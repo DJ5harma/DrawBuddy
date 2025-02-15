@@ -135,7 +135,7 @@ export class ToolPallete {
         bar_div.style.width = "100%";
 
         bar_div.innerHTML = /*html*/ `
-		<input id="stroke_width_bar" type="range" min="1" max="100" value="10" />
+		<input id="stroke_width_bar" type="range" min="1" max="30" value="5" />
         `;
 
         this.tool_pallete.appendChild(bar_div);

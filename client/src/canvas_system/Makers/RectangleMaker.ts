@@ -7,12 +7,7 @@ import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
 
 let draw = false;
 
-let curr = new Rectangle({
-    pos: [0, 0],
-    dims: [0, 0],
-    fill: "rgb(255, 255, 255)",
-    stroke: { color: "rgb(255, 0, 255)", width: 5 },
-});
+const curr = new Rectangle();
 
 export class RectangleMaker extends Maker {
     public static init(): void {

@@ -10,7 +10,7 @@ let draw = false;
 
 let points: vec2[] = [];
 
-let curr = new Pencil({ stroke: { color: "rgb(255, 255, 255)", width: 5 } });
+const curr = new Pencil();
 
 export class PencilMaker extends Maker {
     public static init(): void {

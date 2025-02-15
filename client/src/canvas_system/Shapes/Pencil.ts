@@ -1,18 +1,14 @@
 import { buffer_canvas, buffer_ctx } from "../../main";
+import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { Shape } from "./Shape";
 
 export class Pencil implements Shape {
-    stroke: Stroke;
+    stroke: Stroke = ToolPallete.stroke;
 
     cached_image_data?: { img: ImageData; sx: number; sy: number };
 
     bounding_rect: BoundingRect | undefined;
     resize_handle: ResizeHandle | undefined;
-
-    constructor({ stroke }: { stroke: Stroke }) {
-        this.stroke = { ...stroke };
-        this.bounding_rect = undefined;
-    }
 
     public prepare_for_render(ctx: CanvasRenderingContext2D) {
         ctx.strokeStyle = this.stroke.color;
@@ -44,7 +40,7 @@ export class Pencil implements Shape {
     }
 
     public get_copy() {
-        const copy = new Pencil({ stroke: { ...this.stroke } });
+        const copy = new Pencil();
         copy.make_like(this);
         return copy;
     }

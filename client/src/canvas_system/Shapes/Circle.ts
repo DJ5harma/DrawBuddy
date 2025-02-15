@@ -1,31 +1,15 @@
+import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { Shape } from "./Shape";
 
 export class Circle implements Shape {
-    stroke;
-    fill;
+    stroke = ToolPallete.stroke;
+    fill = ToolPallete.fill;
 
-    pos;
-    radius;
+    pos = [0, 0];
+    radius = 0;
 
     bounding_rect: BoundingRect | undefined;
     resize_handle: ResizeHandle | undefined;
-
-    constructor({
-        pos,
-        radius,
-        stroke,
-        fill,
-    }: {
-        pos: vec2;
-        radius: number;
-        stroke: Stroke;
-        fill: Color;
-    }) {
-        this.pos = pos;
-        this.radius = radius;
-        this.stroke = stroke;
-        this.fill = fill;
-    }
 
     public prepare_for_render(ctx: CanvasRenderingContext2D): void {
         ctx.strokeStyle = this.stroke.color;
@@ -46,12 +30,7 @@ export class Circle implements Shape {
     }
 
     public get_copy() {
-        const copy = new Circle({
-            radius: this.radius,
-            fill: this.fill,
-            pos: { ...this.pos },
-            stroke: { ...this.stroke },
-        });
+        const copy = new Circle();
         copy.make_like(this);
         return copy;
     }

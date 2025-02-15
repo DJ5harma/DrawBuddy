@@ -7,12 +7,7 @@ import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
 
 let draw = false;
 
-let curr = new Circle({
-    pos: [0, 0],
-    radius: 0,
-    fill: "rgb(255, 255, 255)",
-    stroke: { color: "rgb(255, 0, 255)", width: 5 },
-});
+const curr = new Circle();
 
 export class CircleMaker extends Maker {
     public static init(): void {
