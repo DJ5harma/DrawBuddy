@@ -1,29 +1,14 @@
+import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { Shape } from "./Shape";
 
 export class Rectangle implements Shape {
-    pos;
-    dims;
-    stroke;
-    fill;
-    bounding_rect: BoundingRect | undefined;
-    resize_handle: ResizeHandle;
+    pos: vec2 = [0, 0];
+    dims: vec2 = [0, 0];
+    stroke = ToolPallete.stroke;
+    fill = ToolPallete.fill;
 
-    constructor({
-        pos,
-        dims,
-        stroke,
-        fill,
-    }: {
-        pos: vec2;
-        dims: vec2;
-        stroke: Stroke;
-        fill: Color;
-    }) {
-        this.pos = pos;
-        this.dims = dims;
-        this.stroke = stroke;
-        this.fill = fill;
-    }
+    bounding_rect: BoundingRect | undefined;
+    resize_handle: ResizeHandle | undefined;
 
     public prepare_for_render(ctx: CanvasRenderingContext2D): void {
         ctx.strokeStyle = this.stroke.color;
@@ -41,12 +26,7 @@ export class Rectangle implements Shape {
     }
 
     public get_copy() {
-        const copy = new Rectangle({
-            dims: { ...this.dims },
-            fill: this.fill,
-            pos: { ...this.pos },
-            stroke: { ...this.stroke },
-        });
+        const copy = new Rectangle();
         copy.make_like(this);
         return copy;
     }

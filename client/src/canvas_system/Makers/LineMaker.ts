@@ -7,11 +7,7 @@ import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
 
 let draw = false;
 
-let curr = new Line({
-    start: [0, 0],
-    end: [0, 0],
-    stroke: { color: "rgb(255, 0, 255)", width: 5 },
-});
+const curr = new Line();
 
 export class LineMaker extends Maker {
     public static init(): void {

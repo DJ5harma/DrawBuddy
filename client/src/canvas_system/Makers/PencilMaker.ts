@@ -10,7 +10,7 @@ let draw = false;
 
 let points: vec2[] = [];
 
-let curr = new Pencil({ stroke: { color: "rgb(255, 255, 255)", width: 5 } });
+const curr = new Pencil();
 
 export class PencilMaker extends Maker {
     public static init(): void {
@@ -70,9 +70,5 @@ export class PencilMaker extends Maker {
 
         CanvasManager.store_shape(curr).render_shape(curr);
         TempCanvasManager.clear_canvas_only_unrender();
-    }
-
-    public static set_config(_config: { stroke: Stroke }): void {
-        curr.stroke = _config.stroke;
     }
 }

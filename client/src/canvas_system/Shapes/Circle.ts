@@ -1,29 +1,15 @@
+import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { Shape } from "./Shape";
 
 export class Circle implements Shape {
-    pos;
-    radius;
-    stroke;
-    fill;
-    bounding_rect: BoundingRect | undefined;
-    resize_handle: ResizeHandle;
+    stroke = ToolPallete.stroke;
+    fill = ToolPallete.fill;
 
-    constructor({
-        pos,
-        radius,
-        stroke,
-        fill,
-    }: {
-        pos: vec2;
-        radius: number;
-        stroke: Stroke;
-        fill: Color;
-    }) {
-        this.pos = pos;
-        this.radius = radius;
-        this.stroke = stroke;
-        this.fill = fill;
-    }
+    pos = [0, 0];
+    radius = 0;
+
+    bounding_rect: BoundingRect | undefined;
+    resize_handle: ResizeHandle | undefined;
 
     public prepare_for_render(ctx: CanvasRenderingContext2D): void {
         ctx.strokeStyle = this.stroke.color;
@@ -44,12 +30,7 @@ export class Circle implements Shape {
     }
 
     public get_copy() {
-        const copy = new Circle({
-            radius: this.radius,
-            fill: this.fill,
-            pos: { ...this.pos },
-            stroke: { ...this.stroke },
-        });
+        const copy = new Circle();
         copy.make_like(this);
         return copy;
     }
@@ -72,6 +53,7 @@ export class Circle implements Shape {
             pos[1] + dims[1] >= this.pos[1] + this.radius
         );
     }
+
     public displace_by(_displacement: vec2): void {
         const [x, y] = _displacement;
 
@@ -99,8 +81,8 @@ export class Circle implements Shape {
     public resize_by(_delta_xy: vec2): void {
         if (!this.bounding_rect) return;
 
-        
         let sum = _delta_xy[0] + _delta_xy[1];
+      
         if(this.resize_handle === 'n' || this.resize_handle === 'nw' ||  this.resize_handle === 'w') sum = -sum;
 
         if (sum + this.radius < 10) return;

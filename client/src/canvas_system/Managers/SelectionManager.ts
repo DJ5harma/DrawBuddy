@@ -4,24 +4,24 @@ import { Shape } from "../Shapes/Shape";
 import { CanvasManager } from "./CanvasManager";
 import { TempCanvasManager } from "./TempCanvasManager";
 
-export class SelectionManager {
-    private static selected_shapes = new Set<Shape>();
+let selected_shapes = new Set<Shape>();
 
+export class SelectionManager {
     public static init() {
         console.log(this.name);
     }
 
     public static add_shape_to_selection(shape: Shape) {
         console.log(shape, "added to selection list");
-        if (this.selected_shapes.has(shape)) return this;
-        this.selected_shapes.add(shape);
+        if (selected_shapes.has(shape)) return this;
+        selected_shapes.add(shape);
         this.render_selection_of_shape(shape);
         return this;
     }
 
     public static remove_selection_of_all() {
         TempCanvasManager.clear_canvas_only_unrender();
-        this.selected_shapes.clear();
+        selected_shapes.clear();
         return this;
     }
 
@@ -52,7 +52,7 @@ export class SelectionManager {
     }
 
     public static render_selection_of_all() {
-        this.selected_shapes.forEach((shape) => {
+        selected_shapes.forEach((shape) => {
             this.render_selection_of_shape(shape);
         });
 
@@ -60,19 +60,19 @@ export class SelectionManager {
     }
 
     public static is_shape_selected(shape: Shape) {
-        return this.selected_shapes.has(shape);
+        return selected_shapes.has(shape);
     }
 
     public static get_selected_shapes() {
-        return this.selected_shapes;
+        return selected_shapes;
     }
 
     public static update_selected_shapes_from_pallete() {
-        console.log(this.selected_shapes.size, " selected");
+        console.log(selected_shapes.size, " selected");
 
-        if (!this.selected_shapes.size) return;
+        if (!selected_shapes.size) return;
 
-        this.selected_shapes.forEach((shape) => {
+        selected_shapes.forEach((shape) => {
             if (shape.fill) {
                 console.log("prev fill: ", shape.fill);
                 shape.fill = ToolPallete.fill;

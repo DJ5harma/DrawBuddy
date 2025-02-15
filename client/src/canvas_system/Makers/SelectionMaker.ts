@@ -10,15 +10,7 @@ import { Shape } from "../Shapes/Shape";
 
 let draw = false;
 
-let curr = new Rectangle({
-    pos: [0, 0],
-    dims: [0, 0],
-    stroke: {
-        color: "rgb(5, 247, 255)",
-        width: 1,
-    },
-    fill: "rgba(5, 247, 255, 0.1)",
-});
+const curr = new Rectangle();
 
 export class SelectionMaker extends Maker {
     public static init(): void {
@@ -88,8 +80,6 @@ export class SelectionMaker extends Maker {
                 selected_shape
             ).render_selection_of_shape(selected_shape);
         }
-
-        
 
         CanvasManager.get_shapes().forEach((shape) => {
             if (

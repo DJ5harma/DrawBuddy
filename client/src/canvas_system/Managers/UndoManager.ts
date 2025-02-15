@@ -1,32 +1,36 @@
 import { CanvasManager } from "./CanvasManager";
 import { Shape } from "../Shapes/Shape";
 
+let undo_stack: Shape[] = [];
+
 export class UndoManager {
-	private static undo_stack: Shape[] = [];
+    public static init() {
+        console.log(this.name);
 
-	public static init() {
-		console.log(this.name);
+        document.addEventListener("keydown", (e) => {
+            if (e.ctrlKey) {
+                if (e.key.toUpperCase() === "Z") this.undo();
+                else if (e.key.toUpperCase() === "Y") this.redo();
+            }
+        });
+    }
 
-		document.addEventListener("keydown", (e) => {
-			if (e.ctrlKey && e.key.toUpperCase() === "Z") this.undo();
-			if (e.ctrlKey && e.key.toUpperCase() === "Y") this.redo();
-		});
-	}
+    public static undo() {
+        const last_shape = CanvasManager.pop_shape();
+        if (!last_shape) return;
 
-	public static undo() {
-		const last_shape = CanvasManager.pop_shape();
-		if (!last_shape) return;
+        undo_stack.push(last_shape);
 
-		this.undo_stack.push(last_shape);
+        CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
+    }
 
-		CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
-	}
+    public static redo() {
+        const last_undid_shape = undo_stack.pop();
 
-	public static redo() {
-		const last_undid_shape = this.undo_stack.pop();
+        if (!last_undid_shape) return;
 
-		if (!last_undid_shape) return;
-
-		CanvasManager.store_shape(last_undid_shape).render_shape(last_undid_shape);
-	}
+        CanvasManager.store_shape(last_undid_shape).render_shape(
+            last_undid_shape
+        );
+    }
 }
