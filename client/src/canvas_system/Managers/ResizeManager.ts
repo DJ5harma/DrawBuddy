@@ -74,7 +74,6 @@ export class ResizeManager {
 
             diffs.forEach((d) => {
                 if (d < 10) {
-                    // this.resizing = true;
                     ResizeManager.start_interaction([x, y], shape);
                     this.resizing_shape = shape;
                     this.starting_pos = [x, y];
@@ -83,6 +82,7 @@ export class ResizeManager {
             });
         }
     }
+
     private static mousemove(e: MouseEvent) {
         if (!this.resizing_shape) return;
 

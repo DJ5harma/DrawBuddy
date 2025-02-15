@@ -1,9 +1,9 @@
 export abstract class Shape {
-    abstract bounding_rect: BoundingRect | undefined;
-    resize_handle: ResizeHandle = undefined;
-
     abstract fill?: Color;
     abstract stroke?: Stroke;
+
+    abstract bounding_rect: BoundingRect | undefined;
+    abstract resize_handle: ResizeHandle | undefined;
 
     public abstract get_copy(): Shape;
 
@@ -14,8 +14,6 @@ export abstract class Shape {
     public abstract is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean;
 
     public abstract displace_by(_displacement: vec2): void;
-
-    // public abstract ensure_bounding_rect(): void;
 
     public abstract fix_maths(): void;
 

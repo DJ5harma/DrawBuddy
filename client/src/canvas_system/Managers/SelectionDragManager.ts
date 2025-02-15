@@ -9,21 +9,25 @@ let is_active = false;
 
 export class SelectionDragManager {
     public static init() {
-        document.addEventListener("keydown", (e) => this.keydown(e));
-        document.addEventListener("keyup", (e) => this.keyup(e));
         console.log("Selection drag manager, init");
+
+        document.addEventListener("keydown", this.keydown);
+        document.addEventListener("keyup", this.keyup);
         document.addEventListener("mousedown", this.mousedown);
         document.addEventListener("mousemove", this.mousemove);
         document.addEventListener("mouseup", this.mouseup);
     }
+
     protected static keydown(e: KeyboardEvent): void {
         if (!e.ctrlKey) return;
         is_active = true;
     }
+
     protected static keyup(_: KeyboardEvent): void {
         is_active = false;
         move = false;
     }
+
     public static is_dragging() {
         return is_active;
     }
@@ -59,6 +63,7 @@ export class SelectionDragManager {
 
         move_start_pos = new_pos;
     }
+
     private static mouseup(): void {
         if (!move) return;
 

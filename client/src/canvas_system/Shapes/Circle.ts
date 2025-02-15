@@ -1,12 +1,14 @@
 import { Shape } from "./Shape";
 
 export class Circle implements Shape {
-    pos;
-    radius;
     stroke;
     fill;
+
+    pos;
+    radius;
+
     bounding_rect: BoundingRect | undefined;
-    resize_handle: ResizeHandle;
+    resize_handle: ResizeHandle | undefined;
 
     constructor({
         pos,
@@ -72,6 +74,7 @@ export class Circle implements Shape {
             pos[1] + dims[1] >= this.pos[1] + this.radius
         );
     }
+
     public displace_by(_displacement: vec2): void {
         const [x, y] = _displacement;
 
@@ -99,9 +102,9 @@ export class Circle implements Shape {
     public resize_by(_delta_xy: vec2): void {
         if (!this.bounding_rect) return;
 
-        
         let sum = _delta_xy[0] + _delta_xy[1];
-        if(this.resize_handle === 'n' || this.resize_handle === 'w') sum = -sum;
+        if (this.resize_handle === "n" || this.resize_handle === "w")
+            sum = -sum;
 
         if (sum + this.radius < 10) return;
 

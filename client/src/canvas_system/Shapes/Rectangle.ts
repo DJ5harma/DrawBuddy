@@ -5,8 +5,9 @@ export class Rectangle implements Shape {
     dims;
     stroke;
     fill;
+
     bounding_rect: BoundingRect | undefined;
-    resize_handle: ResizeHandle;
+    resize_handle: ResizeHandle | undefined;
 
     constructor({
         pos,

@@ -71,8 +71,4 @@ export class PencilMaker extends Maker {
         CanvasManager.store_shape(curr).render_shape(curr);
         TempCanvasManager.clear_canvas_only_unrender();
     }
-
-    public static set_config(_config: { stroke: Stroke }): void {
-        curr.stroke = _config.stroke;
-    }
 }

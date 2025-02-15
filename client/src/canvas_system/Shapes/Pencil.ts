@@ -4,10 +4,10 @@ import { Shape } from "./Shape";
 export class Pencil implements Shape {
     stroke: Stroke;
 
-    bounding_rect: BoundingRect | undefined;
-
     cached_image_data?: { img: ImageData; sx: number; sy: number };
-    resize_handle: ResizeHandle;
+
+    bounding_rect: BoundingRect | undefined;
+    resize_handle: ResizeHandle | undefined;
 
     constructor({ stroke }: { stroke: Stroke }) {
         this.stroke = { ...stroke };

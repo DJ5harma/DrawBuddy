@@ -1,11 +1,13 @@
 import { Shape } from "./Shape";
 
 export class Line implements Shape {
+    stroke;
+
     start: vec2;
     end: vec2;
-    stroke;
+
     bounding_rect: BoundingRect | undefined;
-    resize_handle: ResizeHandle;
+    resize_handle: ResizeHandle | undefined;
 
     constructor({
         start,
@@ -63,6 +65,7 @@ export class Line implements Shape {
             pos[1] + dims[1] > this.start[1] + this.end[1]
         );
     }
+
     public displace_by(_displacement: vec2): void {
         const [x, y] = _displacement;
 
@@ -86,9 +89,6 @@ export class Line implements Shape {
 
         const max_x = Math.max(this.start[0], this.end[0]);
         const max_y = Math.max(this.start[1], this.end[1]);
-
-        // this.start = [min_x, min_y];
-        // this.end = [max_x, max_y];
 
         this.bounding_rect = {
             top_left: [min_x, min_y],
@@ -117,14 +117,11 @@ export class Line implements Shape {
                 case "w": {
                     this.start[0] += x;
                     this.bounding_rect.top_left[0] += x;
-                    // this.pos[0] += x;
-
                     break;
                 }
                 case "n": {
                     this.start[1] += y;
                     this.bounding_rect.top_left[1] += y;
-                    // this.pos[1] += y;
                     break;
                 }
             }
