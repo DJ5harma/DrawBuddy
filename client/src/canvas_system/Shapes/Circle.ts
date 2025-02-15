@@ -96,5 +96,15 @@ export class Circle implements Shape {
         };
     }
 
-    public resize_by(_delta_xy: vec2): void {}
+    public resize_by(_delta_xy: vec2): void {
+        if (!this.bounding_rect) return;
+
+        const sum = _delta_xy[0] + _delta_xy[1];
+
+        if (sum + this.radius < 10) return;
+
+        this.radius += sum;
+
+        this.fix_maths();
+    }
 }

@@ -81,11 +81,53 @@ export class Line implements Shape {
     }
 
     public fix_maths(): void {
+        const min_x = Math.min(this.start[0], this.end[0]);
+        const min_y = Math.min(this.start[1], this.end[1]);
+
+        const max_x = Math.max(this.start[0], this.end[0]);
+        const max_y = Math.max(this.start[1], this.end[1]);
+
+        // this.start = [min_x, min_y];
+        // this.end = [max_x, max_y];
+
         this.bounding_rect = {
-            top_left: [...this.start],
-            bottom_right: [...this.end],
+            top_left: [min_x, min_y],
+            bottom_right: [max_x, max_y],
         };
     }
 
-    public resize_by(_delta_xy: vec2): void {}
+    public resize_by(_delta_xy: vec2): void {
+        const str = this.resize_handle;
+        if (!str || !this.bounding_rect) return;
+
+        const [x, y] = _delta_xy;
+
+        for (let i = 0; i < str.length; ++i) {
+            switch (str[i]) {
+                case "e": {
+                    this.end[0] += x;
+                    this.bounding_rect.bottom_right[0] += x;
+                    break;
+                }
+                case "s": {
+                    this.end[1] += y;
+                    this.bounding_rect.bottom_right[1] += y;
+                    break;
+                }
+                case "w": {
+                    this.start[0] += x;
+                    this.bounding_rect.top_left[0] += x;
+                    // this.pos[0] += x;
+
+                    break;
+                }
+                case "n": {
+                    this.start[1] += y;
+                    this.bounding_rect.top_left[1] += y;
+                    // this.pos[1] += y;
+                    break;
+                }
+            }
+        }
+    }
 }
