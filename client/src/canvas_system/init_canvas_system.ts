@@ -17,7 +17,6 @@ function design_canvas() {
         const { style } = cvs;
 
         style.position = "fixed";
-        style.border = "solid red";
         style.left = "0px";
         style.top = "0px";
 
@@ -45,7 +44,7 @@ export default function init_canvas_system() {
     SelectionMaker.init();
 
     //
-    ResizeManager.init()
+    ResizeManager.init();
 
     let mutex_unlocked = true;
 

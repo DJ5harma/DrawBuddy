@@ -15,16 +15,17 @@ export class ToolPallete {
         const { style } = this.tool_pallete;
 
         style.position = "absolute";
-        style.top = "0px";
-        style.left = "0px";
+        style.top = "20%";
+        style.left = "10px";
 
         style.display = "flex";
         style.flexDirection = "column";
         style.paddingLeft = "20px";
         style.paddingRight = "20px";
-        style.border = "solid white 1px";
+        style.boxShadow = "0 0 2px 2px white";
+        style.borderRadius = "20px";
 
-        style.backgroundColor = "white";
+        style.color = "white";
 
         this.setup_stroke_colors_div();
         this.setup_background_colors_div();
@@ -44,7 +45,6 @@ export class ToolPallete {
     private static setup_stroke_colors_div() {
         const stroke_label = document.createElement("p");
         stroke_label.textContent = "Stroke";
-        stroke_label.style.color = "black";
         this.tool_pallete.appendChild(stroke_label);
 
         const stroke_div = document.createElement("div");
@@ -86,7 +86,6 @@ export class ToolPallete {
     private static setup_background_colors_div() {
         const stroke_label = document.createElement("p");
         stroke_label.textContent = "Background";
-        stroke_label.style.color = "black";
         this.tool_pallete.appendChild(stroke_label);
 
         const background_div = document.createElement("div");
@@ -128,7 +127,6 @@ export class ToolPallete {
     private static setup_stroke_width_bar() {
         const stroke_label = document.createElement("p");
         stroke_label.textContent = "Stroke width";
-        stroke_label.style.color = "black";
         this.tool_pallete.appendChild(stroke_label);
 
         const bar_div = document.createElement("div");
