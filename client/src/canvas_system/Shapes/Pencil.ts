@@ -2,7 +2,6 @@ import { buffer_canvas, buffer_ctx } from "../../main";
 import { Shape } from "./Shape";
 
 export class Pencil implements Shape {
-    points: vec2[];
     stroke: Stroke;
 
     bounding_rect: BoundingRect | undefined;
@@ -11,7 +10,6 @@ export class Pencil implements Shape {
     resize_handle: ResizeHandle;
 
     constructor({ stroke }: { stroke: Stroke }) {
-        this.points = [];
         this.stroke = { ...stroke };
         this.bounding_rect = undefined;
     }
@@ -22,33 +20,27 @@ export class Pencil implements Shape {
     }
 
     public render_me_whole(ctx: CanvasRenderingContext2D): void {
-        console.log("retrived image data: ", this.cached_image_data);
-
-        if (this.cached_image_data) {
-            buffer_ctx.putImageData(this.cached_image_data.img, 0, 0);
-
-            ctx.beginPath();
-
-            // Now draw it without erasing existing content
-            ctx.drawImage(
-                buffer_canvas,
-                this.cached_image_data.sx,
-                this.cached_image_data.sy
-            );
-
-            buffer_ctx.clearRect(
-                0,
-                0,
-                buffer_canvas.width,
-                buffer_canvas.height
-            );
-
-            ctx.closePath();
-        } else {
+        if (!this.cached_image_data) {
             console.error(
                 "A pencil drawing was requested but its cached image data was not found"
             );
+            return;
         }
+
+        buffer_ctx.putImageData(this.cached_image_data.img, 0, 0);
+
+        ctx.beginPath();
+
+        // Now draw it without erasing existing content
+        ctx.drawImage(
+            buffer_canvas,
+            this.cached_image_data.sx,
+            this.cached_image_data.sy
+        );
+
+        buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
+
+        ctx.closePath();
     }
 
     public get_copy() {
@@ -58,7 +50,6 @@ export class Pencil implements Shape {
     }
 
     public make_like(p: Pencil) {
-        this.points = [...p.points];
         this.stroke = { ...p.stroke };
         this.cached_image_data = p.cached_image_data
             ? { ...p.cached_image_data }
@@ -86,10 +77,7 @@ export class Pencil implements Shape {
 
     public displace_by(_displacement: vec2): void {
         const [x, y] = _displacement;
-        for (let i = 0; i < this.points.length; ++i) {
-            this.points[i][0] += x;
-            this.points[i][1] += y;
-        }
+
         if (this.bounding_rect) {
             this.bounding_rect.top_left[0] += x;
             this.bounding_rect.bottom_right[0] += x;
@@ -104,29 +92,64 @@ export class Pencil implements Shape {
     }
 
     public fix_maths(): void {
-        let min_x: number, max_x: number, min_y: number, max_y: number;
-        const pts = this.points;
-        min_x = pts[0][0];
-        min_y = pts[0][1];
-
-        max_x = pts[0][0];
-        max_y = pts[0][1];
-
-        if (!pts.length) return;
-
-        pts.forEach(([x, y]) => {
-            min_x = Math.min(min_x, x);
-            min_y = Math.min(min_y, y);
-
-            max_x = Math.max(max_x, x);
-            max_y = Math.max(max_y, y);
-        });
+        if (!this.cached_image_data) {
+            console.error("no cached image data");
+            return;
+        }
 
         this.bounding_rect = {
-            top_left: [min_x, min_y],
-            bottom_right: [max_x, max_y],
+            top_left: [this.cached_image_data.sx, this.cached_image_data.sy],
+            bottom_right: [
+                this.cached_image_data.sx + this.cached_image_data.img.width,
+                this.cached_image_data.sy + this.cached_image_data.img.height,
+            ],
         };
     }
 
-    public resize_by(_delta_xy: vec2): void {}
+    public resize_by(_delta_xy: vec2): void {
+        const str = this.resize_handle;
+        if (!this.bounding_rect) {
+            console.error("BR not found");
+            return;
+        }
+        if (!this.cached_image_data) {
+            console.error("Cached image data not found while resizing");
+            return;
+        }
+
+        if (!str) {
+            console.error("Resize handle not found");
+            return;
+        }
+
+        const [x, y] = _delta_xy;
+
+        // for (let i = 0; i < str.length; ++i) {
+        //     switch (str[i]) {
+        //         case "e": {
+        //             this.cached_image_data.img.width += x;
+        //             this.bounding_rect.bottom_right[0] += x;
+        //             break;
+        //         }
+        //         case "s": {
+        //             this.dims[1] += y;
+        //             this.bounding_rect.bottom_right[1] += y;
+        //             break;
+        //         }
+        //         case "w": {
+        //             this.dims[0] -= x;
+        //             this.bounding_rect.top_left[0] += x;
+        //             this.pos[0] += x;
+
+        //             break;
+        //         }
+        //         case "n": {
+        //             this.dims[1] -= y;
+        //             this.bounding_rect.top_left[1] += y;
+        //             this.pos[1] += y;
+        //             break;
+        //         }
+        //     }
+        // }
+    }
 }

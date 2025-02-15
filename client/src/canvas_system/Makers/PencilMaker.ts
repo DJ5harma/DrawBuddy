@@ -8,6 +8,8 @@ import { Maker } from "./Maker";
 
 let draw = false;
 
+let points: vec2[] = [];
+
 let curr = new Pencil({ stroke: { color: "rgb(255, 255, 255)", width: 5 } });
 
 export class PencilMaker extends Maker {
@@ -33,7 +35,7 @@ export class PencilMaker extends Maker {
         temp_ctx.moveTo(e.clientX, e.clientY);
         temp_ctx.beginPath();
 
-        curr.points = [[e.clientX, e.clientY]];
+        points = [[e.clientX, e.clientY]];
     }
 
     protected static mousemove(e: MouseEvent): void {
@@ -41,7 +43,7 @@ export class PencilMaker extends Maker {
 
         const [x, y] = [e.clientX, e.clientY];
 
-        curr.points.push([x, y]);
+        points.push([x, y]);
 
         temp_ctx.lineTo(x, y);
         temp_ctx.stroke();
