@@ -1,9 +1,9 @@
 import { CanvasManager } from "./CanvasManager";
 import { Shape } from "../Shapes/Shape";
 
-export class UndoManager {
-    private static undo_stack: Shape[] = [];
+let undo_stack: Shape[] = [];
 
+export class UndoManager {
     public static init() {
         console.log(this.name);
 
@@ -19,13 +19,13 @@ export class UndoManager {
         const last_shape = CanvasManager.pop_shape();
         if (!last_shape) return;
 
-        this.undo_stack.push(last_shape);
+        undo_stack.push(last_shape);
 
         CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
     }
 
     public static redo() {
-        const last_undid_shape = this.undo_stack.pop();
+        const last_undid_shape = undo_stack.pop();
 
         if (!last_undid_shape) return;
 

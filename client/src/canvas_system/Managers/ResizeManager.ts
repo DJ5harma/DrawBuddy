@@ -3,18 +3,16 @@ import { CanvasManager } from "./CanvasManager";
 import { SelectionDragManager } from "./SelectionDragManager";
 import { SelectionManager } from "./SelectionManager";
 
+let starting_pos: vec2 = [0, 0];
+let resizing_shape: Shape | undefined = undefined;
+
 export class ResizeManager {
-    // private static resizing = false;
-    private static starting_pos: vec2 = [0, 0];
-
-    private static resizing_shape: Shape | undefined = undefined;
-
     public static init() {
         console.log("init ResizeManager");
 
-        document.addEventListener("mousedown", (e) => this.mousedown(e));
-        document.addEventListener("mousemove", (e) => this.mousemove(e));
-        document.addEventListener("mouseup", (e) => this.mouseup(e));
+        document.addEventListener("mousedown", this.mousedown);
+        document.addEventListener("mousemove", this.mousemove);
+        document.addEventListener("mouseup", this.mouseup);
     }
 
     private static start_interaction(_touch_pos: vec2, shape: Shape): void {
@@ -75,8 +73,8 @@ export class ResizeManager {
             diffs.forEach((d) => {
                 if (d < 10) {
                     ResizeManager.start_interaction([x, y], shape);
-                    this.resizing_shape = shape;
-                    this.starting_pos = [x, y];
+                    resizing_shape = shape;
+                    starting_pos = [x, y];
                     return;
                 }
             });
@@ -84,21 +82,23 @@ export class ResizeManager {
     }
 
     private static mousemove(e: MouseEvent) {
-        if (!this.resizing_shape) return;
+        if (!resizing_shape) return;
 
-        this.resizing_shape.resize_by([
-            e.clientX - this.starting_pos[0],
-            e.clientY - this.starting_pos[1],
+        resizing_shape.resize_by([
+            e.clientX - starting_pos[0],
+            e.clientY - starting_pos[1],
         ]);
-        this.starting_pos = [e.clientX, e.clientY];
+
+        starting_pos = [e.clientX, e.clientY];
+
         SelectionManager.unrender_selection_of_all().render_selection_of_all();
         CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
     }
 
     private static mouseup(_: MouseEvent) {
-        if (!this.resizing_shape) return;
-        this.resizing_shape.fix_maths();
-        this.resizing_shape = undefined;
+        if (!resizing_shape) return;
+        resizing_shape.fix_maths();
+        resizing_shape = undefined;
 
         document.body.style.cursor = "default";
     }
