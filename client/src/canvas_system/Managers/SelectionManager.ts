@@ -1,4 +1,6 @@
+import { temp_ctx } from "../../main";
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
+import { SelectionMaker } from "../Makers/SelectionMaker";
 import { Rectangle } from "../Shapes/Rectangle";
 import { Shape } from "../Shapes/Shape";
 import { CanvasManager } from "./CanvasManager";
@@ -38,15 +40,14 @@ export class SelectionManager {
 
         const { top_left, bottom_right } = shape.bounding_rect;
 
-        const rect = new Rectangle({
-            pos: [top_left[0] - 10, top_left[1] - 10],
-            dims: [
-                bottom_right[0] - top_left[0] + 20,
-                bottom_right[1] - top_left[1] + 20,
-            ],
-            fill: "rgba(100, 100, 242, 0.1)",
-            stroke: { color: "rgba(100, 100, 242, 1)", width: 2 },
-        });
+        const rect = new Rectangle();
+        rect.pos = [top_left[0] - 10, top_left[1] - 10];
+        rect.dims = [
+            bottom_right[0] - top_left[0] + 20,
+            bottom_right[1] - top_left[1] + 20,
+        ];
+        rect.fill = SelectionMaker.curr.fill;
+        rect.stroke = SelectionMaker.curr.stroke;
 
         TempCanvasManager.render_shape(rect);
     }

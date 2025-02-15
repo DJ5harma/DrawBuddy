@@ -10,9 +10,9 @@ import { Shape } from "../Shapes/Shape";
 
 let draw = false;
 
-const curr = new Rectangle();
-
 export class SelectionMaker extends Maker {
+    static curr = new Rectangle();
+
     public static init(): void {
         document.addEventListener("mousedown", (e) => this.mousedown(e));
         document.addEventListener("mousemove", (e) => this.mousemove(e));
@@ -28,10 +28,10 @@ export class SelectionMaker extends Maker {
             return;
 
         draw = true;
-        curr.pos = [e.clientX, e.clientY];
-        curr.dims = [0, 0];
+        this.curr.pos = [e.clientX, e.clientY];
+        this.curr.dims = [0, 0];
 
-        curr.prepare_for_render(temp_ctx);
+        this.curr.prepare_for_render(temp_ctx);
         temp_ctx.beginPath();
         temp_ctx.moveTo(e.clientX, e.clientY);
     }
@@ -41,17 +41,17 @@ export class SelectionMaker extends Maker {
 
         const [x, y] = [e.clientX, e.clientY];
 
-        curr.dims = [x - curr.pos[0], y - curr.pos[1]];
+        this.curr.dims = [x - this.curr.pos[0], y - this.curr.pos[1]];
 
-        TempCanvasManager.clear_canvas_only_unrender().render_shape(curr);
+        TempCanvasManager.clear_canvas_only_unrender().render_shape(this.curr);
     }
 
     protected static mouseup(e: MouseEvent): void {
         if (e.button !== 0 || !draw) return;
         draw = false;
 
-        let [x, y] = curr.pos;
-        let [w, l] = curr.dims;
+        let [x, y] = this.curr.pos;
+        let [w, l] = this.curr.dims;
 
         if (w < 0) {
             w = -w;

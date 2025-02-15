@@ -1,3 +1,7 @@
+import { SelectionMaker } from "../../../canvas_system/Makers/SelectionMaker";
+import { temp_ctx } from "../../../main";
+import { ToolPallete } from "../ToolPallete/ToolPallete";
+
 const maker_names: Tools[] = ["PENCIL", "RECTANGLE", "CIRCLE", "LINE"];
 const selection_tool_name: Tools = "SELECTION";
 const canvas_dragger_tool_name: Tools = "CANVAS-DRAGGER";
@@ -35,6 +39,12 @@ export class ToolSelector {
         elem.innerText = selection_tool_name;
 
         elem.addEventListener("click", (_) => {
+            SelectionMaker.curr.fill = "rgba(163, 163, 242, 0.1)";
+            SelectionMaker.curr.stroke = {
+                color: "rgba(100, 100, 242, 1)",
+                width: 2,
+            };
+
             console.log(selection_tool_name, "clicked");
             this.selected_tool = selection_tool_name;
             return;
