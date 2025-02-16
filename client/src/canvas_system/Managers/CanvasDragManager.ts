@@ -18,7 +18,7 @@ export class CanvasDragManager {
     }
 
     private static wheel(e: WheelEvent) {
-        if (move) return;
+        if (move || e.ctrlKey) return;
         const dirY = e.deltaY < 0 ? 1 : -1;
         console.log(dirY);
         buffer_ctx.drawImage(canvas, 0, 0);

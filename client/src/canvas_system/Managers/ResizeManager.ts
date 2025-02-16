@@ -72,7 +72,9 @@ export class ResizeManager {
 
             diffs.forEach((d) => {
                 if (d < 10) {
-                    ResizeManager.start_interaction([x, y], shape);
+                    selected_shapes.forEach((shp) => {
+                        ResizeManager.start_interaction([x, y], shp);
+                    });
                     resizing_shape = shape;
                     starting_pos = [x, y];
                     return;
@@ -84,10 +86,12 @@ export class ResizeManager {
     private static mousemove(e: MouseEvent) {
         if (!resizing_shape) return;
 
-        resizing_shape.resize_by([
-            e.clientX - starting_pos[0],
-            e.clientY - starting_pos[1],
-        ]);
+        SelectionManager.get_selected_shapes().forEach((shape) =>
+            shape.resize_by([
+                e.clientX - starting_pos[0],
+                e.clientY - starting_pos[1],
+            ])
+        );
 
         starting_pos = [e.clientX, e.clientY];
 

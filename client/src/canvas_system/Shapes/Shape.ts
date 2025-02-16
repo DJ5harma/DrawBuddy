@@ -18,4 +18,6 @@ export abstract class Shape {
     public abstract fix_maths(): void;
 
     public abstract resize_by(_delta_xy: vec2): void;
+
+    public abstract zoom_by(_d: number): void;
 }

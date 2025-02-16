@@ -91,4 +91,15 @@ export class Circle implements Shape {
 
         this.fix_maths();
     }
+
+    public zoom_by(_d: number): void {
+        this.pos[0] -= _d;
+        this.pos[1] -= _d;
+        if (this.radius - _d < 10) return;
+        this.radius -= _d / 2;
+
+        this.fix_maths();
+
+        return;
+    }
 }

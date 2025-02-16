@@ -17,6 +17,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "server": "file:"
+    "server": "file:",
+    "socket.io": "^4.8.1"
   }
 }

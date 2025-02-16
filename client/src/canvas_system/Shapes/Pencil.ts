@@ -148,4 +148,7 @@ export class Pencil implements Shape {
         //     }
         // }
     }
+    public zoom_by(_d: number): void {
+        return;
+    }
 }

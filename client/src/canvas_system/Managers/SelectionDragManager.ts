@@ -26,6 +26,7 @@ export class SelectionDragManager {
     protected static keyup(_: KeyboardEvent): void {
         is_active = false;
         move = false;
+        document.body.style.cursor = "default";
     }
 
     public static is_dragging() {
@@ -39,11 +40,10 @@ export class SelectionDragManager {
             ToolSelector.selected_tool !== "SELECTION"
         )
             return;
+        document.body.style.cursor = "grab";
         move = true;
         move_start_pos = [e.clientX, e.clientY];
         console.log("Started drag");
-
-        document.body.style.cursor = "grab";
     }
 
     private static mousemove(e: MouseEvent) {
@@ -54,6 +54,8 @@ export class SelectionDragManager {
             new_pos[0] - move_start_pos[0],
             new_pos[1] - move_start_pos[1],
         ];
+
+        console.log(SelectionManager.get_selected_shapes());
 
         SelectionManager.get_selected_shapes().forEach((shape) => {
             shape.displace_by(delta);
@@ -68,7 +70,5 @@ export class SelectionDragManager {
         if (!move) return;
 
         move = false;
-
-        document.body.style.cursor = "default";
     }
 }

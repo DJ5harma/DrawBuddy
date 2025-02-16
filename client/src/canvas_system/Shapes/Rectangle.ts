@@ -132,4 +132,17 @@ export class Rectangle implements Shape {
             }
         }
     }
+    public zoom_by(_d: number): void {
+        this.pos[0] -= _d;
+        this.pos[1] -= _d;
+
+        if (this.dims[0] - _d < 10 || this.dims[1] - _d < 10) return;
+
+        this.dims[0] -= _d;
+        this.dims[1] -= _d;
+
+        this.fix_maths();
+
+        return;
+    }
 }

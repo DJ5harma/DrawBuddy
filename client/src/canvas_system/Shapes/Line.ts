@@ -110,4 +110,18 @@ export class Line implements Shape {
             }
         }
     }
+
+    public zoom_by(_d: number): void {
+        // if (this.end[0] - this.start[0] - _d < 10) return;
+        // if (this.end[1] - this.start[1] - _d < 10) return;
+
+        // this.start[0] -= _d;
+        // this.start[1] -= _d;
+        this.end[0] -= Math.abs(_d);
+        this.end[1] -= Math.abs(_d);
+
+        this.fix_maths();
+
+        return;
+    }
 }
