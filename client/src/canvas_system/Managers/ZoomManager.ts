@@ -34,7 +34,7 @@ export class ZoomManager {
         // let rejected_zoom = false;
         CanvasManager.get_shapes().forEach((shape) => {
             shape.resize_handle = "se";
-            shape.zoom_by(dy / 10);
+            shape.resize_by([-dy / 10, -dy / 10]);
         });
         CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
         SelectionManager.unrender_selection_of_all().remove_selection_of_all();
