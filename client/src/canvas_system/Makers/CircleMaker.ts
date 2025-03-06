@@ -4,6 +4,7 @@ import { CanvasManager } from "../Managers/CanvasManager";
 import { TempCanvasManager } from "../Managers/TempCanvasManager";
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
+import { camera, temp_canvas } from "../../main";
 
 let draw = false;
 
@@ -21,7 +22,11 @@ export class CircleMaker extends Maker {
 
         draw = true;
 
-        curr.pos = [e.clientX, e.clientY];
+        const rect = temp_canvas.getBoundingClientRect();
+
+        const screenPos: vec2 = [e.clientX - rect.left, e.clientY - rect.top];
+        const worldPos = camera.screenToWorld(screenPos);
+        curr.pos = worldPos;
         curr.radius = 0;
 
         curr.fill = ToolPallete.fill;

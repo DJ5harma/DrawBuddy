@@ -1,6 +1,4 @@
 import { SelectionMaker } from "../../../canvas_system/Makers/SelectionMaker";
-import { temp_ctx } from "../../../main";
-import { ToolPallete } from "../ToolPallete/ToolPallete";
 
 const maker_names: Tools[] = ["PENCIL", "RECTANGLE", "CIRCLE", "LINE"];
 const selection_tool_name: Tools = "SELECTION";
