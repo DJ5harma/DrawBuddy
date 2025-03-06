@@ -83,7 +83,10 @@ export class Circle implements Shape {
 
         let sum = _delta_xy[0] + _delta_xy[1];
       
-        if(this.resize_handle === 'n' || this.resize_handle === 'nw' ||  this.resize_handle === 'w') sum = -sum;
+        if(this.resize_handle === 'n' ||  this.resize_handle === 'w') sum = -sum;
+        if(this.resize_handle === 'nw') sum = -_delta_xy[0];
+        if(this.resize_handle === 'ne') sum = _delta_xy[0];
+        if(this.resize_handle === 'sw') sum = _delta_xy[1];
 
         if (sum + this.radius < 10) return;
 

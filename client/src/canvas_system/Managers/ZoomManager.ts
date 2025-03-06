@@ -1,42 +1,43 @@
-import { buffer_ctx, ctx, temp_ctx } from "../../main";
-import { CanvasManager } from "./CanvasManager";
-import { SelectionManager } from "./SelectionManager";
-
-let zooming = false;
-let size = 1;
+import { Camera } from "./Camera";
 
 export class ZoomManager {
-    static init() {
-        console.log("init ZoomManager");
 
-        window.addEventListener("wheel", this.wheel.bind(this), {
-            passive: false,
-        });
+    constructor(private readonly camera: Camera) {
+        this.init();
     }
 
-    private static wheel = (e: WheelEvent) => {
-        e.preventDefault();
-        if (!e.ctrlKey) return;
+    private init() {
+        console.log("Initializing ZoomManager with wheel zoom");
+        window.addEventListener("wheel", this.handleWheel, { passive: false });
+    }
 
-        const dy = e.deltaY;
-        console.log("ZOOMING", dy);
-
-        // size = Math.max(0.5, Math.min(dy < 0 ? 5 : -5, 5));
-
-        // ctx.scale(size, size);
-        // temp_ctx.scale(size, size);
-        // buffer_ctx.scale(size, size);
-
-        // ctx.setTransform(size, 0, 0, size, 0, 0);
-        // temp_ctx.setTransform(size, 0, 0, size, 0, 0);
-        // buffer_ctx.setTransform(size, 0, 0, size, 0, 0);
-
-        // let rejected_zoom = false;
-        CanvasManager.get_shapes().forEach((shape) => {
-            shape.resize_handle = "se";
-            shape.resize_by([-dy / 10, -dy / 10]);
-        });
-        CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
-        SelectionManager.unrender_selection_of_all().remove_selection_of_all();
+    private handleWheel = (e: WheelEvent) => {
+        if (e.ctrlKey) {
+            console.log("Disabling");
+            e.preventDefault();
+    
+            const oldScale = this.camera.scale;
+            const zoomSensitivity = 0.005;
+            const newScale = Math.min(
+                Math.max(oldScale * Math.exp(-e.deltaY * zoomSensitivity), this.camera.minScale),
+                this.camera.maxScale
+            );
+    
+            const rect = this.camera.canvas[1].getBoundingClientRect();
+            const pointer: vec2 = [e.clientX - rect.left, e.clientY - rect.top];
+    
+            this.camera.offset = [
+                this.camera.offset[0] + pointer[0] * (1 / oldScale - 1 / newScale),
+                this.camera.offset[1] + pointer[1] * (1 / oldScale - 1 / newScale)
+            ];
+    
+            this.camera.scale = newScale;
+            this.camera.applyTransform();
+        }
     };
+    
+
+    destroy() {
+        window.removeEventListener("wheel", this.handleWheel);
+    }
 }
