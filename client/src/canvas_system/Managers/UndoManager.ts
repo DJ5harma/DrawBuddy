@@ -1,7 +1,6 @@
 import { CanvasManager } from "./CanvasManager";
-import { Shape } from "../Shapes/Shape";
 
-let undo_stack: Shape[] = [];
+let undo_stack: ImageDataObj[] = [];
 
 export class UndoManager {
     public static init() {
@@ -29,8 +28,9 @@ export class UndoManager {
 
         if (!last_undid_shape) return;
 
-        CanvasManager.store_shape(last_undid_shape).render_shape(
+        CanvasManager.render_shape(
             last_undid_shape
         );
+        CanvasManager.push_shape(last_undid_shape)
     }
 }

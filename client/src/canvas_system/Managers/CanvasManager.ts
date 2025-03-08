@@ -85,4 +85,8 @@ export class CanvasManager {
     public static pop_shape() {
         return this.arr.pop();
     }
+
+    public static push_shape(shape:ImageDataObj){
+        this.arr.push(shape)
+    }
 }
