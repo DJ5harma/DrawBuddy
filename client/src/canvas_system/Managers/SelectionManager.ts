@@ -1,8 +1,5 @@
-import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { SelectionMaker } from "../Makers/SelectionMaker";
 import { Rectangle } from "../Shapes/Rectangle";
-import { Shape } from "../Shapes/Shape";
-import { CanvasManager } from "./CanvasManager";
 import { TempCanvasManager } from "./TempCanvasManager";
 
 let selected_shapes = new Set<ImageDataObj>();
@@ -16,7 +13,7 @@ export class SelectionManager {
         console.log(shape, "added to selection list");
         if (selected_shapes.has(shape)) return this;
         selected_shapes.add(shape);
-        this.render_selection_of_shape(shape.bounding_rect);
+        this.render_selection_of_shape(shape);
         return this;
     }
 
@@ -31,7 +28,11 @@ export class SelectionManager {
         return this;
     }
 
-    public static render_selection_of_shape(bounding_rect: BoundingRect) {
+    private static render_selection_of_shape({
+        bounding_rect,
+        sx,
+        sy,
+    }: ImageDataObj) {
         // if (!shape.bounding_rect) {
         //     console.error("Shape has no bounding_rect: ", shape);
         //     return this;
@@ -40,7 +41,7 @@ export class SelectionManager {
         const { top_left, bottom_right } = bounding_rect;
 
         const rect = new Rectangle();
-        rect.pos = [top_left[0] - 10, top_left[1] - 10];
+        rect.pos = [top_left[0] - 10 + sx, top_left[1] - 10 + sy];
         rect.dims = [
             bottom_right[0] - top_left[0] + 20,
             bottom_right[1] - top_left[1] + 20,
@@ -52,8 +53,8 @@ export class SelectionManager {
     }
 
     public static render_selection_of_all() {
-        selected_shapes.forEach(({ bounding_rect }) => {
-            this.render_selection_of_shape(bounding_rect);
+        selected_shapes.forEach((shape) => {
+            this.render_selection_of_shape(shape);
         });
 
         return this;

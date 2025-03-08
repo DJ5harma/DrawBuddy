@@ -76,9 +76,7 @@ export class SelectionMaker extends Maker {
                 }
             }
             if (!selected_shape) return;
-            SelectionManager.add_shape_to_selection(
-                selected_shape
-            ).render_selection_of_shape(selected_shape.bounding_rect);
+            SelectionManager.add_shape_to_selection(selected_shape);
         }
 
         CanvasManager.get_shapes().forEach((shape) => {

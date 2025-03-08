@@ -49,21 +49,23 @@ export class SelectionDragManager {
     private static mousemove(e: MouseEvent) {
         if (!move) return;
 
-        const new_pos: vec2 = [e.clientX, e.clientY];
-        const delta: vec2 = [
-            new_pos[0] - move_start_pos[0],
-            new_pos[1] - move_start_pos[1],
-        ];
+        console.log("dragging");
 
-        console.log(SelectionManager.get_selected_shapes());
+        const [dx, dy]: vec2 = [
+            e.clientX - move_start_pos[0],
+            e.clientY - move_start_pos[1],
+        ];
+        // console.log(SelectionManager.get_selected_shapes());
 
         SelectionManager.get_selected_shapes().forEach((shape) => {
-            shape.displace_by(delta);
+            shape.sx += dx;
+            shape.sy += dy;
         });
         CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
+
         SelectionManager.unrender_selection_of_all().render_selection_of_all();
 
-        move_start_pos = new_pos;
+        move_start_pos = [e.clientX, e.clientY];
     }
 
     private static mouseup(): void {

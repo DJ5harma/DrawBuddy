@@ -69,12 +69,7 @@ export class CanvasManager {
     }
 
     public static render_stored_shapes_all() {
-        TempCanvasManager.clear_canvas_only_unrender();
-
-        buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
-
-        this.arr.forEach((Shape) => buffer_ctx.putImageData(Shape.img, 0, 0));
-        ctx.drawImage(buffer_canvas, ...this.displaced);
+        this.displace_canvas_by([0, 0]);
         return this;
     }
 
