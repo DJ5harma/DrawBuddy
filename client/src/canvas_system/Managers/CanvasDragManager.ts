@@ -1,4 +1,4 @@
-import { buffer_canvas, buffer_ctx, canvas, ctx } from "../../main";
+import { buffer_ctx, ctx } from "../../main";
 import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
 import { CanvasManager } from "./CanvasManager";
 
@@ -8,7 +8,7 @@ let move_start_pos: vec2 = [0, 0];
 export class CanvasDragManager {
     public static init() {
         console.log("CanvasDragManager init");
-        buffer_canvas.style.visibility = "hidden";
+        buffer_ctx.canvas.style.visibility = "hidden";
 
         document.addEventListener("wheel", this.wheel);
         document.addEventListener("mousedown", this.mousedown);
@@ -30,8 +30,13 @@ export class CanvasDragManager {
         move = true;
         move_start_pos = [e.clientX, e.clientY];
 
-        buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
-        buffer_ctx.drawImage(canvas, 0, 0);
+        buffer_ctx.clearRect(
+            0,
+            0,
+            buffer_ctx.canvas.width,
+            buffer_ctx.canvas.height
+        );
+        buffer_ctx.drawImage(ctx.canvas, 0, 0);
     }
 
     private static mousemove(e: MouseEvent) {
@@ -43,7 +48,7 @@ export class CanvasDragManager {
         ] as vec2;
 
         CanvasManager.clear_canvas_only_unrender();
-        ctx.drawImage(buffer_canvas, ...new_translate);
+        ctx.drawImage(buffer_ctx.canvas, ...new_translate);
     }
 
     private static mouseup(e: MouseEvent) {

@@ -1,3 +1,4 @@
+import { buffer_ctx, ctx } from "../../main";
 import { CanvasManager } from "./CanvasManager";
 import { SelectionDragManager } from "./SelectionDragManager";
 import { SelectionManager } from "./SelectionManager";
@@ -80,6 +81,34 @@ export class ResizeManager {
             shape.bounding_rect.top_left[1] += dn;
             shape.bounding_rect.bottom_right[0] += dr;
             shape.bounding_rect.bottom_right[1] += ds;
+
+            createImageBitmap(shape.img).then((bitmap) => {
+                const new_width =
+                    shape.bounding_rect.bottom_right[0] -
+                    shape.bounding_rect.top_left[0];
+                const new_height =
+                    shape.bounding_rect.bottom_right[1] -
+                    shape.bounding_rect.top_left[1];
+
+                buffer_ctx.drawImage(
+                    bitmap,
+                    shape.sx,
+                    shape.sy,
+                    new_width,
+                    new_height
+                );
+                ctx.putImageData(
+                    buffer_ctx.getImageData(0, 0, new_width, new_height),
+                    0,
+                    0
+                );
+                buffer_ctx.clearRect(
+                    0,
+                    0,
+                    buffer_ctx.canvas.width,
+                    buffer_ctx.canvas.height
+                );
+            });
 
             CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
             SelectionManager.unrender_selection_of_all().render_selection_of_all();

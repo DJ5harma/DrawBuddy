@@ -1,4 +1,4 @@
-import { temp_ctx, temp_canvas } from "../../main";
+import { temp_ctx } from "../../main";
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
 import { CanvasManager } from "../Managers/CanvasManager";

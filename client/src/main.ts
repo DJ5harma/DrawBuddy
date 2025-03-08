@@ -12,18 +12,17 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = /*html*/ `
   <div id="tool_selector"></div>
   <div id="tool_pallete"></div>
   </div>
-`;  
+`;
 
-export const canvas = document.querySelector<HTMLCanvasElement>("#canvas")!;
+const canvas = document.querySelector<HTMLCanvasElement>("#canvas")!;
 export const ctx = canvas.getContext("2d")!;
 
-export const temp_canvas =
-    document.querySelector<HTMLCanvasElement>("#temp_canvas")!;
+const temp_canvas = document.querySelector<HTMLCanvasElement>("#temp_canvas")!;
 export const temp_ctx = temp_canvas.getContext("2d", {
     willReadFrequently: true,
 })!;
 
-export const buffer_canvas =
+const buffer_canvas =
     document.querySelector<HTMLCanvasElement>("#buffer_canvas")!;
 export const buffer_ctx = buffer_canvas.getContext("2d")!;
 

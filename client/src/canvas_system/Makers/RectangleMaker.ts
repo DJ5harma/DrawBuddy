@@ -4,7 +4,7 @@ import { CanvasManager } from "../Managers/CanvasManager";
 import { TempCanvasManager } from "../Managers/TempCanvasManager";
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
-import { camera, temp_canvas } from "../../main";
+import { camera, temp_ctx } from "../../main";
 
 let draw = false;
 
@@ -22,7 +22,7 @@ export class RectangleMaker extends Maker {
             return;
 
         draw = true;
-        const rect = temp_canvas.getBoundingClientRect();
+        const rect = temp_ctx.canvas.getBoundingClientRect();
 
         const screenPos: vec2 = [e.clientX - rect.left, e.clientY - rect.top];
         const worldPos = camera.screenToWorld(screenPos);

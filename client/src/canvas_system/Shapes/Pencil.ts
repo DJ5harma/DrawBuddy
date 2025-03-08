@@ -1,4 +1,4 @@
-import { buffer_canvas, buffer_ctx } from "../../main";
+import { buffer_ctx } from "../../main";
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { Shape } from "./Shape";
 
@@ -29,12 +29,17 @@ export class Pencil implements Shape {
 
         // Now draw it without erasing existing content
         ctx.drawImage(
-            buffer_canvas,
+            buffer_ctx.canvas,
             this.cached_image_data.sx,
             this.cached_image_data.sy
         );
 
-        buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
+        buffer_ctx.clearRect(
+            0,
+            0,
+            buffer_ctx.canvas.width,
+            buffer_ctx.canvas.height
+        );
 
         ctx.closePath();
     }

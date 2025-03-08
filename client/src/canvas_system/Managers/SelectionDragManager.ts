@@ -48,24 +48,23 @@ export class SelectionDragManager {
 
     private static mousemove(e: MouseEvent) {
         if (!move) return;
+        window.requestAnimationFrame(() => {
+            const [dx, dy]: vec2 = [
+                e.clientX - move_start_pos[0],
+                e.clientY - move_start_pos[1],
+            ];
+            // console.log(SelectionManager.get_selected_shapes());
 
-        console.log("dragging");
+            SelectionManager.get_selected_shapes().forEach((shape) => {
+                shape.sx += dx;
+                shape.sy += dy;
+            });
+            CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
 
-        const [dx, dy]: vec2 = [
-            e.clientX - move_start_pos[0],
-            e.clientY - move_start_pos[1],
-        ];
-        // console.log(SelectionManager.get_selected_shapes());
+            SelectionManager.unrender_selection_of_all().render_selection_of_all();
 
-        SelectionManager.get_selected_shapes().forEach((shape) => {
-            shape.sx += dx;
-            shape.sy += dy;
+            move_start_pos = [e.clientX, e.clientY];
         });
-        CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
-
-        SelectionManager.unrender_selection_of_all().render_selection_of_all();
-
-        move_start_pos = [e.clientX, e.clientY];
     }
 
     private static mouseup(): void {

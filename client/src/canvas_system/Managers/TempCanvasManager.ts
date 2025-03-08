@@ -1,4 +1,4 @@
-import { temp_canvas, temp_ctx } from "../../main";
+import { temp_ctx } from "../../main";
 import { Shape } from "../Shapes/Shape";
 
 // only knows about temp_ctx
@@ -13,7 +13,7 @@ export class TempCanvasManager {
     }
 
     public static clear_canvas_only_unrender() {
-        temp_ctx.clearRect(0, 0, temp_canvas.width, temp_canvas.height);
+        temp_ctx.clearRect(0, 0, temp_ctx.canvas.width, temp_ctx.canvas.height);
         return this;
     }
 }

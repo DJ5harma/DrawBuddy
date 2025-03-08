@@ -1,11 +1,4 @@
-import {
-    buffer_canvas,
-    buffer_ctx,
-    canvas,
-    ctx,
-    temp_canvas,
-    temp_ctx,
-} from "../../main";
+import { buffer_ctx, ctx, temp_ctx } from "../../main";
 import { Shape } from "../Shapes/Shape";
 import { TempCanvasManager } from "./TempCanvasManager";
 
@@ -29,8 +22,8 @@ export class CanvasManager {
             img: temp_ctx.getImageData(
                 0,
                 0,
-                temp_canvas.width,
-                temp_canvas.height
+                temp_ctx.canvas.width,
+                temp_ctx.canvas.height
             ),
             sx: -this.displaced[0],
             sy: -this.displaced[1],
@@ -39,7 +32,7 @@ export class CanvasManager {
         TempCanvasManager.clear_canvas_only_unrender();
 
         buffer_ctx.putImageData(newShape.img, 0, 0);
-        ctx.drawImage(buffer_canvas, 0, 0);
+        ctx.drawImage(buffer_ctx.canvas, 0, 0);
 
         this.arr.push(newShape);
     }
@@ -53,7 +46,7 @@ export class CanvasManager {
         this.arr.forEach(({ img, sx, sy }) => {
             buffer_ctx.putImageData(img, 0, 0);
             ctx.drawImage(
-                buffer_canvas,
+                buffer_ctx.canvas,
                 this.displaced[0] + sx,
                 this.displaced[1] + sy
             );
@@ -62,7 +55,7 @@ export class CanvasManager {
 
     public static render_shape(Shape: ImageDataObj) {
         buffer_ctx.putImageData(Shape.img, 0, 0);
-        ctx.drawImage(buffer_canvas, Shape.sx, Shape.sy);
+        ctx.drawImage(buffer_ctx.canvas, Shape.sx, Shape.sy);
         console.log("Put shape", Shape.img);
 
         return this;
@@ -74,7 +67,7 @@ export class CanvasManager {
     }
 
     public static clear_canvas_only_unrender() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         return this;
     }
 
