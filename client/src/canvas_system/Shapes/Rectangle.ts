@@ -49,48 +49,4 @@ export class Rectangle implements Shape {
             ],
         };
     }
-
-    // public resize_by(delta_xy: vec2) {
-    //     const [x, y] = delta_xy;
-
-    //     const str = this.resize_handle;
-
-    //     if (!this.bounding_rect) {
-    //         console.error("BR not found");
-    //         return;
-    //     }
-
-    //     if (!str) {
-    //         console.error("Resize handle not found");
-    //         return;
-    //     }
-
-    //     for (let i = 0; i < str.length; ++i) {
-    //         switch (str[i]) {
-    //             case "e": {
-    //                 this.dims[0] += x;
-    //                 this.bounding_rect.bottom_right[0] += x;
-    //                 break;
-    //             }
-    //             case "s": {
-    //                 this.dims[1] += y;
-    //                 this.bounding_rect.bottom_right[1] += y;
-    //                 break;
-    //             }
-    //             case "w": {
-    //                 this.dims[0] -= x;
-    //                 this.bounding_rect.top_left[0] += x;
-    //                 this.pos[0] += x;
-
-    //                 break;
-    //             }
-    //             case "n": {
-    //                 this.dims[1] -= y;
-    //                 this.bounding_rect.top_left[1] += y;
-    //                 this.pos[1] += y;
-    //                 break;
-    //             }
-    //         }
-    //     }
-    // }
 }
