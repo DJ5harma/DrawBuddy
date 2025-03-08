@@ -10,6 +10,8 @@ import { PencilMaker } from "./Makers/PencilMaker";
 import { SelectionDragManager } from "./Managers/SelectionDragManager";
 import { SelectionMaker } from "./Makers/SelectionMaker";
 import { ResizeManager } from "./Managers/ResizeManager";
+import { ToolSelector } from "../ui_system/Tools/ToolSelector/ToolSelector";
+import { ToolPallete } from "../ui_system/Tools/ToolPallete/ToolPallete";
 
 function design_canvas() {
     document.body.style.overflow = "hidden";
@@ -44,6 +46,9 @@ export default function init_canvas_system() {
     SelectionMaker.init();
     ResizeManager.init();
 
+    // UI
+    ToolSelector.init();
+    ToolPallete.init();
 
     let mutex_unlocked = true;
 

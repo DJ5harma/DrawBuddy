@@ -98,7 +98,7 @@ export class ResizeManager {
                     new_height
                 );
                 ctx.putImageData(
-                    buffer_ctx.getImageData(0, 0, new_width, new_height),
+                    buffer_ctx.getImageData(0, 0, new_width, new_height, {}),
                     0,
                     0
                 );

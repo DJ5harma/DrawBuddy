@@ -33,11 +33,6 @@ export class SelectionManager {
         sx,
         sy,
     }: ImageDataObj) {
-        // if (!shape.bounding_rect) {
-        //     console.error("Shape has no bounding_rect: ", shape);
-        //     return this;
-        // }
-
         const { top_left, bottom_right } = bounding_rect;
 
         const rect = new Rectangle();
