@@ -33,3 +33,5 @@ export const camera = new Camera(canvases);
 new ZoomManager(camera);
 
 init_canvas_system();
+
+window.addEventListener("resize", (e) => e.preventDefault());
