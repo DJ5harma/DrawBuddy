@@ -25,7 +25,7 @@ export class ToolSelector {
         style.border = "solid cyan";
         style.borderRadius = "20px";
         style.padding = "10px";
-        style.color = "white";
+        style.color = "black";
     }
 
     private static setup_selection_maker() {
