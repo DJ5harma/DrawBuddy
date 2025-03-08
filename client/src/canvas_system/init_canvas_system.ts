@@ -12,6 +12,7 @@ import { SelectionMaker } from "./Makers/SelectionMaker";
 import { ResizeManager } from "./Managers/ResizeManager";
 import { ToolSelector } from "../ui_system/Tools/ToolSelector/ToolSelector";
 import { ToolPallete } from "../ui_system/Tools/ToolPallete/ToolPallete";
+import { TestZoomManager } from "./Managers/TestZoomManager";
 
 function design_canvas() {
     document.body.style.overflow = "hidden";
@@ -46,6 +47,7 @@ export default function init_canvas_system() {
     SelectionMaker.init();
     ResizeManager.init();
 
+    TestZoomManager.init();
     // UI
     ToolSelector.init();
     ToolPallete.init();

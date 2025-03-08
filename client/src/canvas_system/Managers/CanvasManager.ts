@@ -43,12 +43,17 @@ export class CanvasManager {
         this.displaced[1] += dy;
 
         CanvasManager.clear_canvas_only_unrender();
-        this.arr.forEach(({ img, sx, sy }) => {
+        this.arr.forEach((shape) => {
+            const { img } = shape;
+
+            shape.sx += dx;
+            shape.sy += dy;
+
             buffer_ctx.putImageData(img, 0, 0);
             ctx.drawImage(
                 buffer_ctx.canvas,
-                this.displaced[0] + sx,
-                this.displaced[1] + sy
+                this.displaced[0],
+                this.displaced[1]
             );
         });
     }

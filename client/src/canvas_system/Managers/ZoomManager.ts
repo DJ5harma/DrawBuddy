@@ -1,7 +1,7 @@
 import { Camera } from "./Camera";
+import { CanvasManager } from "./CanvasManager";
 
 export class ZoomManager {
-
     constructor(private readonly camera: Camera) {
         this.init();
     }
@@ -15,27 +15,33 @@ export class ZoomManager {
         if (e.ctrlKey) {
             console.log("Disabling");
             e.preventDefault();
-    
+
             const oldScale = this.camera.scale;
             const zoomSensitivity = 0.005;
             const newScale = Math.min(
-                Math.max(oldScale * Math.exp(-e.deltaY * zoomSensitivity), this.camera.minScale),
+                Math.max(
+                    oldScale * Math.exp(-e.deltaY * zoomSensitivity),
+                    this.camera.minScale
+                ),
                 this.camera.maxScale
             );
-    
+
             const rect = this.camera.canvas[1].getBoundingClientRect();
             const pointer: vec2 = [e.clientX - rect.left, e.clientY - rect.top];
-    
+
             this.camera.offset = [
-                this.camera.offset[0] + pointer[0] * (1 / oldScale - 1 / newScale),
-                this.camera.offset[1] + pointer[1] * (1 / oldScale - 1 / newScale)
+                this.camera.offset[0] +
+                    pointer[0] * (1 / oldScale - 1 / newScale),
+                this.camera.offset[1] +
+                    pointer[1] * (1 / oldScale - 1 / newScale),
             ];
-    
+
             this.camera.scale = newScale;
             this.camera.applyTransform();
+
+            CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
         }
     };
-    
 
     destroy() {
         window.removeEventListener("wheel", this.handleWheel);

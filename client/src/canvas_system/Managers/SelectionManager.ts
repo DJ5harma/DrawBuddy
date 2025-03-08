@@ -44,12 +44,14 @@ export class SelectionManager {
         rect.fill = SelectionMaker.curr.fill;
         rect.stroke = SelectionMaker.curr.stroke;
 
+        // console.log(rect.pos);
+
         TempCanvasManager.render_shape(rect);
     }
 
     public static render_selection_of_all() {
         selected_shapes.forEach((shape) => {
-            this.render_selection_of_shape(shape);
+            SelectionManager.render_selection_of_shape(shape);
         });
 
         return this;
@@ -107,14 +109,14 @@ export class SelectionManager {
     }
 
     public static is_shape_inside_rect(
-        bounding_rect: BoundingRect,
+        { bounding_rect, sx, sy }: ImageDataObj,
         { pos, dims }: { pos: vec2; dims: vec2 }
     ) {
         return (
-            pos[0] < bounding_rect.top_left[0] &&
-            pos[1] < bounding_rect.top_left[1] &&
-            pos[0] + dims[0] > bounding_rect.bottom_right[0] &&
-            pos[1] + dims[1] > bounding_rect.bottom_right[1]
+            pos[0] < bounding_rect.top_left[0] + sx &&
+            pos[1] < bounding_rect.top_left[1] + sy &&
+            pos[0] + dims[0] > bounding_rect.bottom_right[0] + sx &&
+            pos[1] + dims[1] > bounding_rect.bottom_right[1] + sy
         );
     }
 }

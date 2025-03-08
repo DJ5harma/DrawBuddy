@@ -30,8 +30,6 @@ export const buffer_ctx = buffer_canvas.getContext("2d", {
 export const canvases = [buffer_canvas, canvas, temp_canvas];
 
 export const camera = new Camera(canvases);
-new ZoomManager(camera);
+// new ZoomManager(camera);
 
 init_canvas_system();
-
-window.addEventListener("resize", (e) => e.preventDefault());

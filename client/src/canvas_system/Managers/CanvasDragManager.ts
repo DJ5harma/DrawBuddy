@@ -1,6 +1,7 @@
 import { buffer_ctx, ctx } from "../../main";
 import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
 import { CanvasManager } from "./CanvasManager";
+import { SelectionManager } from "./SelectionManager";
 
 let move = false;
 let move_start_pos: vec2 = [0, 0];
@@ -62,5 +63,6 @@ export class CanvasDragManager {
             e.clientY - move_start_pos[1],
         ] as vec2;
         CanvasManager.displace_canvas_by(new_translate);
+        SelectionManager.unrender_selection_of_all().render_selection_of_all();
     }
 }

@@ -81,7 +81,7 @@ export class SelectionMaker extends Maker {
 
         CanvasManager.get_shapes().forEach((shape) => {
             if (
-                SelectionManager.is_shape_inside_rect(shape.bounding_rect, {
+                SelectionManager.is_shape_inside_rect(shape, {
                     pos: [x - 10, y - 10],
                     dims: [w + 20, l + 20],
                 })
