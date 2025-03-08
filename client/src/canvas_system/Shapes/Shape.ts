@@ -4,7 +4,7 @@ export abstract class Shape {
 
     public abstract prepare_for_render(_ctx: CanvasRenderingContext2D): void;
 
-    // public abstract render_me_whole(_ctx: CanvasRenderingContext2D): void;
+    public abstract render_me_whole(_ctx: CanvasRenderingContext2D): void;
 
     // public abstract is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean;
 

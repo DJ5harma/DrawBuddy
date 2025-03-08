@@ -14,6 +14,8 @@ import { TempCanvasManager } from "./TempCanvasManager";
 export class CanvasManager {
     private static arr: ImageDataObj[] = [];
 
+    private static displaced: vec2 = [0, 0];
+
     public static init() {
         console.log(this.name, "init");
     }
@@ -30,17 +32,32 @@ export class CanvasManager {
                 temp_canvas.width,
                 temp_canvas.height
             ),
-            sx: 0,
-            sy: 0,
+            sx: -this.displaced[0],
+            sy: -this.displaced[1],
             bounding_rect: shape.get_bounding_rect(),
         } as ImageDataObj;
-        this.arr.push(newShape);
-        this.render_shape(newShape);
         TempCanvasManager.clear_canvas_only_unrender();
+
+        buffer_ctx.putImageData(newShape.img, 0, 0);
+        ctx.drawImage(buffer_canvas, 0, 0);
+
+        this.arr.push(newShape);
     }
 
-    public static pop_shape() {
-        return this.arr.pop();
+    public static displace_canvas_by(_displacement: vec2) {
+        const [dx, dy] = _displacement;
+        this.displaced[0] += dx;
+        this.displaced[1] += dy;
+
+        CanvasManager.clear_canvas_only_unrender();
+        this.arr.forEach(({ img, sx, sy }) => {
+            buffer_ctx.putImageData(img, 0, 0);
+            ctx.drawImage(
+                buffer_canvas,
+                this.displaced[0] + sx,
+                this.displaced[1] + sy
+            );
+        });
     }
 
     public static render_shape(Shape: ImageDataObj) {
@@ -52,8 +69,12 @@ export class CanvasManager {
     }
 
     public static render_stored_shapes_all() {
+        TempCanvasManager.clear_canvas_only_unrender();
+
+        buffer_ctx.clearRect(0, 0, buffer_canvas.width, buffer_canvas.height);
+
         this.arr.forEach((Shape) => buffer_ctx.putImageData(Shape.img, 0, 0));
-        ctx.drawImage(buffer_canvas, 0, 0);
+        ctx.drawImage(buffer_canvas, ...this.displaced);
         return this;
     }
 
@@ -66,5 +87,9 @@ export class CanvasManager {
         this.clear_canvas_only_unrender();
         this.arr = [];
         return this;
+    }
+
+    public static pop_shape() {
+        return this.arr.pop();
     }
 }

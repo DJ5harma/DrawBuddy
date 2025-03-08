@@ -27,15 +27,15 @@ export class Line implements Shape {
         };
     }
 
-    // public render_me_whole(ctx: CanvasRenderingContext2D): void {
-    //     this.prepare_for_render(ctx);
+    public render_me_whole(ctx: CanvasRenderingContext2D): void {
+        this.prepare_for_render(ctx);
 
-    //     ctx.beginPath();
-    //     ctx.moveTo(...this.start);
-    //     ctx.lineTo(...this.end);
-    //     ctx.stroke();
-    //     ctx.closePath();
-    // }
+        ctx.beginPath();
+        ctx.moveTo(...this.start);
+        ctx.lineTo(...this.end);
+        ctx.stroke();
+        ctx.closePath();
+    }
 
     // public get_copy() {
     //     const copy = new Line();

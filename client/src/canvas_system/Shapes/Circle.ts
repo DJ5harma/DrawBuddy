@@ -24,18 +24,18 @@ export class Circle implements Shape {
             ],
         };
     }
-    // public render_me_whole(ctx: CanvasRenderingContext2D): void {
-    //     this.prepare_for_render(ctx);
+    public render_me_whole(ctx: CanvasRenderingContext2D): void {
+        this.prepare_for_render(ctx);
 
-    //     let [x, y] = this.pos;
-    //     const positiveRadius = Math.abs(this.radius);
+        let [x, y] = this.pos;
+        const positiveRadius = Math.abs(this.radius);
 
-    //     ctx.beginPath();
-    //     ctx.arc(x, y, positiveRadius, 0, 2 * Math.PI);
-    //     ctx.fillStyle = this.fill;
-    //     ctx.fill();
-    //     ctx.stroke();
-    // }
+        ctx.beginPath();
+        ctx.arc(x, y, positiveRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = this.fill;
+        ctx.fill();
+        ctx.stroke();
+    }
 
     // public get_copy() {
     //     const copy = new Circle();
