@@ -39,4 +39,12 @@ declare global {
     // type Shape = Rectangle | number;
 
     // var Shape: Shape;
+
+    type ImageDataObj = {
+        img: ImageData;
+        sx: number;
+        sy: number;
+        bounding_rect: BoundingRect;
+    };
+    var ImageDataObj = ImageDataObj;
 }

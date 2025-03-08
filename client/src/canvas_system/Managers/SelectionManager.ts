@@ -1,4 +1,3 @@
-import { temp_ctx } from "../../main";
 import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { SelectionMaker } from "../Makers/SelectionMaker";
 import { Rectangle } from "../Shapes/Rectangle";
@@ -6,18 +5,18 @@ import { Shape } from "../Shapes/Shape";
 import { CanvasManager } from "./CanvasManager";
 import { TempCanvasManager } from "./TempCanvasManager";
 
-let selected_shapes = new Set<Shape>();
+let selected_shapes = new Set<ImageDataObj>();
 
 export class SelectionManager {
     public static init() {
         console.log(this.name);
     }
 
-    public static add_shape_to_selection(shape: Shape) {
+    public static add_shape_to_selection(shape: ImageDataObj) {
         console.log(shape, "added to selection list");
         if (selected_shapes.has(shape)) return this;
         selected_shapes.add(shape);
-        this.render_selection_of_shape(shape);
+        this.render_selection_of_shape(shape.bounding_rect);
         return this;
     }
 
@@ -32,13 +31,13 @@ export class SelectionManager {
         return this;
     }
 
-    public static render_selection_of_shape(shape: Shape) {
-        if (!shape.bounding_rect) {
-            console.error("Shape has no bounding_rect: ", shape);
-            return this;
-        }
+    public static render_selection_of_shape(bounding_rect: BoundingRect) {
+        // if (!shape.bounding_rect) {
+        //     console.error("Shape has no bounding_rect: ", shape);
+        //     return this;
+        // }
 
-        const { top_left, bottom_right } = shape.bounding_rect;
+        const { top_left, bottom_right } = bounding_rect;
 
         const rect = new Rectangle();
         rect.pos = [top_left[0] - 10, top_left[1] - 10];
@@ -53,14 +52,14 @@ export class SelectionManager {
     }
 
     public static render_selection_of_all() {
-        selected_shapes.forEach((shape) => {
-            this.render_selection_of_shape(shape);
+        selected_shapes.forEach(({ bounding_rect }) => {
+            this.render_selection_of_shape(bounding_rect);
         });
 
         return this;
     }
 
-    public static is_shape_selected(shape: Shape) {
+    public static is_shape_selected(shape: ImageDataObj) {
         return selected_shapes.has(shape);
     }
 
@@ -68,33 +67,32 @@ export class SelectionManager {
         return selected_shapes;
     }
 
-    public static update_selected_shapes_from_pallete() {
-        console.log(selected_shapes.size, " selected");
+    // public static update_selected_shapes_from_pallete() {
+    //     console.log(selected_shapes.size, " selected");
 
-        if (!selected_shapes.size) return;
+    //     if (!selected_shapes.size) return;
 
-        selected_shapes.forEach((shape) => {
-            if (shape.fill) {
-                console.log("prev fill: ", shape.fill);
-                shape.fill = ToolPallete.fill;
-                console.log("new fill: ", shape.fill);
-            }
-            if (shape.stroke) {
-                console.log("prev stroke: ", shape.stroke);
-                shape.stroke = { ...ToolPallete.stroke };
-                console.log("new stroke: ", shape.stroke);
-            }
-        });
-        CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
-        this.render_selection_of_all();
-    }
+    //     selected_shapes.forEach((shape) => {
+    //         if (shape.fill) {
+    //             console.log("prev fill: ", shape.fill);
+    //             shape.fill = ToolPallete.fill;
+    //             console.log("new fill: ", shape.fill);
+    //         }
+    //         if (shape.stroke) {
+    //             console.log("prev stroke: ", shape.stroke);
+    //             shape.stroke = { ...ToolPallete.stroke };
+    //             console.log("new stroke: ", shape.stroke);
+    //         }
+    //     });
+    //     CanvasManager.clear_canvas_only_unrender().render_stored_shapes_all();
+    //     this.render_selection_of_all();
+    // }
 
-    public static is_cursor_on_shape(shape: Shape, e: MouseEvent) {
-        if (!shape.bounding_rect) {
-            console.error("Shape doesn't have bounding rect: ", shape);
-            return;
-        }
-        const { top_left, bottom_right } = shape.bounding_rect;
+    public static is_cursor_on_shape(
+        bounding_rect: BoundingRect,
+        e: MouseEvent
+    ) {
+        const { top_left, bottom_right } = bounding_rect;
         const [x, y] = [e.clientX, e.clientY];
         return (
             x >
@@ -109,6 +107,18 @@ export class SelectionManager {
             y <
                 // - 30 +
                 bottom_right[1]
+        );
+    }
+
+    public static is_shape_inside_rect(
+        bounding_rect: BoundingRect,
+        { pos, dims }: { pos: vec2; dims: vec2 }
+    ) {
+        return (
+            pos[0] < bounding_rect.top_left[0] &&
+            pos[1] < bounding_rect.top_left[1] &&
+            pos[0] + dims[0] > bounding_rect.bottom_right[0] &&
+            pos[1] + dims[1] > bounding_rect.bottom_right[1]
         );
     }
 }

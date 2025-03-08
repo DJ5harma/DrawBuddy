@@ -25,20 +25,6 @@ export class Rectangle implements Shape {
         ctx.closePath();
     }
 
-    public get_copy() {
-        const copy = new Rectangle();
-        copy.make_like(this);
-        return copy;
-    }
-
-    public make_like(r: Rectangle) {
-        this.pos = [...r.pos] as vec2;
-        this.dims = [...r.dims] as vec2;
-        this.stroke = { ...r.stroke };
-        this.fill = r.fill;
-        this.bounding_rect = r.bounding_rect && { ...r.bounding_rect };
-    }
-
     public is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
         const { pos, dims } = _rect;
 
@@ -64,7 +50,7 @@ export class Rectangle implements Shape {
         }
     }
 
-    public fix_maths(): void {
+    public get_bounding_rect(): BoundingRect {
         let [x, y] = this.pos;
         let [w, l] = this.dims;
 
@@ -80,7 +66,7 @@ export class Rectangle implements Shape {
         this.pos = [x, y] as vec2;
         this.dims = [w, l] as vec2;
 
-        this.bounding_rect = {
+        return {
             top_left: [this.pos[0], this.pos[1]],
             bottom_right: [
                 this.pos[0] + this.dims[0],
@@ -141,7 +127,7 @@ export class Rectangle implements Shape {
         this.dims[0] -= _d;
         this.dims[1] -= _d;
 
-        this.fix_maths();
+        // this.fix_maths();
 
         return;
     }

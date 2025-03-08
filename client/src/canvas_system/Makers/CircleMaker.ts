@@ -51,7 +51,6 @@ export class CircleMaker extends Maker {
         if (e.button !== 0 || !draw) return;
         draw = false;
 
-        CanvasManager.store_shape(curr).render_shape(curr);
-        TempCanvasManager.clear_canvas_only_unrender();
+        CanvasManager.store_shape(curr);
     }
 }

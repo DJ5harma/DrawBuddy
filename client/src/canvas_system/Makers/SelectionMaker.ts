@@ -6,7 +6,6 @@ import { TempCanvasManager } from "../Managers/TempCanvasManager";
 import { CanvasManager } from "../Managers/CanvasManager";
 import { ToolSelector } from "../../ui_system/Tools/ToolSelector/ToolSelector";
 import { SelectionDragManager } from "../Managers/SelectionDragManager";
-import { Shape } from "../Shapes/Shape";
 
 let draw = false;
 
@@ -67,10 +66,11 @@ export class SelectionMaker extends Maker {
         if (w < 40 || l < 40) {
             const shapes = CanvasManager.get_shapes();
 
-            let selected_shape: Shape | undefined;
+            let selected_shape: ImageDataObj | undefined;
 
             for (let i = shapes.length - 1; i > -1; --i) {
-                if (SelectionManager.is_cursor_on_shape(shapes[i], e)) {
+                const { bounding_rect } = shapes[i];
+                if (SelectionManager.is_cursor_on_shape(bounding_rect, e)) {
                     selected_shape = shapes[i];
                     break;
                 }
@@ -78,12 +78,12 @@ export class SelectionMaker extends Maker {
             if (!selected_shape) return;
             SelectionManager.add_shape_to_selection(
                 selected_shape
-            ).render_selection_of_shape(selected_shape);
+            ).render_selection_of_shape(selected_shape.bounding_rect);
         }
 
         CanvasManager.get_shapes().forEach((shape) => {
             if (
-                shape.is_inside_rect({
+                SelectionManager.is_shape_inside_rect(shape.bounding_rect, {
                     pos: [x - 10, y - 10],
                     dims: [w + 20, l + 20],
                 })

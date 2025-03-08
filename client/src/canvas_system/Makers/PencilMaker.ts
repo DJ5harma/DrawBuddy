@@ -55,20 +55,9 @@ export class PencilMaker extends Maker {
         draw = false;
         temp_ctx.closePath();
 
-        curr.cached_image_data = {
-            img: temp_ctx.getImageData(
-                0,
-                0,
-                temp_canvas.width,
-                temp_canvas.height
-            ),
-            sx: 0,
-            sy: 0,
-        };
-
         console.log("added Cached image data: ", curr.cached_image_data);
 
-        CanvasManager.store_shape(curr).render_shape(curr);
+        CanvasManager.store_shape(curr);
         TempCanvasManager.clear_canvas_only_unrender();
     }
 }

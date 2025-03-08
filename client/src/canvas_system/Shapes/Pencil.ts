@@ -39,61 +39,61 @@ export class Pencil implements Shape {
         ctx.closePath();
     }
 
-    public get_copy() {
-        const copy = new Pencil();
-        copy.make_like(this);
-        return copy;
-    }
+    // public get_copy() {
+    //     const copy = new Pencil();
+    //     copy.make_like(this);
+    //     return copy;
+    // }
 
-    public make_like(p: Pencil) {
-        this.stroke = { ...p.stroke };
-        this.cached_image_data = p.cached_image_data
-            ? { ...p.cached_image_data }
-            : undefined;
-        this.bounding_rect = p.bounding_rect
-            ? { ...p.bounding_rect }
-            : undefined;
-    }
+    // public make_like(p: Pencil) {
+    //     this.stroke = { ...p.stroke };
+    //     this.cached_image_data = p.cached_image_data
+    //         ? { ...p.cached_image_data }
+    //         : undefined;
+    //     this.bounding_rect = p.bounding_rect
+    //         ? { ...p.bounding_rect }
+    //         : undefined;
+    // }
 
-    public is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
-        if (!this.bounding_rect) {
-            console.error("Bounding rect not found");
-            return false;
-        }
-        const dims = _rect.dims;
-        const pos = _rect.pos;
+    // public is_inside_rect(_rect: { pos: vec2; dims: vec2 }): boolean {
+    //     if (!this.bounding_rect) {
+    //         console.error("Bounding rect not found");
+    //         return false;
+    //     }
+    //     const dims = _rect.dims;
+    //     const pos = _rect.pos;
 
-        return (
-            pos[0] < this.bounding_rect.top_left[0] &&
-            pos[1] < this.bounding_rect.top_left[1] &&
-            pos[0] + dims[0] > this.bounding_rect.bottom_right[0] &&
-            pos[1] + dims[1] > this.bounding_rect.bottom_right[1]
-        );
-    }
+    //     return (
+    //         pos[0] < this.bounding_rect.top_left[0] &&
+    //         pos[1] < this.bounding_rect.top_left[1] &&
+    //         pos[0] + dims[0] > this.bounding_rect.bottom_right[0] &&
+    //         pos[1] + dims[1] > this.bounding_rect.bottom_right[1]
+    //     );
+    // }
 
-    public displace_by(_displacement: vec2): void {
-        const [x, y] = _displacement;
+    // public displace_by(_displacement: vec2): void {
+    //     const [x, y] = _displacement;
 
-        if (this.bounding_rect) {
-            this.bounding_rect.top_left[0] += x;
-            this.bounding_rect.bottom_right[0] += x;
-            this.bounding_rect.top_left[1] += y;
-            this.bounding_rect.bottom_right[1] += y;
-        }
+    //     if (this.bounding_rect) {
+    //         this.bounding_rect.top_left[0] += x;
+    //         this.bounding_rect.bottom_right[0] += x;
+    //         this.bounding_rect.top_left[1] += y;
+    //         this.bounding_rect.bottom_right[1] += y;
+    //     }
 
-        if (this.cached_image_data) {
-            this.cached_image_data.sx += x;
-            this.cached_image_data.sy += y;
-        }
-    }
+    //     if (this.cached_image_data) {
+    //         this.cached_image_data.sx += x;
+    //         this.cached_image_data.sy += y;
+    //     }
+    // }
 
-    public fix_maths(): void {
+    public get_bounding_rect(): BoundingRect {
         if (!this.cached_image_data) {
             console.error("no cached image data");
-            return;
+            return { bottom_right: [0, 0], top_left: [0, 0] };
         }
 
-        this.bounding_rect = {
+        return {
             top_left: [this.cached_image_data.sx, this.cached_image_data.sy],
             bottom_right: [
                 this.cached_image_data.sx + this.cached_image_data.img.width,

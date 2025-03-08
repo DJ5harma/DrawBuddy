@@ -24,9 +24,9 @@ export class RectangleMaker extends Maker {
         draw = true;
         const rect = temp_canvas.getBoundingClientRect();
 
-        const screenPos:vec2 = [e.clientX-rect.left, e.clientY-rect.top];
-        const worldPos = camera.screenToWorld(screenPos)
-        curr.pos = worldPos
+        const screenPos: vec2 = [e.clientX - rect.left, e.clientY - rect.top];
+        const worldPos = camera.screenToWorld(screenPos);
+        curr.pos = worldPos;
 
         curr.dims = [0, 0];
 
@@ -50,7 +50,6 @@ export class RectangleMaker extends Maker {
         if (e.button !== 0 || !draw) return;
         draw = false;
 
-        CanvasManager.store_shape(curr).render_shape(curr);
-        TempCanvasManager.clear_canvas_only_unrender();
+        CanvasManager.store_shape(curr);
     }
 }
