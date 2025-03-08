@@ -1,7 +1,6 @@
 import { canvas, ctx } from "../../main";
 import { Shape } from "../Shapes/Shape";
 
-// only knows about real ctx
 export class CanvasManager {
     private static arr: Shape[] = [];
 

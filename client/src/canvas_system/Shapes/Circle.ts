@@ -2,6 +2,7 @@ import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { Shape } from "./Shape";
 
 export class Circle implements Shape {
+    shapeInstance:Tools = "CIRCLE"
     stroke = ToolPallete.stroke;
     fill = ToolPallete.fill;
 

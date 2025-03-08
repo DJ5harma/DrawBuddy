@@ -2,6 +2,7 @@ import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { Shape } from "./Shape";
 
 export class Line implements Shape {
+    shapeInstance:Tools = "LINE"
     stroke = ToolPallete.stroke;
 
     start: vec2 = [0, 0];

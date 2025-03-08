@@ -1,6 +1,7 @@
 import init_canvas_system from "./canvas_system/init_canvas_system";
 import { Camera } from "./canvas_system/Managers/Camera";
 import { ZoomManager } from "./canvas_system/Managers/ZoomManager";
+import { SocketConn } from "./socket/socket_conn";
 import "./style.css";
 import init_ui_system from "./ui_system/init_ui_system";
 
@@ -11,6 +12,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = /*html*/ `
   <canvas id="temp_canvas"></canvas>
   <div id="tool_selector"></div>
   <div id="tool_pallete"></div>
+  <div id="share_button"></div>
   </div>
 `;  
 
@@ -34,3 +36,4 @@ new ZoomManager(camera);
 
 init_canvas_system();
 init_ui_system();
+SocketConn.init();

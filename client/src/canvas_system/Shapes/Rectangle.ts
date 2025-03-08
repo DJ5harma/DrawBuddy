@@ -2,6 +2,7 @@ import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { Shape } from "./Shape";
 
 export class Rectangle implements Shape {
+    shapeInstance:Tools = "RECTANGLE"
     pos: vec2 = [0, 0];
     dims: vec2 = [0, 0];
     stroke = ToolPallete.stroke;

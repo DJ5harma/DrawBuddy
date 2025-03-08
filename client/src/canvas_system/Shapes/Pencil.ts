@@ -3,6 +3,7 @@ import { ToolPallete } from "../../ui_system/Tools/ToolPallete/ToolPallete";
 import { Shape } from "./Shape";
 
 export class Pencil implements Shape {
+    shapeInstance:Tools = "PENCIL"
     stroke: Stroke = ToolPallete.stroke;
 
     cached_image_data?: { img: ImageData; sx: number; sy: number };

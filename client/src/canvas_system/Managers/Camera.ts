@@ -14,7 +14,7 @@ export class Camera {
         this.canvas.forEach((element) => {
             const ctx = element.getContext("2d")!;
             ctx.resetTransform();
-            ctx.scale(this.scale, this.scale);
+            ctx.scale(this.scale, this.scale);            
             ctx.translate(-this.offset[0], -this.offset[1]);
         });
 
@@ -25,8 +25,6 @@ export class Camera {
         shapes.forEach((shape) => {
             shape.render_me_whole(ctx);
         });
-        console.log("Scale : ", this.scale);
-        console.log("offset : ", this.offset);
     }
 
     screenToWorld(pos: vec2): vec2 {

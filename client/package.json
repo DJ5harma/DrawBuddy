@@ -9,10 +9,15 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.11",
+    "autoprefixer": "^10.4.20",
+    "tailwindcss": "^4.0.11",
     "typescript": "~5.7.2",
     "vite": "^6.1.0"
   },
   "dependencies": {
-    "client": "file:"
+    "client": "file:",
+    "nanoid": "^5.1.3",
+    "socket.io-client": "^4.8.1"
   }
 }
