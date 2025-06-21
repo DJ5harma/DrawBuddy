@@ -2,6 +2,8 @@
 
 An advanced real-time design collaboration platform designed for teams and individuals to create, edit, and share designs seamlessly. With a focus on efficiency, scalability, and usability, **DrawBuddy** provides a cutting-edge collaborative canvas for all your design needs.
 
+![Usage](https://github.com/user-attachments/assets/c846b97c-83b3-42aa-bdfe-6bd6deb25d83)
+
 ---
 
 ## Overview
